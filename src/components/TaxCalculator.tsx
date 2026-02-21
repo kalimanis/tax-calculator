@@ -4,15 +4,31 @@ import { Moon, Sun } from "lucide-react";
 import { YearSelector } from "./YearSelector";
 import { RegimeSelector } from "./RegimeSelector";
 import { IncomeForm } from "./IncomeForm";
+import { SalaryForm } from "./SalaryForm";
 import { ResultsSummary } from "./ResultsSummary";
+import { SalaryResults } from "./SalaryResults";
 import { BracketBreakdown } from "./BracketBreakdown";
 import { IncomeWaterfall } from "./IncomeWaterfall";
 import { ComparisonView } from "./ComparisonView";
+import { SalaryComparisonView } from "./SalaryComparisonView";
 import { Disclaimer } from "./Disclaimer";
 import { LABELS } from "@/lib/constants";
 import { calculateTax } from "@/lib/tax-engine";
+import { calculateSalary } from "@/lib/salary-engine";
+import { getEfkaRates } from "@/lib/salary-constants";
 import { getEfkaTable, getEfkaNewProfessional, getMaxCategory } from "@/lib/efka-tables";
-import type { AgeGroup, ClientLocation, FiscalYear, ProfessionType, Regime, TaxInput } from "@/lib/types";
+import type {
+  AgeGroup,
+  ClientLocation,
+  FiscalYear,
+  PayFrequency,
+  ProfessionType,
+  Regime,
+  SalaryDirection,
+  SalaryInput,
+  Seniority,
+  TaxInput,
+} from "@/lib/types";
 
 function getUrlParams(): Partial<Record<string, string>> {
   const params = new URLSearchParams(window.location.search);
@@ -25,11 +41,13 @@ function getUrlParams(): Partial<Record<string, string>> {
 
 function setUrlParams(params: Record<string, string>) {
   const url = new URL(window.location.href);
+  // Clear all existing params first
+  const existingKeys = Array.from(url.searchParams.keys());
+  existingKeys.forEach((key) => url.searchParams.delete(key));
+  // Set new params
   Object.entries(params).forEach(([key, value]) => {
     if (value && value !== "0" && value !== "standard" && value !== "false") {
       url.searchParams.set(key, value);
-    } else {
-      url.searchParams.delete(key);
     }
   });
   window.history.replaceState({}, "", url.toString());
@@ -53,6 +71,12 @@ function useDarkMode() {
   return [dark, () => setDark((d) => !d)] as const;
 }
 
+function initRegime(urlParams: Partial<Record<string, string>>): Regime {
+  const r = urlParams.r;
+  if (r === "misthotos" || r === "atomiki") return r;
+  return "mplokaki";
+}
+
 export function TaxCalculator() {
   const urlParams = getUrlParams();
   const [dark, toggleDark] = useDarkMode();
@@ -60,9 +84,7 @@ export function TaxCalculator() {
   const [year, setYear] = useState<FiscalYear>(
     urlParams.y === "2026" ? 2026 : 2025
   );
-  const [regime, setRegime] = useState<Regime>(
-    urlParams.r === "atomiki" ? "atomiki" : "mplokaki"
-  );
+  const [regime, setRegime] = useState<Regime>(initRegime(urlParams));
   const [grossIncome, setGrossIncome] = useState(
     Number(urlParams.gi) || 0
   );
@@ -86,7 +108,7 @@ export function TaxCalculator() {
     Number(urlParams.ds) || 50
   );
 
-  // EFKA state
+  // EFKA state (freelancer)
   const [efkaAutoMode, setEfkaAutoMode] = useState(true);
   const [profession, setProfession] = useState<ProfessionType>(
     (urlParams.pr as ProfessionType) || "standard"
@@ -99,7 +121,29 @@ export function TaxCalculator() {
   );
   const [manualEfka, setManualEfka] = useState(Number(urlParams.me) || 0);
 
-  // Compute EFKA annual based on mode
+  // Salary state
+  const defaultEfkaRates = getEfkaRates(2025);
+  const [salaryDirection, setSalaryDirection] = useState<SalaryDirection>(
+    urlParams.sd === "net-to-gross" ? "net-to-gross" : "gross-to-net"
+  );
+  const [monthlySalary, setMonthlySalary] = useState(
+    Number(urlParams.ms) || 0
+  );
+  const [payFrequency, setPayFrequency] = useState<PayFrequency>(
+    urlParams.pf === "12" ? 12 : 14
+  );
+  const [efkaEmployeeRate, setEfkaEmployeeRate] = useState(
+    Number(urlParams.eer) || defaultEfkaRates.employee
+  );
+  const [efkaEmployerRate, setEfkaEmployerRate] = useState(
+    Number(urlParams.err) || defaultEfkaRates.employer
+  );
+  const [hasArticle5G, setHasArticle5G] = useState(urlParams.a5g === "1");
+  const [seniority, setSeniority] = useState<Seniority>(
+    (Number(urlParams.sn) as Seniority) || 0
+  );
+
+  // Compute EFKA annual based on mode (freelancer)
   const efkaAnnual = useMemo(() => {
     if (!efkaAutoMode) return manualEfka;
     if (isNewProfessional) return getEfkaNewProfessional(year).annual;
@@ -135,9 +179,20 @@ export function TaxCalculator() {
     setEfkaCategory(1);
     setIsNewProfessional(false);
     setManualEfka(0);
+    // Salary reset
+    setSalaryDirection("gross-to-net");
+    setMonthlySalary(0);
+    setPayFrequency(14);
+    const rates = getEfkaRates(2025);
+    setEfkaEmployeeRate(rates.employee);
+    setEfkaEmployerRate(rates.employer);
+    setHasArticle5G(false);
+    setSeniority(0);
   }, []);
 
-  // Tax input
+  const isSalary = regime === "misthotos";
+
+  // Tax input (freelancer)
   const taxInput: TaxInput = useMemo(
     () => ({
       fiscalYear: year,
@@ -155,27 +210,76 @@ export function TaxCalculator() {
     [year, regime, grossIncome, efkaAnnual, otherExpenses, children, ageGroup, isFirstYearFiling, yearsInBusiness, clientLocation, domesticIncomeShare]
   );
 
-  const result = useMemo(() => calculateTax(taxInput), [taxInput]);
+  const taxResult = useMemo(() => calculateTax(taxInput), [taxInput]);
+
+  // Salary input & result
+  const salaryInput: SalaryInput = useMemo(
+    () => ({
+      fiscalYear: year,
+      direction: salaryDirection,
+      monthlySalary,
+      payFrequency,
+      children,
+      ageGroup: year === 2025 ? "standard" : ageGroup,
+      efkaEmployeeRate,
+      efkaEmployerRate,
+      seniority,
+      hasArticle5G,
+    }),
+    [year, salaryDirection, monthlySalary, payFrequency, children, ageGroup, efkaEmployeeRate, efkaEmployerRate, seniority, hasArticle5G]
+  );
+
+  const salaryResult = useMemo(
+    () => (isSalary && monthlySalary > 0 ? calculateSalary(salaryInput) : null),
+    [isSalary, monthlySalary, salaryInput]
+  );
+
+  // Salary waterfall chart data
+  const salaryWaterfallData = useMemo(() => {
+    if (!salaryResult) return undefined;
+    return [
+      { name: "Μικτός", value: salaryResult.grossAnnual, color: "#059669" },
+      { name: "ΕΦΚΑ", value: salaryResult.efkaEmployee, color: "#dc2626" },
+      { name: "Φόρος", value: salaryResult.netTax, color: "#dc2626" },
+      { name: "Καθαρός", value: salaryResult.netAnnual, color: "#059669" },
+    ];
+  }, [salaryResult]);
 
   // Sync to URL
   useEffect(() => {
-    setUrlParams({
-      y: String(year),
-      r: regime,
-      gi: String(grossIncome),
-      ex: String(otherExpenses),
-      ch: String(children),
-      ag: ageGroup,
-      fy: isFirstYearFiling ? "1" : "0",
-      yb: String(yearsInBusiness),
-      pr: profession,
-      ec: String(efkaCategory),
-      np: isNewProfessional ? "1" : "0",
-      me: String(manualEfka),
-      cl: clientLocation,
-      ds: String(domesticIncomeShare),
-    });
-  }, [year, regime, grossIncome, otherExpenses, children, ageGroup, isFirstYearFiling, yearsInBusiness, profession, efkaCategory, isNewProfessional, manualEfka, clientLocation, domesticIncomeShare]);
+    if (isSalary) {
+      setUrlParams({
+        y: String(year),
+        r: regime,
+        ch: String(children),
+        ag: ageGroup,
+        sd: salaryDirection,
+        ms: String(monthlySalary),
+        pf: String(payFrequency),
+        eer: String(efkaEmployeeRate),
+        err: String(efkaEmployerRate),
+        a5g: hasArticle5G ? "1" : "0",
+        sn: String(seniority),
+      });
+    } else {
+      setUrlParams({
+        y: String(year),
+        r: regime,
+        gi: String(grossIncome),
+        ex: String(otherExpenses),
+        ch: String(children),
+        ag: ageGroup,
+        fy: isFirstYearFiling ? "1" : "0",
+        yb: String(yearsInBusiness),
+        pr: profession,
+        ec: String(efkaCategory),
+        np: isNewProfessional ? "1" : "0",
+        me: String(manualEfka),
+        cl: clientLocation,
+        ds: String(domesticIncomeShare),
+      });
+    }
+  }, [isSalary, year, regime, grossIncome, otherExpenses, children, ageGroup, isFirstYearFiling, yearsInBusiness, profession, efkaCategory, isNewProfessional, manualEfka, clientLocation, domesticIncomeShare, salaryDirection, monthlySalary, payFrequency, efkaEmployeeRate, efkaEmployerRate, hasArticle5G, seniority]);
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
@@ -184,7 +288,7 @@ export function TaxCalculator() {
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:py-6">
           <div>
             <h1 className="text-lg font-bold tracking-tight sm:text-2xl">
-              Υπολογιστής Φόρου Ελεύθερων Επαγγελματιών
+              Υπολογιστής Φόρου Εισοδήματος
             </h1>
             <p className="mt-1 text-sm text-slate-300">
               Φορολογικά Έτη 2025 &amp; 2026
@@ -227,44 +331,101 @@ export function TaxCalculator() {
         <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
           {/* Left: Form */}
           <div>
-            <IncomeForm
-              year={year}
-              regime={regime}
-              grossIncome={grossIncome}
-              onGrossIncomeChange={setGrossIncome}
-              efkaAnnual={efkaAnnual}
-              onEfkaChange={setManualEfka}
-              efkaAutoMode={efkaAutoMode}
-              onEfkaAutoModeChange={setEfkaAutoMode}
-              profession={profession}
-              onProfessionChange={handleProfessionChange}
-              efkaCategory={efkaCategory}
-              onEfkaCategoryChange={setEfkaCategory}
-              isNewProfessional={isNewProfessional}
-              onNewProfessionalChange={setIsNewProfessional}
-              otherExpenses={otherExpenses}
-              onOtherExpensesChange={setOtherExpenses}
-              children={children}
-              onChildrenChange={setChildren}
-              ageGroup={ageGroup}
-              onAgeGroupChange={setAgeGroup}
-              isFirstYearFiling={isFirstYearFiling}
-              onFirstYearFilingChange={setIsFirstYearFiling}
-              yearsInBusiness={yearsInBusiness}
-              onYearsInBusinessChange={setYearsInBusiness}
-              clientLocation={clientLocation}
-              onClientLocationChange={setClientLocation}
-              domesticIncomeShare={domesticIncomeShare}
-              onDomesticIncomeShareChange={setDomesticIncomeShare}
-              taxableIncome={result.taxableIncome}
-            />
+            {isSalary ? (
+              <SalaryForm
+                year={year}
+                direction={salaryDirection}
+                onDirectionChange={setSalaryDirection}
+                monthlySalary={monthlySalary}
+                onMonthlySalaryChange={setMonthlySalary}
+                payFrequency={payFrequency}
+                onPayFrequencyChange={setPayFrequency}
+                children={children}
+                onChildrenChange={setChildren}
+                ageGroup={ageGroup}
+                onAgeGroupChange={setAgeGroup}
+                efkaEmployeeRate={efkaEmployeeRate}
+                onEfkaEmployeeRateChange={setEfkaEmployeeRate}
+                efkaEmployerRate={efkaEmployerRate}
+                onEfkaEmployerRateChange={setEfkaEmployerRate}
+                seniority={seniority}
+                onSeniorityChange={setSeniority}
+                hasArticle5G={hasArticle5G}
+                onArticle5GChange={setHasArticle5G}
+                taxableIncome={salaryResult?.taxableIncome ?? 0}
+              />
+            ) : (
+              <IncomeForm
+                year={year}
+                regime={regime}
+                grossIncome={grossIncome}
+                onGrossIncomeChange={setGrossIncome}
+                efkaAnnual={efkaAnnual}
+                onEfkaChange={setManualEfka}
+                efkaAutoMode={efkaAutoMode}
+                onEfkaAutoModeChange={setEfkaAutoMode}
+                profession={profession}
+                onProfessionChange={handleProfessionChange}
+                efkaCategory={efkaCategory}
+                onEfkaCategoryChange={setEfkaCategory}
+                isNewProfessional={isNewProfessional}
+                onNewProfessionalChange={setIsNewProfessional}
+                otherExpenses={otherExpenses}
+                onOtherExpensesChange={setOtherExpenses}
+                children={children}
+                onChildrenChange={setChildren}
+                ageGroup={ageGroup}
+                onAgeGroupChange={setAgeGroup}
+                isFirstYearFiling={isFirstYearFiling}
+                onFirstYearFilingChange={setIsFirstYearFiling}
+                yearsInBusiness={yearsInBusiness}
+                onYearsInBusinessChange={setYearsInBusiness}
+                clientLocation={clientLocation}
+                onClientLocationChange={setClientLocation}
+                domesticIncomeShare={domesticIncomeShare}
+                onDomesticIncomeShareChange={setDomesticIncomeShare}
+                taxableIncome={taxResult.taxableIncome}
+              />
+            )}
           </div>
 
           {/* Right: Results */}
           <div className="space-y-6">
-            {grossIncome > 0 ? (
+            {isSalary ? (
+              salaryResult ? (
+                <>
+                  <SalaryResults result={salaryResult} payFrequency={payFrequency} />
+
+                  <Card>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base">Λεπτομερής Ανάλυση</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <BracketBreakdown
+                        brackets={salaryResult.brackets}
+                        grossTax={salaryResult.grossTax}
+                      />
+                      <IncomeWaterfall chartData={salaryWaterfallData} />
+                    </CardContent>
+                  </Card>
+
+                  <SalaryComparisonView input={salaryInput} currentResult={salaryResult} />
+                </>
+              ) : (
+                <Card>
+                  <CardContent className="flex flex-col items-center justify-center py-16 text-center">
+                    <p className="text-lg font-medium text-muted-foreground">
+                      Εισάγετε τον μηνιαίο μισθό σας για να δείτε τα αποτελέσματα
+                    </p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Τα αποτελέσματα υπολογίζονται αυτόματα
+                    </p>
+                  </CardContent>
+                </Card>
+              )
+            ) : grossIncome > 0 ? (
               <>
-                <ResultsSummary result={result} regime={regime} clientLocation={clientLocation} />
+                <ResultsSummary result={taxResult} regime={regime} clientLocation={clientLocation} />
 
                 <Card>
                   <CardHeader className="pb-3">
@@ -272,18 +433,18 @@ export function TaxCalculator() {
                   </CardHeader>
                   <CardContent className="space-y-2">
                     <BracketBreakdown
-                      brackets={result.brackets}
-                      grossTax={result.grossTax}
+                      brackets={taxResult.brackets}
+                      grossTax={taxResult.grossTax}
                     />
                     <IncomeWaterfall
-                      result={result}
+                      result={taxResult}
                       grossIncome={grossIncome}
                       regime={regime}
                     />
                   </CardContent>
                 </Card>
 
-                <ComparisonView input={taxInput} currentResult={result} />
+                <ComparisonView input={taxInput} currentResult={taxResult} />
               </>
             ) : (
               <Card>

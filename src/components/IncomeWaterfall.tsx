@@ -18,26 +18,23 @@ import { LABELS } from "@/lib/constants";
 import { formatCurrency } from "@/lib/utils";
 import type { Regime, TaxResult } from "@/lib/types";
 
-interface IncomeWaterfallProps {
-  result: TaxResult;
-  grossIncome: number;
-  regime: Regime;
+interface WaterfallBar {
+  name: string;
+  value: number;
+  color: string;
 }
 
-export function IncomeWaterfall({ result, grossIncome, regime }: IncomeWaterfallProps) {
-  const expenses = grossIncome - result.efkaAnnual - result.taxableIncome;
-  const chartData = [
-    { name: "Ακαθάριστα", value: grossIncome, color: "#059669" },
-    ...(result.efkaAnnual > 0 ? [{ name: "ΕΦΚΑ", value: result.efkaAnnual, color: "#dc2626" }] : []),
-    ...(expenses > 0 ? [{ name: "Έξοδα", value: expenses, color: "#dc2626" }] : []),
-    { name: "Φόρος", value: result.netTax, color: "#dc2626" },
-    ...(regime === "atomiki" && result.prepayment > 0
-      ? [{ name: "Προκαταβολή", value: result.prepayment, color: "#f59e0b" }]
-      : []),
-    { name: "Καθαρό", value: Math.max(0, result.netIncome), color: "#059669" },
-  ];
+interface IncomeWaterfallProps {
+  result?: TaxResult;
+  grossIncome?: number;
+  regime?: Regime;
+  chartData?: WaterfallBar[];
+}
 
-  if (grossIncome <= 0) return null;
+export function IncomeWaterfall({ result, grossIncome, regime, chartData: externalData }: IncomeWaterfallProps) {
+  const chartData = externalData ?? buildFreelancerData(result!, grossIncome!, regime!);
+
+  if (chartData.length === 0) return null;
 
   return (
     <Accordion type="single" collapsible>
@@ -71,4 +68,19 @@ export function IncomeWaterfall({ result, grossIncome, regime }: IncomeWaterfall
       </AccordionItem>
     </Accordion>
   );
+}
+
+function buildFreelancerData(result: TaxResult, grossIncome: number, regime: Regime): WaterfallBar[] {
+  if (grossIncome <= 0) return [];
+  const expenses = grossIncome - result.efkaAnnual - result.taxableIncome;
+  return [
+    { name: "Ακαθάριστα", value: grossIncome, color: "#059669" },
+    ...(result.efkaAnnual > 0 ? [{ name: "ΕΦΚΑ", value: result.efkaAnnual, color: "#dc2626" }] : []),
+    ...(expenses > 0 ? [{ name: "Έξοδα", value: expenses, color: "#dc2626" }] : []),
+    { name: "Φόρος", value: result.netTax, color: "#dc2626" },
+    ...(regime === "atomiki" && result.prepayment > 0
+      ? [{ name: "Προκαταβολή", value: result.prepayment, color: "#f59e0b" }]
+      : []),
+    { name: "Καθαρό", value: Math.max(0, result.netIncome), color: "#059669" },
+  ];
 }
