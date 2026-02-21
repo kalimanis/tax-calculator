@@ -46,11 +46,11 @@ export function IncomeWaterfall({ result, grossIncome, regime }: IncomeWaterfall
           {LABELS.waterfall.title}
         </AccordionTrigger>
         <AccordionContent>
-          <div className="h-64 w-full">
+          <div className="h-48 w-full sm:h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                <XAxis dataKey="name" tick={{ fontSize: 10 }} interval={0} />
                 <YAxis
                   tick={{ fontSize: 11 }}
                   tickFormatter={(v: number) => `€${(v / 1000).toFixed(0)}k`}

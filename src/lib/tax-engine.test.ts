@@ -12,13 +12,15 @@ const baseInput: TaxInput = {
   ageGroup: "standard",
   isFirstYearFiling: false,
   yearsInBusiness: 4,
+  clientLocation: "domestic",
+  domesticIncomeShare: 100,
 };
 
 describe("calculateTaxReduction", () => {
-  it("base €777 for 0 children, decreases above €12K", () => {
-    // taxableIncome = €22.372,15 → decrease = 20 * (10372.15/1000) = 207.443
+  it("base €777 for 0 children, decreases above €12K per whole €1K", () => {
+    // taxableIncome = €22.372,15 → decrease = 20 * floor(10372.15/1000) = 20 * 10 = 200
     const reduction = calculateTaxReduction(22372.15, 0);
-    expect(reduction).toBeCloseTo(569.56, 1);
+    expect(reduction).toBe(577);
   });
 
   it("returns full base for income ≤ €12K", () => {
@@ -46,11 +48,11 @@ describe("Example 1: Μπλοκάκι 2025, €22.372,15 taxable, 0 children", (
     // Bracket 3: €2.372,15 × 28% = €664,20
     expect(result.grossTax).toBeCloseTo(3764.20, 1);
 
-    // Reduction: base €777, decrease = 20 * (10372.15/1000) = 207.44 → 569.56
-    expect(result.taxReduction).toBeCloseTo(569.56, 1);
+    // Reduction: base €777, decrease = 20 * floor(10372.15/1000) = 200 → 577
+    expect(result.taxReduction).toBe(577);
 
-    // Net tax = 3764.20 - 569.56 = 3194.64
-    expect(result.netTax).toBeCloseTo(3194.64, 1);
+    // Net tax = 3764.20 - 577 = 3187.20
+    expect(result.netTax).toBeCloseTo(3187.20, 1);
   });
 });
 
@@ -190,5 +192,38 @@ describe("edge cases", () => {
     });
     // 10000 × 9% = 900 (net tax) × 27.5% = 247.50
     expect(result.prepayment).toBeCloseTo(247.5, 1);
+  });
+});
+
+describe("client location withholding", () => {
+  it("foreign client: withholding = 0, balanceDue = netTax", () => {
+    const result = calculateTax({
+      ...baseInput,
+      grossIncome: 30000,
+      clientLocation: "foreign",
+    });
+    expect(result.withholding20).toBe(0);
+    expect(result.balanceDue).toBe(result.netTax);
+  });
+
+  it("mixed 60% domestic: withholding = gross × 0.60 × 0.20", () => {
+    const result = calculateTax({
+      ...baseInput,
+      grossIncome: 30000,
+      clientLocation: "mixed",
+      domesticIncomeShare: 60,
+    });
+    // 30000 × 0.60 × 0.20 = 3600
+    expect(result.withholding20).toBe(3600);
+  });
+
+  it("atomiki ignores clientLocation: withholding always 0", () => {
+    const result = calculateTax({
+      ...baseInput,
+      regime: "atomiki",
+      grossIncome: 30000,
+      clientLocation: "foreign",
+    });
+    expect(result.withholding20).toBe(0);
   });
 });

@@ -49,21 +49,21 @@ export function EfkaSelector({
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Label className="text-sm font-medium">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <Label className="text-sm font-medium shrink-0">
             {LABELS.income.efka}
           </Label>
           <Tooltip>
             <TooltipTrigger asChild>
               <Info className="h-3.5 w-3.5 text-muted-foreground" />
             </TooltipTrigger>
-            <TooltipContent className="max-w-xs">
+            <TooltipContent className="max-w-[min(20rem,calc(100vw-2rem))]">
               <p>{TOOLTIPS.efka}</p>
             </TooltipContent>
           </Tooltip>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <Label htmlFor="efka-mode" className="text-xs text-muted-foreground">
             {autoMode ? LABELS.efka.auto : LABELS.efka.manual}
           </Label>

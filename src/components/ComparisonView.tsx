@@ -24,15 +24,15 @@ function ComparisonRow({ label, valueA, valueB, isCurrency = true }: ComparisonR
   const format = isCurrency ? formatCurrency : (v: number) => formatPercent(v);
 
   return (
-    <div className="flex items-center justify-between py-2 text-sm">
+    <div className="flex flex-col gap-1 py-2 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-0">
       <span className="text-muted-foreground">{label}</span>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         <span className="tabular-nums font-medium">{format(valueA)}</span>
-        <ArrowRight className="h-3 w-3 text-muted-foreground" />
+        <ArrowRight className="h-3 w-3 shrink-0 text-muted-foreground" />
         <span className="tabular-nums font-medium">{format(valueB)}</span>
         <Badge
           variant={diff < 0 ? "default" : diff > 0 ? "destructive" : "secondary"}
-          className="min-w-[80px] justify-center tabular-nums text-xs"
+          className="min-w-[72px] justify-center tabular-nums text-xs sm:min-w-[80px]"
         >
           {diff > 0 ? "+" : ""}
           {isCurrency ? formatCurrency(diff) : formatPercent(diff)}
