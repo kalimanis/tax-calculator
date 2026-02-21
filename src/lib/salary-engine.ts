@@ -42,8 +42,19 @@ function calculateGrossToNet(input: SalaryInput): SalaryResult {
     netTax = round2(netTax * 0.5);
   }
 
-  const netAnnual = round2(grossAnnual - efkaEmployee - netTax);
-  const netMonthly = round2(netAnnual / payFrequency);
+  // Monthly tax withholding (rounded per-payment, as payroll does)
+  const monthlyTax = round2(netTax / payFrequency);
+  const totalWithheld = round2(monthlyTax * payFrequency);
+  const settlementDiff = round2(netTax - totalWithheld);
+
+  // Net monthly = what the payslip shows (using rounded monthly tax)
+  const taxableMonthly = round2(grossMonthly - efkaEmployeeMonthly);
+  const netMonthly = round2(taxableMonthly - monthlyTax);
+  const netAnnual = round2(netMonthly * payFrequency);
+
+  // Precise annual net (based on exact annual tax, not monthly × pays)
+  const netAnnualPrecise = round2(grossAnnual - efkaEmployee - netTax);
+
   const effectiveRate = taxableIncome > 0 ? round2((netTax / taxableIncome) * 100) : 0;
   const employerCost = round2(grossAnnual + efkaEmployer);
 
@@ -59,6 +70,8 @@ function calculateGrossToNet(input: SalaryInput): SalaryResult {
     netTax,
     netAnnual,
     netMonthly,
+    netAnnualPrecise,
+    settlementDiff,
     effectiveRate,
     employerCost,
   };

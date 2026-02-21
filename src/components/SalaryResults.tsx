@@ -153,14 +153,14 @@ export function SalaryResults({ result, payFrequency }: SalaryResultsProps) {
                       />
                       <BreakdownRow
                         label={SALARY_LABELS.results.efkaEmployee}
-                        monthly={result.efkaEmployee / 12}
+                        monthly={result.efkaEmployee / payFrequency}
                         annual={result.efkaEmployee}
                         negative
                         payFrequency={payFrequency}
                       />
                       <BreakdownRow
                         label={SALARY_LABELS.results.netTax}
-                        monthly={result.netTax / 12}
+                        monthly={result.netTax / payFrequency}
                         annual={result.netTax}
                         negative
                         payFrequency={payFrequency}
@@ -171,13 +171,13 @@ export function SalaryResults({ result, payFrequency }: SalaryResultsProps) {
                           {formatCurrency(result.netMonthly)}
                         </td>
                         <td className="py-2 text-right tabular-nums text-emerald-600 dark:text-emerald-400">
-                          {formatCurrency(result.netAnnual)}
+                          {formatCurrency(result.netAnnualPrecise)}
                         </td>
                       </tr>
                       <tr className="text-muted-foreground">
                         <td className="py-2">{SALARY_LABELS.results.efkaEmployer}</td>
                         <td className="py-2 text-right tabular-nums">
-                          {formatCurrency(result.efkaEmployer / 12)}
+                          {formatCurrency(result.efkaEmployer / payFrequency)}
                         </td>
                         <td className="py-2 text-right tabular-nums">
                           {formatCurrency(result.efkaEmployer)}
@@ -195,6 +195,22 @@ export function SalaryResults({ result, payFrequency }: SalaryResultsProps) {
                     </tbody>
                   </table>
                 </div>
+                {Math.abs(result.settlementDiff) >= 0.01 && (
+                  <div className="mt-3 flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="h-3 w-3 shrink-0" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-[min(20rem,calc(100vw-2rem))]">
+                        <p>Στη μισθοδοσία ο φόρος στρογγυλοποιείται κάθε μήνα. Η μικρή διαφορά (συνήθως &lt; €1) συμψηφίζεται στην ετήσια φορολογική δήλωση.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <span>
+                      Διαφορά εκκαθάρισης λόγω στρογγυλοποίησης: {formatCurrency(Math.abs(result.settlementDiff))}{" "}
+                      ({result.settlementDiff < 0 ? "επιστροφή" : "πληρωμή"})
+                    </span>
+                  </div>
+                )}
               </AccordionContent>
             </AccordionItem>
           </Accordion>

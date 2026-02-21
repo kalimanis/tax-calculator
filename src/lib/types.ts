@@ -83,6 +83,8 @@ export interface SalaryResult {
   netTax: number;
   netAnnual: number;
   netMonthly: number;
+  netAnnualPrecise: number;
+  settlementDiff: number;
   effectiveRate: number;
   employerCost: number;
 }

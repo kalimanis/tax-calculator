@@ -104,6 +104,25 @@ describe("net-to-gross solver", () => {
   });
 });
 
+describe("rounding settlement diff", () => {
+  it("is calculated for €880 gross", () => {
+    const result = calculateSalary({
+      ...baseInput,
+      monthlySalary: 880,
+    });
+
+    // Monthly tax is rounded independently
+    const expectedMonthlyTax = Math.round((result.netTax / 14) * 100) / 100;
+    const totalWithheld = Math.round(expectedMonthlyTax * 14 * 100) / 100;
+    expect(result.settlementDiff).toBeCloseTo(result.netTax - totalWithheld, 2);
+
+    // Annual precise uses exact tax, not monthly × 14
+    expect(result.netAnnualPrecise).toBe(
+      Math.round((result.grossAnnual - result.efkaEmployee - result.netTax) * 100) / 100
+    );
+  });
+});
+
 describe("2026 brackets", () => {
   it("produce lower tax for 2 children vs 2025", () => {
     const result2025 = calculateSalary({
