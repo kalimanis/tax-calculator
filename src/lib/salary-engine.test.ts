@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { calculateSalary } from "./salary-engine";
-import { getEfkaRates, getMinimumWage } from "./salary-constants";
+import { getEfkaRates } from "./salary-constants";
 import type { SalaryInput } from "./types";
 
 const baseInput: SalaryInput = {
