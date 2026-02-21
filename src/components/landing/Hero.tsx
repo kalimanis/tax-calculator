@@ -41,7 +41,7 @@ export function Hero() {
     <section
       id="hero"
       aria-label="Κύρια παρουσίαση"
-      className="grain-overlay relative overflow-hidden bg-gradient-to-br from-[var(--lp-warm-white)] via-[var(--lp-warm-white-dim)] to-[#e8f4f3] pt-24 pb-14 dark:to-[#0d9488]/5 lg:pt-28 lg:pb-20"
+      className="grain-overlay relative overflow-hidden bg-gradient-to-br from-[var(--lp-warm-white)] via-[var(--lp-warm-white-dim)] to-[#e8f4f3] pt-32 pb-14 dark:to-[#0d9488]/5 lg:pt-36 lg:pb-20"
     >
       {/* Gradient mesh decoration — hidden on mobile for perf */}
       <div className="pointer-events-none absolute -top-32 -right-32 hidden h-[500px] w-[500px] rounded-full bg-[var(--lp-teal)]/8 blur-[120px] md:block" />
