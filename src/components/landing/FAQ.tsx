@@ -45,12 +45,12 @@ function FAQItem({
   onToggle: () => void;
 }) {
   return (
-    <div className="border-b border-[var(--lp-navy)]/5 last:border-b-0">
+    <div className="border-b border-[var(--lp-navy)]/5 last:border-b-0 dark:border-white/5">
       <button
         onClick={onToggle}
         className="flex w-full items-center justify-between py-5 text-left transition-colors hover:text-[var(--lp-teal)]"
       >
-        <span className="font-outfit pr-4 text-[15px] font-semibold text-[var(--lp-navy)]">
+        <span className="font-outfit pr-4 text-[15px] font-semibold text-[var(--lp-navy)] dark:text-white">
           {item.question}
         </span>
         <ChevronDown
@@ -82,7 +82,7 @@ export function FAQ() {
   return (
     <section
       id="faq"
-      className="bg-gradient-to-b from-white to-[var(--lp-warm-white-dim)] py-20 lg:py-28"
+      className="bg-gradient-to-b from-white to-[var(--lp-warm-white-dim)] py-20 dark:from-[var(--lp-warm-white)] dark:to-[var(--lp-warm-white-dim)] lg:py-28"
       ref={ref}
     >
       <div className="mx-auto max-w-3xl px-5 lg:px-8">
@@ -90,13 +90,13 @@ export function FAQ() {
           <p className="text-center text-sm font-semibold tracking-widest text-[var(--lp-teal)] uppercase">
             FAQ
           </p>
-          <h2 className="font-outfit mt-3 text-center text-3xl font-bold text-[var(--lp-navy)] sm:text-4xl">
+          <h2 className="font-outfit mt-3 text-center text-3xl font-bold text-[var(--lp-navy)] dark:text-white sm:text-4xl">
             Συχνές Ερωτήσεις
           </h2>
         </div>
 
         <div
-          className={`reveal-up stagger-2 mt-12 rounded-2xl border border-[var(--lp-navy)]/5 bg-white px-6 ${isVisible ? "revealed" : ""}`}
+          className={`reveal-up stagger-2 mt-12 rounded-2xl border border-[var(--lp-navy)]/5 bg-white px-6 dark:border-white/5 dark:bg-white/5 ${isVisible ? "revealed" : ""}`}
         >
           {FAQ_ITEMS.map((item, i) => (
             <FAQItem

@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Moon, Sun } from "lucide-react";
+import { useDarkMode } from "@/hooks/useDarkMode";
 import { YearSelector } from "./YearSelector";
 import { RegimeSelector } from "./RegimeSelector";
 import { IncomeForm } from "./IncomeForm";
@@ -51,24 +52,6 @@ function setUrlParams(params: Record<string, string>) {
     }
   });
   window.history.replaceState({}, "", url.toString());
-}
-
-function useDarkMode() {
-  const [dark, setDark] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return (
-      localStorage.getItem("theme") === "dark" ||
-      (!localStorage.getItem("theme") &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-    );
-  });
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
-    localStorage.setItem("theme", dark ? "dark" : "light");
-  }, [dark]);
-
-  return [dark, () => setDark((d) => !d)] as const;
 }
 
 function initRegime(urlParams: Partial<Record<string, string>>): Regime {
