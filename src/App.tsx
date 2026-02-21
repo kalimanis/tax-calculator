@@ -1,7 +1,35 @@
-import { TaxCalculator } from "@/components/TaxCalculator";
+import { lazy, Suspense } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { LandingPage } from "@/pages/LandingPage";
+
+const TaxCalculator = lazy(() =>
+  import("@/components/TaxCalculator").then((m) => ({
+    default: m.TaxCalculator,
+  }))
+);
 
 function App() {
-  return <TaxCalculator />;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route
+          path="/calculator"
+          element={
+            <Suspense
+              fallback={
+                <div className="flex min-h-screen items-center justify-center">
+                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-gray-800" />
+                </div>
+              }
+            >
+              <TaxCalculator />
+            </Suspense>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
