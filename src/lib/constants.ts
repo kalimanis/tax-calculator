@@ -1,5 +1,7 @@
 import type { Bracket } from "./types";
 
+export const SITE_URL = "https://app.kalynexis.dev";
+
 export const BRACKETS_2025: Bracket[] = [
   { min: 0, max: 10000, rate: 0.09 },
   { min: 10000, max: 20000, rate: 0.22 },

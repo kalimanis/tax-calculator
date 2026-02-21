@@ -39,6 +39,8 @@ export function Hero() {
 
   return (
     <section
+      id="hero"
+      aria-label="Κύρια παρουσίαση"
       className="grain-overlay relative overflow-hidden bg-gradient-to-br from-[var(--lp-warm-white)] via-[var(--lp-warm-white-dim)] to-[#e8f4f3] pt-24 pb-14 dark:to-[#0d9488]/5 lg:pt-28 lg:pb-20"
     >
       {/* Gradient mesh decoration — hidden on mobile for perf */}
@@ -60,8 +62,8 @@ export function Hero() {
               .
             </h1>
             <p className="mt-6 max-w-lg text-lg leading-relaxed text-[var(--lp-text-muted)]">
-              Ο πιο ακριβής υπολογιστής φόρου και καθαρού μισθού για την Ελλάδα.
-              Μπλοκάκι, ατομική, μισθωτός — ενημερωμένος για{" "}
+              Υπολόγισε φόρο εισοδήματος και καθαρό μισθό —
+              μισθωτός, μπλοκάκι ή ατομική — με βάση την κλίμακα{" "}
               <span className="font-semibold text-[var(--lp-navy)] dark:text-white">
                 2025 &amp; 2026
               </span>
@@ -72,6 +74,7 @@ export function Hero() {
             <div className="mt-8 flex flex-wrap gap-4">
               <button
                 onClick={() => navigate("/calculator")}
+                data-event="cta-hero-primary"
                 className="group inline-flex items-center gap-2 rounded-full bg-[var(--lp-teal)] px-7 py-3.5 text-[15px] font-semibold text-white shadow-xl shadow-[var(--lp-teal)]/20 transition-all hover:bg-[var(--lp-teal-dark)] hover:shadow-2xl hover:shadow-[var(--lp-teal)]/30"
               >
                 Υπολόγισε τον Μισθό σου

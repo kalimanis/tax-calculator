@@ -93,6 +93,7 @@ export function ComparisonTeaser() {
   return (
     <section
       id="comparison"
+      aria-label="Σύγκριση 2025 vs 2026"
       className="relative bg-gradient-to-b from-[var(--lp-warm-white-dim)] to-white py-20 dark:to-[var(--lp-warm-white)] lg:py-28"
       ref={ref}
     >

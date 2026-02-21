@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
+import { Helmet } from "@dr.pogodin/react-helmet";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Moon, Sun } from "lucide-react";
 import { useDarkMode } from "@/hooks/useDarkMode";
@@ -13,7 +14,7 @@ import { IncomeWaterfall } from "./IncomeWaterfall";
 import { ComparisonView } from "./ComparisonView";
 import { SalaryComparisonView } from "./SalaryComparisonView";
 import { Disclaimer } from "./Disclaimer";
-import { LABELS } from "@/lib/constants";
+import { LABELS, SITE_URL } from "@/lib/constants";
 import { calculateTax } from "@/lib/tax-engine";
 import { calculateSalary } from "@/lib/salary-engine";
 import { getEfkaRates } from "@/lib/salary-constants";
@@ -264,8 +265,64 @@ export function TaxCalculator() {
     }
   }, [isSalary, year, regime, grossIncome, otherExpenses, children, ageGroup, isFirstYearFiling, yearsInBusiness, profession, efkaCategory, isNewProfessional, manualEfka, clientLocation, domesticIncomeShare, salaryDirection, monthlySalary, payFrequency, efkaEmployeeRate, efkaEmployerRate, hasArticle5G, seniority]);
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Αρχική",
+        item: `${SITE_URL}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Υπολογιστής Φόρου",
+        item: `${SITE_URL}/calculator`,
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+      <Helmet>
+        <title>Υπολογιστής Φόρου Εισοδήματος — ΦοροΥπολογιστής</title>
+        <meta
+          name="description"
+          content="Υπολογίστε τον φόρο εισοδήματος και τον καθαρό μισθό σας. Μισθωτός, μπλοκάκι, ατομική επιχείρηση — 2025 & 2026."
+        />
+        <link rel="canonical" href={`${SITE_URL}/calculator`} />
+
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Υπολογιστής Φόρου Εισοδήματος — ΦοροΥπολογιστής"
+        />
+        <meta
+          property="og:description"
+          content="Υπολογίστε τον φόρο εισοδήματος και τον καθαρό μισθό σας."
+        />
+        <meta property="og:url" content={`${SITE_URL}/calculator`} />
+        <meta property="og:image" content={`${SITE_URL}/og-image.svg`} />
+        <meta property="og:locale" content="el_GR" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Υπολογιστής Φόρου Εισοδήματος — ΦοροΥπολογιστής"
+        />
+        <meta
+          name="twitter:description"
+          content="Υπολογίστε τον φόρο εισοδήματος και τον καθαρό μισθό σας."
+        />
+        <meta name="twitter:image" content={`${SITE_URL}/og-image.svg`} />
+
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbSchema)}
+        </script>
+      </Helmet>
+
       {/* Header */}
       <header className="bg-gradient-to-r from-slate-900 to-slate-800 text-white print:bg-slate-900">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:py-6">

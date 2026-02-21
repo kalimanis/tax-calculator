@@ -82,6 +82,7 @@ export function FAQ() {
   return (
     <section
       id="faq"
+      aria-label="Συχνές ερωτήσεις"
       className="bg-gradient-to-b from-white to-[var(--lp-warm-white-dim)] py-20 dark:from-[var(--lp-warm-white)] dark:to-[var(--lp-warm-white-dim)] lg:py-28"
       ref={ref}
     >

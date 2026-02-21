@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1f36"/>
+      <stop offset="100%" stop-color="#0f1225"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="950" cy="150" r="200" fill="#0d9488" opacity="0.08"/>
+  <circle cx="200" cy="500" r="150" fill="#f59e0b" opacity="0.06"/>
+
+  <!-- Logo mark -->
+  <rect x="80" y="200" width="80" height="80" rx="16" fill="#0d9488"/>
+  <text x="120" y="255" text-anchor="middle" font-family="system-ui, sans-serif" font-size="48" font-weight="700" fill="white">Φ</text>
+
+  <!-- Title -->
+  <text x="180" y="245" font-family="system-ui, sans-serif" font-size="42" font-weight="800" fill="white">ΦοροΥπολογιστής</text>
+
+  <!-- Subtitle -->
+  <text x="80" y="330" font-family="system-ui, sans-serif" font-size="28" fill="#94a3b8">Υπολογιστής Φόρου &amp; Καθαρού Μισθού</text>
+
+  <!-- Features -->
+  <text x="80" y="410" font-family="system-ui, sans-serif" font-size="22" fill="#0d9488">Μισθωτός · Μπλοκάκι · Ατομική Επιχείρηση</text>
+
+  <!-- Year badge -->
+  <rect x="80" y="460" width="180" height="44" rx="22" fill="#f59e0b" opacity="0.15"/>
+  <text x="170" y="489" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#f59e0b">2025 &amp; 2026</text>
+
+  <!-- Free badge -->
+  <rect x="280" y="460" width="160" height="44" rx="22" fill="#0d9488" opacity="0.15"/>
+  <text x="360" y="489" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#0d9488">100% Δωρεάν</text>
+
+  <!-- Domain -->
+  <text x="80" y="580" font-family="system-ui, sans-serif" font-size="18" fill="#475569">app.kalynexis.dev</text>
+</svg>

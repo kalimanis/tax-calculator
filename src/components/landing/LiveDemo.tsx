@@ -61,6 +61,8 @@ export function LiveDemo() {
   return (
     <section
       id="demo"
+      aria-label="Ζωντανή δοκιμή"
+      data-section="live-demo"
       className="relative overflow-hidden bg-[var(--lp-navy)] py-20 lg:py-28"
       ref={ref}
     >
