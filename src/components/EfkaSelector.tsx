@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Info } from "lucide-react";
 import { LABELS, TOOLTIPS } from "@/lib/constants";
 import { getEfkaTable, getEfkaNewProfessional, getMaxCategory } from "@/lib/efka-tables";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, sanitizeNumericInput } from "@/lib/utils";
 import type { FiscalYear, ProfessionType } from "@/lib/types";
 
 interface EfkaSelectorProps {
@@ -173,7 +173,7 @@ export function EfkaSelector({
             min={0}
             step={0.01}
             value={efkaAnnual || ""}
-            onChange={(e) => onEfkaChange(Number(e.target.value))}
+            onChange={(e) => onEfkaChange(sanitizeNumericInput(e.target.value, { min: 0 }))}
             className="pl-7 tabular-nums"
             placeholder="0,00"
           />

@@ -185,7 +185,7 @@ export function ComparisonTeaser() {
                   <div className="flex h-8 overflow-hidden rounded-lg">
                     {/* 2025 base */}
                     <div
-                      className="flex items-center justify-center bg-[var(--lp-navy)]/10 transition-all duration-1000"
+                      className="flex items-center justify-center bg-[var(--lp-navy)]/10 dark:bg-white/10 transition-all duration-1000"
                       style={{ width: isVisible ? `${basePct}%` : "0%" }}
                     >
                       <span className="text-[11px] font-semibold text-[var(--lp-text-muted)]">

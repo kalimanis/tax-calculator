@@ -20,7 +20,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Info } from "lucide-react";
 import { LABELS } from "@/lib/constants";
 import { SALARY_LABELS, SALARY_TOOLTIPS, getMinimumWage } from "@/lib/salary-constants";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, sanitizeNumericInput } from "@/lib/utils";
 import type { AgeGroup, FiscalYear, PayFrequency, SalaryDirection, Seniority } from "@/lib/types";
 
 interface SalaryFormProps {
@@ -133,7 +133,7 @@ export function SalaryForm({
               min={0}
               step={50}
               value={monthlySalary || ""}
-              onChange={(e) => onMonthlySalaryChange(Number(e.target.value))}
+              onChange={(e) => onMonthlySalaryChange(sanitizeNumericInput(e.target.value, { min: 0 }))}
               className="pl-7 tabular-nums"
               placeholder="0,00"
             />
@@ -263,7 +263,7 @@ export function SalaryForm({
                       max={100}
                       step={0.01}
                       value={((efkaEmployeeRate * 100).toFixed(2))}
-                      onChange={(e) => onEfkaEmployeeRateChange(Number(e.target.value) / 100)}
+                      onChange={(e) => onEfkaEmployeeRateChange(sanitizeNumericInput(e.target.value, { min: 0, max: 100 }) / 100)}
                       className="pr-7 tabular-nums"
                     />
                     <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
@@ -283,7 +283,7 @@ export function SalaryForm({
                       max={100}
                       step={0.01}
                       value={((efkaEmployerRate * 100).toFixed(2))}
-                      onChange={(e) => onEfkaEmployerRateChange(Number(e.target.value) / 100)}
+                      onChange={(e) => onEfkaEmployerRateChange(sanitizeNumericInput(e.target.value, { min: 0, max: 100 }) / 100)}
                       className="pr-7 tabular-nums"
                     />
                     <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">

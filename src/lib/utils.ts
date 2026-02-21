@@ -38,6 +38,15 @@ export function round2(value: number): number {
   return Math.round(value * 100) / 100;
 }
 
+export function sanitizeNumericInput(value: string, opts?: { min?: number; max?: number }): number {
+  const num = Number(value);
+  if (!value || isNaN(num)) return 0;
+  let result = num;
+  if (opts?.min !== undefined) result = Math.max(opts.min, result);
+  if (opts?.max !== undefined) result = Math.min(opts.max, result);
+  return result;
+}
+
 export function parseGreekNumber(value: string): number {
   // Accept both comma and dot as decimal separator
   const cleaned = value.replace(/\s/g, "").replace(/\./g, "").replace(",", ".");
