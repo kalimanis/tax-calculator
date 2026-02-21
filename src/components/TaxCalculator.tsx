@@ -304,7 +304,7 @@ export function TaxCalculator() {
           content="Υπολογίστε τον φόρο εισοδήματος και τον καθαρό μισθό σας."
         />
         <meta property="og:url" content={`${SITE_URL}/calculator`} />
-        <meta property="og:image" content={`${SITE_URL}/og-image.svg`} />
+        <meta property="og:image" content={`${SITE_URL}/og-image.png`} />
         <meta property="og:locale" content="el_GR" />
 
         <meta name="twitter:card" content="summary_large_image" />
@@ -316,7 +316,7 @@ export function TaxCalculator() {
           name="twitter:description"
           content="Υπολογίστε τον φόρο εισοδήματος και τον καθαρό μισθό σας."
         />
-        <meta name="twitter:image" content={`${SITE_URL}/og-image.svg`} />
+        <meta name="twitter:image" content={`${SITE_URL}/og-image.png`} />
 
         <script type="application/ld+json">
           {JSON.stringify(breadcrumbSchema)}
