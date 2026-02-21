@@ -181,9 +181,9 @@ export function TaxCalculator() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       {/* Header */}
       <header className="bg-gradient-to-r from-slate-900 to-slate-800 text-white print:bg-slate-900">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-6">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:py-6">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">
+            <h1 className="text-lg font-bold tracking-tight sm:text-2xl">
               Υπολογιστής Φόρου Ελεύθερων Επαγγελματιών
             </h1>
             <p className="mt-1 text-sm text-slate-300">
@@ -202,19 +202,19 @@ export function TaxCalculator() {
 
       {/* Controls */}
       <div className="border-b bg-white dark:bg-slate-900">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-4 px-4 py-3">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3 sm:gap-4">
           <YearSelector value={year} onChange={setYear} />
           <RegimeSelector value={regime} onChange={setRegime} />
-          <div className="ml-auto flex gap-2 print:hidden">
+          <div className="flex gap-2 max-sm:ml-auto print:hidden sm:ml-auto">
             <button
               onClick={handleReset}
-              className="rounded-md border px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent"
+              className="rounded-md border px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent"
             >
               {LABELS.reset}
             </button>
             <button
               onClick={() => window.print()}
-              className="rounded-md border px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent"
+              className="hidden rounded-md border px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent sm:block"
             >
               Εκτύπωση
             </button>
@@ -224,7 +224,7 @@ export function TaxCalculator() {
 
       {/* Main Content */}
       <main className="mx-auto max-w-5xl px-4 py-6">
-        <div className="grid gap-6 lg:grid-cols-[400px_1fr]">
+        <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
           {/* Left: Form */}
           <div>
             <IncomeForm

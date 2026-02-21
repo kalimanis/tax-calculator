@@ -42,7 +42,7 @@ function ResultCard({ label, value, icon, colorClass, tooltip, subtitle }: Resul
                   <TooltipTrigger asChild>
                     <Info className="h-3 w-3 text-muted-foreground" />
                   </TooltipTrigger>
-                  <TooltipContent className="max-w-xs">
+                  <TooltipContent className="max-w-[min(20rem,calc(100vw-2rem))]">
                     <p>{tooltip}</p>
                   </TooltipContent>
                 </Tooltip>

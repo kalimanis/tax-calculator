@@ -12,7 +12,7 @@ interface YearSelectorProps {
 export function YearSelector({ value, onChange }: YearSelectorProps) {
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+      <span className="hidden text-sm font-medium text-slate-700 dark:text-slate-300 sm:inline">
         {LABELS.fiscalYear}
       </span>
       <Tabs
@@ -27,7 +27,7 @@ export function YearSelector({ value, onChange }: YearSelectorProps) {
               <TooltipTrigger asChild>
                 <Info className="h-3.5 w-3.5 text-muted-foreground" />
               </TooltipTrigger>
-              <TooltipContent className="max-w-xs">
+              <TooltipContent className="max-w-[min(20rem,calc(100vw-2rem))]">
                 <p>{TOOLTIPS.changes2026}</p>
               </TooltipContent>
             </Tooltip>

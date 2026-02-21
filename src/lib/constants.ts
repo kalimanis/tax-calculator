@@ -47,7 +47,9 @@ export const LABELS = {
   subtitle: "Φορολογικά Έτη 2025 & 2026",
   regime: {
     mplokaki: "Μπλοκάκι (Άρθ. 12 §2στ)",
+    mplokakiShort: "Μπλοκάκι",
     atomiki: "Ατομική Επιχείρηση (Άρθ. 29)",
+    atomikiShort: "Ατομική",
   },
   income: {
     gross: "Ακαθάριστα Έσοδα",

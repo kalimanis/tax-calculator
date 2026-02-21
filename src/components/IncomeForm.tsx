@@ -157,7 +157,7 @@ export function IncomeForm({
                   <TooltipTrigger asChild>
                     <Info className="h-3 w-3 text-muted-foreground" />
                   </TooltipTrigger>
-                  <TooltipContent className="max-w-xs">
+                  <TooltipContent className="max-w-[min(20rem,calc(100vw-2rem))]">
                     <p>{TOOLTIPS.foreignClient}</p>
                   </TooltipContent>
                 </Tooltip>
@@ -167,7 +167,7 @@ export function IncomeForm({
                   <button
                     key={loc}
                     onClick={() => onClientLocationChange(loc)}
-                    className={`flex-1 rounded-md border px-3 py-2 text-sm transition-colors ${
+                    className={`flex-1 rounded-md border px-2 py-2.5 text-sm transition-colors ${
                       clientLocation === loc
                         ? "border-primary bg-primary text-primary-foreground"
                         : "border-border bg-background hover:bg-accent"
@@ -237,7 +237,7 @@ export function IncomeForm({
                 <button
                   key={ag}
                   onClick={() => onAgeGroupChange(ag)}
-                  className={`flex-1 rounded-md border px-3 py-2 text-sm transition-colors ${
+                  className={`flex-1 rounded-md border px-2 py-2.5 text-sm transition-colors ${
                     ageGroup === ag
                       ? "border-primary bg-primary text-primary-foreground"
                       : "border-border bg-background hover:bg-accent"
