@@ -8,6 +8,8 @@ export function FinalCTA() {
 
   return (
     <section
+      id="cta"
+      aria-label="Τελική πρόσκληση"
       className="grain-overlay relative overflow-hidden bg-[var(--lp-navy)] py-20 lg:py-28"
       ref={ref}
     >
@@ -29,6 +31,7 @@ export function FinalCTA() {
         >
           <button
             onClick={() => navigate("/calculator")}
+            data-event="cta-final"
             className="group inline-flex items-center gap-2.5 rounded-full bg-[var(--lp-amber)] px-8 py-4 text-base font-bold text-[var(--lp-navy)] shadow-2xl shadow-[var(--lp-amber)]/20 transition-all hover:bg-[var(--lp-amber-light)] hover:shadow-2xl hover:shadow-[var(--lp-amber)]/30"
           >
             Υπολόγισε Τώρα — Δωρεάν

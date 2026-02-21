@@ -29,7 +29,7 @@ export function HowItWorks() {
   const { ref, isVisible } = useScrollReveal(0.1);
 
   return (
-    <section id="how-it-works" className="bg-white py-20 dark:bg-[var(--lp-warm-white)] lg:py-28" ref={ref}>
+    <section id="how-it-works" aria-label="Πώς λειτουργεί" className="bg-white py-20 dark:bg-[var(--lp-warm-white)] lg:py-28" ref={ref}>
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className={`reveal-up ${isVisible ? "revealed" : ""}`}>
           <p className="text-center text-sm font-semibold tracking-widest text-[var(--lp-teal)] uppercase">
@@ -49,7 +49,7 @@ export function HowItWorks() {
                 className={`reveal-up stagger-${i + 1} group relative rounded-2xl border border-[var(--lp-navy)]/5 bg-[var(--lp-warm-white)]/60 p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[var(--lp-navy)]/5 dark:border-white/5 dark:hover:shadow-white/5 ${isVisible ? "revealed" : ""}`}
               >
                 {/* Step number */}
-                <span className="font-outfit absolute top-6 right-6 text-5xl font-extrabold text-[var(--lp-navy)]/[0.1]">
+                <span className="font-outfit absolute top-6 right-6 text-5xl font-extrabold text-[var(--lp-navy)]/[0.1] dark:text-white/[0.1]">
                   {i + 1}
                 </span>
 

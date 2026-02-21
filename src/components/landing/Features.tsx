@@ -55,6 +55,8 @@ export function Features() {
   return (
     <section
       id="features"
+      aria-label="Χαρακτηριστικά"
+      data-section="features"
       className="relative overflow-hidden bg-gradient-to-b from-white to-[var(--lp-warm-white-dim)] py-20 dark:from-[var(--lp-warm-white)] dark:to-[var(--lp-warm-white-dim)] lg:py-28"
       ref={ref}
     >

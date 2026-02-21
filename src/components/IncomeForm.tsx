@@ -13,7 +13,7 @@ import { EfkaSelector } from "./EfkaSelector";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
 import { LABELS, TOOLTIPS } from "@/lib/constants";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, sanitizeNumericInput } from "@/lib/utils";
 import type { AgeGroup, ClientLocation, FiscalYear, ProfessionType, Regime } from "@/lib/types";
 
 interface IncomeFormProps {
@@ -100,7 +100,7 @@ export function IncomeForm({
               min={0}
               step={100}
               value={grossIncome || ""}
-              onChange={(e) => onGrossIncomeChange(Number(e.target.value))}
+              onChange={(e) => onGrossIncomeChange(sanitizeNumericInput(e.target.value, { min: 0 }))}
               className="pl-7 tabular-nums"
               placeholder="0,00"
             />
@@ -137,7 +137,7 @@ export function IncomeForm({
               min={0}
               step={100}
               value={otherExpenses || ""}
-              onChange={(e) => onOtherExpensesChange(Number(e.target.value))}
+              onChange={(e) => onOtherExpensesChange(sanitizeNumericInput(e.target.value, { min: 0 }))}
               className="pl-7 tabular-nums"
               placeholder="0,00"
             />
@@ -191,7 +191,7 @@ export function IncomeForm({
                     value={domesticIncomeShare}
                     onChange={(e) =>
                       onDomesticIncomeShareChange(
-                        Math.min(100, Math.max(0, Number(e.target.value)))
+                        sanitizeNumericInput(e.target.value, { min: 0, max: 100 })
                       )
                     }
                     className="tabular-nums"

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useScrollReveal, useCountUp } from "@/hooks/useLanding";
 import { calculateSalary } from "@/lib/salary-engine";
 import { calculateTax } from "@/lib/tax-engine";
+import { sanitizeNumericInput } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import type { FiscalYear } from "@/lib/types";
 
@@ -61,6 +62,8 @@ export function LiveDemo() {
   return (
     <section
       id="demo"
+      aria-label="Ζωντανή δοκιμή"
+      data-section="live-demo"
       className="relative overflow-hidden bg-[var(--lp-navy)] py-20 lg:py-28"
       ref={ref}
     >
@@ -109,11 +112,8 @@ export function LiveDemo() {
               </span>
               <input
                 type="number"
-                value={amount}
-                onChange={(e) => {
-                  const val = parseInt(e.target.value) || 0;
-                  setAmount(Math.max(0, Math.min(val, 20000)));
-                }}
+                value={amount || ""}
+                onChange={(e) => setAmount(sanitizeNumericInput(e.target.value, { min: 0, max: 20000 }))}
                 className="font-outfit w-full rounded-xl border border-white/10 bg-white/5 py-3.5 pr-4 pl-10 text-2xl font-bold text-white tabular-nums outline-none transition-colors focus:border-[var(--lp-teal)]/50 focus:ring-2 focus:ring-[var(--lp-teal)]/20"
               />
             </div>
