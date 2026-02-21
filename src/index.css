@@ -148,22 +148,32 @@
   --lp-text-light: #8a8fa8;
 }
 
+.dark {
+  --lp-warm-white: #0f1328;
+  --lp-warm-white-dim: #131731;
+  --lp-text: #e2e4ec;
+  --lp-text-muted: #9096b0;
+  --lp-text-light: #6b7194;
+}
+
 /* Outfit font for landing page */
 .font-outfit {
   font-family: "Outfit", sans-serif;
 }
 
-/* Grain overlay texture */
-.grain-overlay::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0.035;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 256px 256px;
-  z-index: 1;
+/* Grain overlay texture — desktop only (SVG filter is expensive on mobile) */
+@media (min-width: 768px) {
+  .grain-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.035;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+    z-index: 1;
+  }
 }
 
 /* Use .grain-content on elements that need to sit above the grain */

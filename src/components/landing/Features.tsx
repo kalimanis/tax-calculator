@@ -55,18 +55,18 @@ export function Features() {
   return (
     <section
       id="features"
-      className="relative overflow-hidden bg-gradient-to-b from-white to-[var(--lp-warm-white-dim)] py-20 lg:py-28"
+      className="relative overflow-hidden bg-gradient-to-b from-white to-[var(--lp-warm-white-dim)] py-20 dark:from-[var(--lp-warm-white)] dark:to-[var(--lp-warm-white-dim)] lg:py-28"
       ref={ref}
     >
-      {/* Subtle mesh */}
-      <div className="pointer-events-none absolute top-0 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-[var(--lp-teal)]/4 blur-[150px]" />
+      {/* Subtle mesh — hidden on mobile for perf */}
+      <div className="pointer-events-none absolute top-0 left-1/2 hidden h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-[var(--lp-teal)]/4 blur-[150px] md:block" />
 
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <div className={`reveal-up ${isVisible ? "revealed" : ""}`}>
           <p className="text-center text-sm font-semibold tracking-widest text-[var(--lp-teal)] uppercase">
             Τι καλύπτει
           </p>
-          <h2 className="font-outfit mt-3 text-center text-3xl font-bold text-[var(--lp-navy)] sm:text-4xl">
+          <h2 className="font-outfit mt-3 text-center text-3xl font-bold text-[var(--lp-navy)] dark:text-white sm:text-4xl">
             Ένας υπολογιστής, τρεις κόσμοι
           </h2>
         </div>
@@ -78,7 +78,7 @@ export function Features() {
               <div
                 key={feature.id}
                 id={feature.id}
-                className={`reveal-up stagger-${i + 1} group relative rounded-2xl border border-[var(--lp-navy)]/5 bg-white/70 p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[var(--lp-navy)]/5 ${feature.accentBorder} ${isVisible ? "revealed" : ""}`}
+                className={`reveal-up stagger-${i + 1} group relative rounded-2xl border border-[var(--lp-navy)]/5 bg-white/70 p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[var(--lp-navy)]/5 dark:border-white/5 dark:bg-white/5 dark:hover:shadow-white/5 ${feature.accentBorder} ${isVisible ? "revealed" : ""}`}
               >
                 <div
                   className={`mb-5 inline-flex items-center justify-center rounded-xl ${feature.accentBg} p-3`}
@@ -86,7 +86,7 @@ export function Features() {
                   <Icon size={24} style={{ color: feature.accent }} />
                 </div>
 
-                <h3 className="font-outfit text-xl font-bold text-[var(--lp-navy)]">
+                <h3 className="font-outfit text-xl font-bold text-[var(--lp-navy)] dark:text-white">
                   {feature.title}
                 </h3>
                 <p className="mt-1.5 text-sm text-[var(--lp-text-muted)]">
