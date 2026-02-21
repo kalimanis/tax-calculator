@@ -12,11 +12,12 @@ import {
 } from "lucide-react";
 import { LABELS, TOOLTIPS } from "@/lib/constants";
 import { formatCurrency, formatPercent } from "@/lib/utils";
-import type { Regime, TaxResult } from "@/lib/types";
+import type { ClientLocation, Regime, TaxResult } from "@/lib/types";
 
 interface ResultsSummaryProps {
   result: TaxResult;
   regime: Regime;
+  clientLocation: ClientLocation;
 }
 
 interface ResultCardProps {
@@ -63,7 +64,19 @@ function ResultCard({ label, value, icon, colorClass, tooltip, subtitle }: Resul
   );
 }
 
-export function ResultsSummary({ result, regime }: ResultsSummaryProps) {
+function getBalanceDueLabel(balanceDue: number): string {
+  if (balanceDue > 0) return LABELS.balanceDue.owed;
+  if (balanceDue < 0) return LABELS.balanceDue.refund;
+  return LABELS.balanceDue.zero;
+}
+
+function getWithholdingSubtitle(clientLocation: ClientLocation): string | undefined {
+  if (clientLocation === "foreign") return LABELS.clientLocation.noWithholding;
+  if (clientLocation === "mixed") return LABELS.clientLocation.partialWithholding;
+  return undefined;
+}
+
+export function ResultsSummary({ result, regime, clientLocation }: ResultsSummaryProps) {
   const isRefund = regime === "mplokaki" && result.balanceDue < 0;
 
   return (
@@ -135,13 +148,19 @@ export function ResultsSummary({ result, regime }: ResultsSummaryProps) {
             icon={<ArrowDownUp className="h-5 w-5 text-sky-500" />}
             colorClass="text-sky-600 dark:text-sky-400"
             tooltip={TOOLTIPS.withholding}
+            subtitle={getWithholdingSubtitle(clientLocation)}
           />
           <ResultCard
-            label={LABELS.results.balanceDue}
+            label={getBalanceDueLabel(result.balanceDue)}
             value={formatCurrency(result.balanceDue)}
             icon={<ArrowDownUp className="h-5 w-5" />}
-            colorClass={isRefund ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}
-            subtitle={isRefund ? "Επιστροφή φόρου" : undefined}
+            colorClass={
+              result.balanceDue === 0
+                ? "text-muted-foreground"
+                : isRefund
+                  ? "text-emerald-600 dark:text-emerald-400"
+                  : "text-rose-600 dark:text-rose-400"
+            }
           />
         </>
       )}

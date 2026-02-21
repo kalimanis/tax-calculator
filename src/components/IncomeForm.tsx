@@ -10,9 +10,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { EfkaSelector } from "./EfkaSelector";
-import { LABELS } from "@/lib/constants";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Info } from "lucide-react";
+import { LABELS, TOOLTIPS } from "@/lib/constants";
 import { formatCurrency } from "@/lib/utils";
-import type { AgeGroup, FiscalYear, ProfessionType, Regime } from "@/lib/types";
+import type { AgeGroup, ClientLocation, FiscalYear, ProfessionType, Regime } from "@/lib/types";
 
 interface IncomeFormProps {
   year: FiscalYear;
@@ -39,6 +41,10 @@ interface IncomeFormProps {
   onFirstYearFilingChange: (v: boolean) => void;
   yearsInBusiness: number;
   onYearsInBusinessChange: (v: number) => void;
+  clientLocation: ClientLocation;
+  onClientLocationChange: (v: ClientLocation) => void;
+  domesticIncomeShare: number;
+  onDomesticIncomeShareChange: (v: number) => void;
   taxableIncome: number;
 }
 
@@ -67,6 +73,10 @@ export function IncomeForm({
   onFirstYearFilingChange,
   yearsInBusiness,
   onYearsInBusinessChange,
+  clientLocation,
+  onClientLocationChange,
+  domesticIncomeShare,
+  onDomesticIncomeShareChange,
   taxableIncome,
 }: IncomeFormProps) {
   return (
@@ -133,6 +143,64 @@ export function IncomeForm({
             />
           </div>
         </div>
+
+        {/* Client Location - μπλοκάκι only */}
+        {regime === "mplokaki" && (
+          <>
+            <Separator />
+            <div>
+              <div className="mb-1.5 flex items-center gap-1.5">
+                <Label className="block text-sm font-medium">
+                  {LABELS.clientLocation.title}
+                </Label>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-3 w-3 text-muted-foreground" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p>{TOOLTIPS.foreignClient}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <div className="flex gap-2">
+                {(["domestic", "foreign", "mixed"] as const).map((loc) => (
+                  <button
+                    key={loc}
+                    onClick={() => onClientLocationChange(loc)}
+                    className={`flex-1 rounded-md border px-3 py-2 text-sm transition-colors ${
+                      clientLocation === loc
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-background hover:bg-accent"
+                    }`}
+                  >
+                    {LABELS.clientLocation[loc]}
+                  </button>
+                ))}
+              </div>
+              {clientLocation === "mixed" && (
+                <div className="mt-3">
+                  <Label htmlFor="domestic-share" className="mb-1.5 block text-sm font-medium">
+                    {LABELS.clientLocation.domesticShare}
+                  </Label>
+                  <Input
+                    id="domestic-share"
+                    type="number"
+                    min={0}
+                    max={100}
+                    step={5}
+                    value={domesticIncomeShare}
+                    onChange={(e) =>
+                      onDomesticIncomeShareChange(
+                        Math.min(100, Math.max(0, Number(e.target.value)))
+                      )
+                    }
+                    className="tabular-nums"
+                  />
+                </div>
+              )}
+            </div>
+          </>
+        )}
 
         <Separator />
 

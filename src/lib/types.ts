@@ -2,6 +2,7 @@ export type FiscalYear = 2025 | 2026;
 export type Regime = "mplokaki" | "atomiki";
 export type AgeGroup = "young" | "middle" | "standard";
 export type ProfessionType = "standard" | "engineer" | "doctor";
+export type ClientLocation = "domestic" | "foreign" | "mixed";
 
 export interface TaxInput {
   fiscalYear: FiscalYear;
@@ -13,6 +14,8 @@ export interface TaxInput {
   ageGroup: AgeGroup;
   isFirstYearFiling: boolean;
   yearsInBusiness: number;
+  clientLocation: ClientLocation;
+  domesticIncomeShare: number;
 }
 
 export interface TaxResult {

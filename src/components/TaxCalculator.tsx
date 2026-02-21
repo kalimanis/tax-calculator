@@ -9,9 +9,10 @@ import { BracketBreakdown } from "./BracketBreakdown";
 import { IncomeWaterfall } from "./IncomeWaterfall";
 import { ComparisonView } from "./ComparisonView";
 import { Disclaimer } from "./Disclaimer";
+import { LABELS } from "@/lib/constants";
 import { calculateTax } from "@/lib/tax-engine";
 import { getEfkaTable, getEfkaNewProfessional, getMaxCategory } from "@/lib/efka-tables";
-import type { AgeGroup, FiscalYear, ProfessionType, Regime, TaxInput } from "@/lib/types";
+import type { AgeGroup, ClientLocation, FiscalYear, ProfessionType, Regime, TaxInput } from "@/lib/types";
 
 function getUrlParams(): Partial<Record<string, string>> {
   const params = new URLSearchParams(window.location.search);
@@ -78,6 +79,12 @@ export function TaxCalculator() {
   const [yearsInBusiness, setYearsInBusiness] = useState(
     Number(urlParams.yb) || 4
   );
+  const [clientLocation, setClientLocation] = useState<ClientLocation>(
+    (urlParams.cl as ClientLocation) || "domestic"
+  );
+  const [domesticIncomeShare, setDomesticIncomeShare] = useState(
+    Number(urlParams.ds) || 50
+  );
 
   // EFKA state
   const [efkaAutoMode, setEfkaAutoMode] = useState(true);
@@ -112,6 +119,24 @@ export function TaxCalculator() {
     [efkaCategory]
   );
 
+  const handleReset = useCallback(() => {
+    setYear(2025);
+    setRegime("mplokaki");
+    setGrossIncome(0);
+    setOtherExpenses(0);
+    setChildren(0);
+    setAgeGroup("standard");
+    setIsFirstYearFiling(false);
+    setYearsInBusiness(4);
+    setClientLocation("domestic");
+    setDomesticIncomeShare(50);
+    setEfkaAutoMode(true);
+    setProfession("standard");
+    setEfkaCategory(1);
+    setIsNewProfessional(false);
+    setManualEfka(0);
+  }, []);
+
   // Tax input
   const taxInput: TaxInput = useMemo(
     () => ({
@@ -124,8 +149,10 @@ export function TaxCalculator() {
       ageGroup: year === 2025 ? "standard" : ageGroup,
       isFirstYearFiling: regime === "atomiki" ? isFirstYearFiling : false,
       yearsInBusiness: regime === "atomiki" ? yearsInBusiness : 4,
+      clientLocation: regime === "mplokaki" ? clientLocation : "domestic",
+      domesticIncomeShare,
     }),
-    [year, regime, grossIncome, efkaAnnual, otherExpenses, children, ageGroup, isFirstYearFiling, yearsInBusiness]
+    [year, regime, grossIncome, efkaAnnual, otherExpenses, children, ageGroup, isFirstYearFiling, yearsInBusiness, clientLocation, domesticIncomeShare]
   );
 
   const result = useMemo(() => calculateTax(taxInput), [taxInput]);
@@ -145,8 +172,10 @@ export function TaxCalculator() {
       ec: String(efkaCategory),
       np: isNewProfessional ? "1" : "0",
       me: String(manualEfka),
+      cl: clientLocation,
+      ds: String(domesticIncomeShare),
     });
-  }, [year, regime, grossIncome, otherExpenses, children, ageGroup, isFirstYearFiling, yearsInBusiness, profession, efkaCategory, isNewProfessional, manualEfka]);
+  }, [year, regime, grossIncome, otherExpenses, children, ageGroup, isFirstYearFiling, yearsInBusiness, profession, efkaCategory, isNewProfessional, manualEfka, clientLocation, domesticIncomeShare]);
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
@@ -176,7 +205,13 @@ export function TaxCalculator() {
         <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-4 px-4 py-3">
           <YearSelector value={year} onChange={setYear} />
           <RegimeSelector value={regime} onChange={setRegime} />
-          <div className="ml-auto print:hidden">
+          <div className="ml-auto flex gap-2 print:hidden">
+            <button
+              onClick={handleReset}
+              className="rounded-md border px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent"
+            >
+              {LABELS.reset}
+            </button>
             <button
               onClick={() => window.print()}
               className="rounded-md border px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent"
@@ -217,6 +252,10 @@ export function TaxCalculator() {
               onFirstYearFilingChange={setIsFirstYearFiling}
               yearsInBusiness={yearsInBusiness}
               onYearsInBusinessChange={setYearsInBusiness}
+              clientLocation={clientLocation}
+              onClientLocationChange={setClientLocation}
+              domesticIncomeShare={domesticIncomeShare}
+              onDomesticIncomeShareChange={setDomesticIncomeShare}
               taxableIncome={result.taxableIncome}
             />
           </div>
@@ -225,7 +264,7 @@ export function TaxCalculator() {
           <div className="space-y-6">
             {grossIncome > 0 ? (
               <>
-                <ResultsSummary result={result} regime={regime} />
+                <ResultsSummary result={result} regime={regime} clientLocation={clientLocation} />
 
                 <Card>
                   <CardHeader className="pb-3">

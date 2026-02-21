@@ -79,8 +79,20 @@ export function calculateTaxReduction(
     return base;
   }
 
-  const decrease = 20 * ((taxableIncome - 12000) / 1000);
+  const decrease = 20 * Math.floor((taxableIncome - 12000) / 1000);
   return Math.max(0, round2(base - decrease));
+}
+
+export function calculateWithholding(input: TaxInput): number {
+  if (input.regime !== "mplokaki") return 0;
+  switch (input.clientLocation) {
+    case "foreign":
+      return 0;
+    case "mixed":
+      return round2(input.grossIncome * (input.domesticIncomeShare / 100) * 0.2);
+    default:
+      return round2(input.grossIncome * 0.2);
+  }
 }
 
 export function calculatePrepayment(
@@ -145,8 +157,7 @@ export function calculateTax(input: TaxInput): TaxResult {
   }
 
   // 7. Withholding (μπλοκάκι)
-  const withholding20 =
-    input.regime === "mplokaki" ? round2(input.grossIncome * 0.2) : 0;
+  const withholding20 = calculateWithholding(input);
 
   // 8. Results
   const totalObligation = round2(netTax + prepayment);
@@ -154,10 +165,10 @@ export function calculateTax(input: TaxInput): TaxResult {
     taxableIncome > 0 ? round2((netTax / taxableIncome) * 100) : 0;
   const netIncome = round2(
     input.grossIncome -
-      input.efkaAnnual -
-      input.otherExpenses -
-      netTax -
-      prepayment
+    input.efkaAnnual -
+    input.otherExpenses -
+    netTax -
+    prepayment
   );
   const balanceDue =
     input.regime === "mplokaki"
