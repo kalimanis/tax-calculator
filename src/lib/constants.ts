@@ -1,6 +1,6 @@
 import type { Bracket } from "./types";
 
-export const SITE_URL = "https://app.kalynexis.dev";
+export const SITE_URL = "https://forologisi.app";
 
 export const BRACKETS_2025: Bracket[] = [
   { min: 0, max: 10000, rate: 0.09 },

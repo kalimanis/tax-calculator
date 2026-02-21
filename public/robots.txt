@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://app.kalynexis.dev/sitemap.xml
+Sitemap: https://forologisi.app/sitemap.xml
