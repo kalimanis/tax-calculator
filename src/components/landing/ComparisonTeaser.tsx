@@ -73,13 +73,13 @@ export function ComparisonTeaser() {
 
     return [
       {
-        label: "Μισθωτός €2.000",
+        label: "Μισθωτός €2.000 μικτά",
         val2025: sal2025.netMonthly,
         val2026: sal2026.netMonthly,
         isMonthly: true,
       },
       {
-        label: "Μπλοκάκι €30.000",
+        label: "Μπλοκάκι €30.000 (ΕΦΚΑ 2η)",
         val2025: tax2025.netIncome,
         val2026: tax2026.netIncome,
         isMonthly: false,
@@ -157,42 +157,53 @@ export function ComparisonTeaser() {
             })}
           </div>
 
-          {/* Visual bars */}
-          <div className="mt-8 space-y-4">
+          {/* Visual bars — zoomed to show the difference */}
+          <div className="mt-8 space-y-5">
             {rows.map((row) => {
-              const maxVal = Math.max(row.val2025, row.val2026);
-              const pct2025 = (row.val2025 / maxVal) * 100;
-              const pct2026 = (row.val2026 / maxVal) * 100;
+              const diff = row.val2026 - row.val2025;
+              const base = row.val2025;
+              // Show the 2025 portion + the 2026 gain on one bar
+              const gainPct = (diff / base) * 100;
+              // Scale up so the gain is visually meaningful (min 15% visible)
+              const scaledGain = Math.max(gainPct * 8, 15);
+              const basePct = 100 - scaledGain;
 
               return (
                 <div key={row.label} className="space-y-2">
-                  <p className="text-xs font-medium text-[var(--lp-text-muted)]">
-                    {row.label}
-                  </p>
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-3">
-                      <span className="w-10 text-xs text-[var(--lp-text-light)]">
-                        2025
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-medium text-[var(--lp-text-muted)]">
+                      {row.label}
+                    </p>
+                    <p className="text-xs font-bold text-emerald-600">
+                      +€{fmt(Math.round(diff))}{" "}
+                      <span className="font-normal text-emerald-500/70">
+                        ({row.isMonthly ? "μήνα" : "έτος"})
                       </span>
-                      <div className="h-3 flex-1 overflow-hidden rounded-full bg-[var(--lp-navy)]/5">
-                        <div
-                          className="h-full rounded-full bg-[var(--lp-navy)]/15 transition-all duration-1000"
-                          style={{ width: isVisible ? `${pct2025}%` : "0%" }}
-                        />
-                      </div>
+                    </p>
+                  </div>
+                  <div className="flex h-8 overflow-hidden rounded-lg">
+                    {/* 2025 base */}
+                    <div
+                      className="flex items-center justify-center bg-[var(--lp-navy)]/10 transition-all duration-1000"
+                      style={{ width: isVisible ? `${basePct}%` : "0%" }}
+                    >
+                      <span className="text-[11px] font-semibold text-[var(--lp-text-muted)]">
+                        2025: €{fmt(row.val2025)}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className="w-10 text-xs font-semibold text-[var(--lp-teal)]">
-                        2026
+                    {/* 2026 gain */}
+                    <div
+                      className="flex items-center justify-center bg-[var(--lp-teal)] transition-all duration-1000 delay-300"
+                      style={{ width: isVisible ? `${scaledGain}%` : "0%" }}
+                    >
+                      <span className="text-[11px] font-bold text-white">
+                        +€{fmt(Math.round(diff))}
                       </span>
-                      <div className="h-3 flex-1 overflow-hidden rounded-full bg-[var(--lp-teal)]/8">
-                        <div
-                          className="h-full rounded-full bg-[var(--lp-teal)] transition-all duration-1000 delay-200"
-                          style={{ width: isVisible ? `${pct2026}%` : "0%" }}
-                        />
-                      </div>
                     </div>
                   </div>
+                  <p className="text-right text-xs font-semibold text-[var(--lp-navy)]">
+                    2026: €{fmt(row.val2026)}
+                  </p>
                 </div>
               );
             })}

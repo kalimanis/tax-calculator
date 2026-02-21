@@ -1,5 +1,8 @@
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCountUp } from "@/hooks/useLanding";
+import { calculateSalary } from "@/lib/salary-engine";
+import { formatCurrency, formatPercent } from "@/lib/utils";
 import { ArrowRight, ChevronDown, CheckCircle2 } from "lucide-react";
 
 const TRUST_BADGES = [
@@ -9,9 +12,30 @@ const TRUST_BADGES = [
   "100% Δωρεάν",
 ];
 
+const HERO_GROSS = 2000;
+
 export function Hero() {
   const navigate = useNavigate();
-  const { count } = useCountUp(1472, 2000);
+
+  const result = useMemo(() => {
+    const r = calculateSalary({
+      fiscalYear: 2026,
+      direction: "gross-to-net",
+      monthlySalary: HERO_GROSS,
+      payFrequency: 14,
+      children: 0,
+      ageGroup: "standard",
+      efkaEmployeeRate: 0.1337,
+      efkaEmployerRate: 0.2179,
+      seniority: 0,
+      hasArticle5G: false,
+    });
+    const efkaMonthly = Math.round(HERO_GROSS * 0.1337 * 100) / 100;
+    const taxMonthly = Math.round((HERO_GROSS - efkaMonthly - r.netMonthly) * 100) / 100;
+    return { net: r.netMonthly, efka: efkaMonthly, tax: taxMonthly, rate: r.effectiveRate };
+  }, []);
+
+  const { count } = useCountUp(Math.round(result.net), 2000);
 
   return (
     <section
@@ -109,26 +133,26 @@ export function Hero() {
                   <div className="flex justify-between text-sm">
                     <span className="text-[var(--lp-text-muted)]">Μικτός</span>
                     <span className="font-medium text-[var(--lp-navy)]">
-                      €2.000
+                      {formatCurrency(HERO_GROSS)}
                     </span>
                   </div>
                   <div className="h-px bg-[var(--lp-navy)]/5" />
                   <div className="flex justify-between text-sm">
                     <span className="text-[var(--lp-text-muted)]">ΕΦΚΑ</span>
                     <span className="font-medium text-red-500/80">
-                      -€267,40
+                      -{formatCurrency(result.efka)}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-[var(--lp-text-muted)]">Φόρος</span>
                     <span className="font-medium text-red-500/80">
-                      -€260,60
+                      -{formatCurrency(result.tax)}
                     </span>
                   </div>
                   <div className="h-px bg-[var(--lp-navy)]/5" />
                   <div className="flex justify-between text-sm font-semibold">
                     <span className="text-[var(--lp-teal)]">Καθαρός</span>
-                    <span className="text-[var(--lp-teal)]">€1.472</span>
+                    <span className="text-[var(--lp-teal)]">{formatCurrency(result.net)}</span>
                   </div>
                 </div>
 
@@ -142,7 +166,7 @@ export function Hero() {
                   Πραγματικός Φόρος
                 </p>
                 <p className="font-outfit text-lg font-bold text-[var(--lp-amber)]">
-                  15,04%
+                  {formatPercent(result.rate)}
                 </p>
               </div>
             </div>

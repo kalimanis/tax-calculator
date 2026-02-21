@@ -11,7 +11,7 @@ const FEATURES = [
     accentBg: "bg-[var(--lp-teal)]/8",
     accentBorder: "group-hover:border-[var(--lp-teal)]/30",
     bullets: [
-      "ΕΦΚΑ 13,37%",
+      "Εισφορές ΕΦΚΑ εργαζομένου",
       "14 μισθοί",
       "Άρθρο 5Γ",
       "Κόστος εργοδότη",
@@ -42,8 +42,8 @@ const FEATURES = [
     accentBg: "bg-[var(--lp-amber)]/8",
     accentBorder: "group-hover:border-[var(--lp-amber)]/30",
     bullets: [
-      "Προκαταβολή 55% / 27,5%",
-      "Waterfall chart",
+      "Προκαταβολή φόρου (55% ή 27,5% 1ο έτος)",
+      "Γράφημα ροής εισοδήματος",
       "Σύγκριση με μπλοκάκι",
     ],
   },
