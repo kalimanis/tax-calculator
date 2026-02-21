@@ -49,7 +49,7 @@ export function HowItWorks() {
                 className={`reveal-up stagger-${i + 1} group relative rounded-2xl border border-[var(--lp-navy)]/5 bg-[var(--lp-warm-white)]/60 p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[var(--lp-navy)]/5 dark:border-white/5 dark:hover:shadow-white/5 ${isVisible ? "revealed" : ""}`}
               >
                 {/* Step number */}
-                <span className="font-outfit absolute top-6 right-6 text-5xl font-extrabold text-[var(--lp-navy)]/[0.1]">
+                <span className="font-outfit absolute top-6 right-6 text-5xl font-extrabold text-[var(--lp-navy)]/[0.1] dark:text-white/[0.1]">
                   {i + 1}
                 </span>
 
