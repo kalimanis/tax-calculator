@@ -17,6 +17,18 @@ export function RegimeSelector({ value, onChange }: RegimeSelectorProps) {
       </span>
       <Tabs value={value} onValueChange={(v) => onChange(v as Regime)}>
         <TabsList>
+          <TabsTrigger value="misthotos" className="flex items-center gap-1.5">
+            <span className="sm:hidden">{LABELS.regime.misthotosShort}</span>
+            <span className="hidden sm:inline">{LABELS.regime.misthotos}</span>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+              </TooltipTrigger>
+              <TooltipContent className="max-w-[min(20rem,calc(100vw-2rem))]">
+                <p>{TOOLTIPS.misthotos}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TabsTrigger>
           <TabsTrigger value="mplokaki" className="flex items-center gap-1.5">
             <span className="sm:hidden">{LABELS.regime.mplokakiShort}</span>
             <span className="hidden sm:inline">{LABELS.regime.mplokaki}</span>
