@@ -19,7 +19,7 @@ const TRUST_ITEMS = [
   {
     icon: Lock,
     title: "Ιδιωτικότητα",
-    description: "Κανένα δεδομένο δεν αποθηκεύεται. Όλοι οι υπολογισμοί client-side.",
+    description: "Κανένα δεδομένο δεν αποθηκεύεται. Όλοι οι υπολογισμοί γίνονται στη συσκευή σου.",
     color: "var(--lp-navy)",
     bg: "bg-[var(--lp-navy)]/8",
   },
@@ -33,7 +33,7 @@ const TRUST_ITEMS = [
   {
     icon: Zap,
     title: "Ακριβές",
-    description: "Αντιπαραβολή με ΑΑΔΕ εκκαθαριστικά και payroll",
+    description: "Αντιπαραβολή με εκκαθαριστικά ΑΑΔΕ και μισθοδοσία",
     color: "var(--lp-teal)",
     bg: "bg-[var(--lp-teal)]/8",
   },

@@ -128,12 +128,23 @@ export function LiveDemo() {
               </p>
               <p className="mt-1 text-xs text-white/30">
                 Φορολογικό έτος {year}
+                {mode === "mplokaki" && " · ΕΦΚΑ 2η κατηγορία"}
               </p>
             </div>
 
             {/* CTA */}
             <button
-              onClick={() => navigate("/calculator")}
+              onClick={() => {
+                const params = new URLSearchParams();
+                params.set("y", String(year));
+                params.set("r", mode);
+                if (mode === "misthotos") {
+                  params.set("ms", String(amount));
+                } else {
+                  params.set("gi", String(amount * 12));
+                }
+                navigate(`/calculator?${params.toString()}`);
+              }}
               className="group mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--lp-amber)] py-3.5 text-sm font-bold text-[var(--lp-navy)] transition-all hover:bg-[var(--lp-amber-light)] hover:shadow-xl hover:shadow-[var(--lp-amber)]/20"
             >
               Δες αναλυτικά
