@@ -84,7 +84,7 @@ export function LandingPage() {
           content="Δωρεάν υπολογιστής φόρου εισοδήματος και καθαρού μισθού για Ελλάδα."
         />
         <meta property="og:url" content={`${SITE_URL}/`} />
-        <meta property="og:image" content={`${SITE_URL}/og-image.svg`} />
+        <meta property="og:image" content={`${SITE_URL}/og-image.png`} />
         <meta property="og:locale" content="el_GR" />
         <meta property="og:site_name" content="ΦοροΥπολογιστής" />
 
@@ -97,7 +97,7 @@ export function LandingPage() {
           name="twitter:description"
           content="Δωρεάν υπολογιστής φόρου εισοδήματος και καθαρού μισθού για Ελλάδα."
         />
-        <meta name="twitter:image" content={`${SITE_URL}/og-image.svg`} />
+        <meta name="twitter:image" content={`${SITE_URL}/og-image.png`} />
 
         <script type="application/ld+json">
           {JSON.stringify(WEB_APP_SCHEMA)}
