@@ -82,6 +82,20 @@ export function trackFAQOpen(question: string) {
   trackEvent("faq_open", { question });
 }
 
+// ─── Changelog Events ───
+
+export function trackChangelogView() {
+  trackEvent("changelog_viewed");
+}
+
+export function trackWhatsNewShown() {
+  trackEvent("whats_new_shown");
+}
+
+export function trackWhatsNewDismissed() {
+  trackEvent("whats_new_dismissed");
+}
+
 // ─── Helpers ───
 
 /** Bucket gross amounts into ranges for privacy (don't track exact amounts) */
