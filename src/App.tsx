@@ -8,6 +8,12 @@ const TaxCalculator = lazy(() =>
   }))
 );
 
+const ChangelogPage = lazy(() =>
+  import("@/components/ChangelogPage").then((m) => ({
+    default: m.ChangelogPage,
+  }))
+);
+
 function App() {
   return (
     <BrowserRouter>
@@ -24,6 +30,20 @@ function App() {
               }
             >
               <TaxCalculator />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/changelog"
+          element={
+            <Suspense
+              fallback={
+                <div className="flex min-h-screen items-center justify-center">
+                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-gray-800" />
+                </div>
+              }
+            >
+              <ChangelogPage />
             </Suspense>
           }
         />

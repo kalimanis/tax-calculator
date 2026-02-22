@@ -60,6 +60,11 @@ export const LABELS = {
     efka: "Εισφορές ΕΦΚΑ",
     expenses: "Λοιπά Έξοδα / Δαπάνες",
     taxable: "Φορολογητέο Εισόδημα",
+    frequency: {
+      label: "Περίοδος",
+      yearly: "Ετήσια",
+      monthly: "Μηνιαία",
+    },
   },
   children: "Εξαρτώμενα Τέκνα",
   age: "Ηλικία",

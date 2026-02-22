@@ -10,6 +10,7 @@ import { TrustSection } from "@/components/landing/TrustSection";
 import { FAQ } from "@/components/landing/FAQ";
 import { FinalCTA } from "@/components/landing/FinalCTA";
 import { Footer } from "@/components/landing/Footer";
+import { WhatsNewModal } from "@/components/WhatsNewModal";
 
 const FAQ_SCHEMA = [
   {
@@ -121,6 +122,7 @@ export function LandingPage() {
         <FinalCTA />
       </main>
       <Footer />
+      <WhatsNewModal />
     </div>
   );
 }

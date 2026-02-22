@@ -62,6 +62,11 @@ export const SALARY_LABELS = {
     employer: "ΕΦΚΑ Εργοδότη",
   },
   article5G: "Άρθρο 5Γ (50% μείωση φόρου)",
+  period: {
+    label: "Περίοδος",
+    monthly: "Μηνιαία",
+    yearly: "Ετήσια",
+  },
   minimumWage: "Κατώτατος Μισθός",
   results: {
     grossMonthly: "Μικτός Μηνιαίος",

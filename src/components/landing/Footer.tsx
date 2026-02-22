@@ -1,5 +1,7 @@
 import { useCallback } from "react";
-import { Mail } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Mail, History } from "lucide-react";
+import { ChangelogBadge } from "@/components/ChangelogBadge";
 
 // Obfuscated to prevent scraping — assembled at runtime
 const EMAIL_PARTS = ["ilias.kalemanis", "gmail.com"];
@@ -37,10 +39,19 @@ export function Footer() {
           </p>
 
           {/* Copyright & contact */}
-          <div className="flex items-center gap-4 text-xs text-[var(--lp-text-light)]">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-[var(--lp-text-light)]">
             <span>© {new Date().getFullYear()}</span>
             <span className="text-[var(--lp-navy)]/10">·</span>
             <span>Δημιουργήθηκε με ❤️ στην Ελλάδα</span>
+            <span className="text-[var(--lp-navy)]/10">·</span>
+            <Link
+              to="/changelog"
+              className="inline-flex items-center gap-1 transition-colors hover:text-[var(--lp-teal)]"
+            >
+              <History size={12} />
+              Ιστορικό Αλλαγών
+              <ChangelogBadge />
+            </Link>
             <span className="text-[var(--lp-navy)]/10">·</span>
             <button
               onClick={handleContact}
