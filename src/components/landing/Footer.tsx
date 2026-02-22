@@ -30,6 +30,12 @@ export function Footer() {
             Ν.5246/2025.
           </p>
 
+          {/* Privacy note */}
+          <p className="max-w-lg text-xs leading-relaxed text-[var(--lp-text-light)]">
+            Χρησιμοποιούμε Umami Analytics, χωρίς cookies, χωρίς προσωπικά δεδομένα.
+            Τα στατιστικά είναι ανώνυμα και συγκεντρωτικά.
+          </p>
+
           {/* Copyright & contact */}
           <div className="flex items-center gap-4 text-xs text-[var(--lp-text-light)]">
             <span>© {new Date().getFullYear()}</span>

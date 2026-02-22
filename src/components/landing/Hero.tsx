@@ -4,6 +4,7 @@ import { useCountUp } from "@/hooks/useLanding";
 import { calculateSalary } from "@/lib/salary-engine";
 import { formatCurrency, formatPercent } from "@/lib/utils";
 import { ArrowRight, ChevronDown, CheckCircle2 } from "lucide-react";
+import { trackLandingCTA } from "@/lib/analytics";
 
 const TRUST_BADGES = [
   "Ν.5246/2025",
@@ -73,7 +74,10 @@ export function Hero() {
             {/* CTA Buttons */}
             <div className="mt-8 flex flex-wrap gap-4">
               <button
-                onClick={() => navigate("/calculator")}
+                onClick={() => {
+                  trackLandingCTA("hero");
+                  navigate("/calculator");
+                }}
                 data-event="cta-hero-primary"
                 className="group inline-flex items-center gap-2 rounded-full bg-[var(--lp-teal)] px-7 py-3.5 text-[15px] font-semibold text-white shadow-xl shadow-[var(--lp-teal)]/20 transition-all hover:bg-[var(--lp-teal-dark)] hover:shadow-2xl hover:shadow-[var(--lp-teal)]/30"
               >

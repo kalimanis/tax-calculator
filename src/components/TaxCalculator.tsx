@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { Helmet } from "@dr.pogodin/react-helmet";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Moon, Sun } from "lucide-react";
@@ -19,6 +19,11 @@ import { calculateTax } from "@/lib/tax-engine";
 import { calculateSalary } from "@/lib/salary-engine";
 import { getEfkaRates } from "@/lib/salary-constants";
 import { getEfkaTable, getEfkaNewProfessional, getMaxCategory } from "@/lib/efka-tables";
+import {
+  trackCalculation,
+  trackModeSwitch,
+  trackYearSwitch,
+} from "@/lib/analytics";
 import type {
   AgeGroup,
   ClientLocation,
@@ -176,6 +181,22 @@ export function TaxCalculator() {
 
   const isSalary = regime === "misthotos";
 
+  // Analytics: map regime to analytics mode
+  const regimeToMode = (r: Regime) =>
+    r === "misthotos" ? "employee" as const : r;
+
+  const prevRegime = useRef(regime);
+  const handleRegimeChange = useCallback((r: Regime) => {
+    trackModeSwitch(regimeToMode(prevRegime.current), regimeToMode(r));
+    prevRegime.current = r;
+    setRegime(r);
+  }, []);
+
+  const handleYearChange = useCallback((y: FiscalYear) => {
+    trackYearSwitch(y);
+    setYear(y);
+  }, []);
+
   // Tax input (freelancer)
   const taxInput: TaxInput = useMemo(
     () => ({
@@ -265,6 +286,20 @@ export function TaxCalculator() {
     }
   }, [isSalary, year, regime, grossIncome, otherExpenses, children, ageGroup, isFirstYearFiling, yearsInBusiness, profession, efkaCategory, isNewProfessional, manualEfka, clientLocation, domesticIncomeShare, salaryDirection, monthlySalary, payFrequency, efkaEmployeeRate, efkaEmployerRate, hasArticle5G, seniority]);
 
+  // Analytics: debounced calculation tracking
+  useEffect(() => {
+    const amount = isSalary ? monthlySalary * 12 : grossIncome;
+    if (amount <= 0) return;
+    const timeout = setTimeout(() => {
+      trackCalculation(regimeToMode(regime), {
+        fiscalYear: year,
+        grossAmount: amount,
+        children,
+      });
+    }, 2000);
+    return () => clearTimeout(timeout);
+  }, [isSalary, grossIncome, monthlySalary, regime, year, children]);
+
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -347,8 +382,8 @@ export function TaxCalculator() {
       {/* Controls */}
       <div className="border-b bg-white dark:bg-slate-900">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3 sm:gap-4">
-          <YearSelector value={year} onChange={setYear} />
-          <RegimeSelector value={regime} onChange={setRegime} />
+          <YearSelector value={year} onChange={handleYearChange} />
+          <RegimeSelector value={regime} onChange={handleRegimeChange} />
           <div className="flex gap-2 max-sm:ml-auto print:hidden sm:ml-auto">
             <button
               onClick={handleReset}

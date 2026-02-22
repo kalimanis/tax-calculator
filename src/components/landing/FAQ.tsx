@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useScrollReveal } from "@/hooks/useLanding";
 import { ChevronDown } from "lucide-react";
+import { trackFAQOpen } from "@/lib/analytics";
 
 const FAQ_ITEMS = [
   {
@@ -31,7 +32,7 @@ const FAQ_ITEMS = [
   {
     question: "Αποθηκεύονται τα δεδομένα μου;",
     answer:
-      "Όχι. Τίποτα δεν αποστέλλεται σε server. Όλοι οι υπολογισμοί γίνονται αποκλειστικά στη συσκευή σου.",
+      "Οι υπολογισμοί γίνονται αποκλειστικά στη συσκευή σου — κανένα ποσό ή προσωπικό δεδομένο δεν αποστέλλεται σε server. Χρησιμοποιούμε ανώνυμα στατιστικά επισκεψιμότητας χωρίς cookies.",
   },
 ];
 
@@ -76,7 +77,7 @@ function FAQItem({
 }
 
 export function FAQ() {
-  const { ref, isVisible } = useScrollReveal(0.1);
+  const { ref, isVisible } = useScrollReveal(0.1, "faq");
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
@@ -104,7 +105,11 @@ export function FAQ() {
               key={item.question}
               item={item}
               isOpen={openIndex === i}
-              onToggle={() => setOpenIndex(openIndex === i ? null : i)}
+              onToggle={() => {
+                const isOpening = openIndex !== i;
+                setOpenIndex(isOpening ? i : null);
+                if (isOpening) trackFAQOpen(item.question);
+              }}
             />
           ))}
         </div>

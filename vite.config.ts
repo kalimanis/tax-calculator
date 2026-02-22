@@ -10,6 +10,12 @@ export default defineConfig({
     tailwindcss(),
     createHtmlPlugin({
       minify: true,
+      inject: {
+        data: {
+          UMAMI_URL: process.env.VITE_UMAMI_URL || "",
+          UMAMI_ID: process.env.VITE_UMAMI_ID || "",
+        },
+      },
     }),
   ],
   resolve: {

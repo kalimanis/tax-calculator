@@ -50,7 +50,7 @@ const FEATURES = [
 ];
 
 export function Features() {
-  const { ref, isVisible } = useScrollReveal(0.1);
+  const { ref, isVisible } = useScrollReveal(0.1, "features");
 
   return (
     <section
