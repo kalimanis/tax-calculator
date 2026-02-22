@@ -18,11 +18,14 @@ interface ComparisonRowProps {
   valueA: number;
   valueB: number;
   isCurrency?: boolean;
+  inverse?: boolean;
 }
 
-function ComparisonRow({ label, valueA, valueB, isCurrency = true }: ComparisonRowProps) {
+function ComparisonRow({ label, valueA, valueB, isCurrency = true, inverse = false }: ComparisonRowProps) {
   const diff = valueB - valueA;
   const format = isCurrency ? formatCurrency : (v: number) => formatPercent(v);
+  const isPositive = inverse ? diff > 0 : diff < 0;
+  const isNegative = inverse ? diff < 0 : diff > 0;
 
   return (
     <div className="flex flex-col gap-1 py-2 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-0">
@@ -32,7 +35,7 @@ function ComparisonRow({ label, valueA, valueB, isCurrency = true }: ComparisonR
         <ArrowRight className="h-3 w-3 shrink-0 text-muted-foreground" />
         <span className="tabular-nums font-medium">{format(valueB)}</span>
         <Badge
-          variant={diff < 0 ? "default" : diff > 0 ? "destructive" : "secondary"}
+          variant={isPositive ? "default" : isNegative ? "destructive" : "secondary"}
           className="min-w-[72px] justify-center tabular-nums text-xs sm:min-w-[80px]"
         >
           {diff > 0 ? "+" : ""}
@@ -100,7 +103,7 @@ function YearComparison({
         <ComparisonRow label={LABELS.results.netTax} valueA={resultA.netTax} valueB={resultB.netTax} />
         <ComparisonRow label={LABELS.results.totalObligation} valueA={resultA.totalObligation} valueB={resultB.totalObligation} />
         <ComparisonRow label={LABELS.results.effectiveRate} valueA={resultA.effectiveRate} valueB={resultB.effectiveRate} isCurrency={false} />
-        <ComparisonRow label={LABELS.results.netIncome} valueA={resultA.netIncome} valueB={resultB.netIncome} />
+        <ComparisonRow label={LABELS.results.netIncome} valueA={resultA.netIncome} valueB={resultB.netIncome} inverse />
       </div>
     </div>
   );
@@ -133,7 +136,7 @@ function RegimeComparison({
         <ComparisonRow label={LABELS.results.netTax} valueA={resultA.netTax} valueB={resultB.netTax} />
         <ComparisonRow label={LABELS.results.totalObligation} valueA={resultA.totalObligation} valueB={resultB.totalObligation} />
         <ComparisonRow label={LABELS.results.effectiveRate} valueA={resultA.effectiveRate} valueB={resultB.effectiveRate} isCurrency={false} />
-        <ComparisonRow label={LABELS.results.netIncome} valueA={resultA.netIncome} valueB={resultB.netIncome} />
+        <ComparisonRow label={LABELS.results.netIncome} valueA={resultA.netIncome} valueB={resultB.netIncome} inverse />
       </div>
     </div>
   );

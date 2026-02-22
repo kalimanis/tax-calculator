@@ -364,14 +364,19 @@ export function TaxCalculator() {
       {/* Header */}
       <header className="bg-gradient-to-r from-slate-900 to-slate-800 text-white print:bg-slate-900">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:py-6">
-          <div>
-            <h1 className="text-lg font-bold tracking-tight sm:text-2xl">
-              Υπολογιστής Φόρου Εισοδήματος
-            </h1>
-            <p className="mt-1 text-sm text-slate-300">
-              Φορολογικά Έτη 2025 &amp; 2026
-            </p>
-          </div>
+          <a href="/" className="flex items-center gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-sm font-bold text-slate-900">
+              Φ
+            </div>
+            <div>
+              <h1 className="text-lg font-bold tracking-tight sm:text-2xl">
+                Υπολογιστής Φόρου Εισοδήματος
+              </h1>
+              <p className="mt-1 text-sm text-slate-300">
+                Φορολογικά Έτη 2025 &amp; 2026
+              </p>
+            </div>
+          </a>
           <button
             onClick={toggleDark}
             className="rounded-lg p-2 text-slate-300 transition-colors hover:bg-white/10 hover:text-white print:hidden"

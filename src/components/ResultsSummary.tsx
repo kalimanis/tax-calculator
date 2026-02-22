@@ -6,6 +6,8 @@ import {
   Receipt,
   Percent,
   Wallet,
+  CalendarCheck,
+  Landmark,
   ArrowDownUp,
   BadgeMinus,
   Info,
@@ -27,11 +29,12 @@ interface ResultCardProps {
   colorClass: string;
   tooltip?: string;
   subtitle?: string;
+  highlight?: boolean;
 }
 
-function ResultCard({ label, value, icon, colorClass, tooltip, subtitle }: ResultCardProps) {
+function ResultCard({ label, value, icon, colorClass, tooltip, subtitle, highlight }: ResultCardProps) {
   return (
-    <Card className="transition-all duration-300 hover:shadow-md">
+    <Card className={`transition-all duration-300 hover:shadow-md ${highlight ? "ring-2 ring-emerald-500/50" : ""}`}>
       <CardContent className="p-4">
         <div className="flex items-start justify-between">
           <div className="min-w-0 flex-1">
@@ -138,6 +141,22 @@ export function ResultsSummary({ result, regime, clientLocation }: ResultsSummar
         value={formatCurrency(result.netIncome)}
         icon={<Wallet className="h-5 w-5 text-emerald-600" />}
         colorClass="text-emerald-600 dark:text-emerald-400"
+      />
+
+      <ResultCard
+        label={LABELS.results.netMonthly}
+        value={formatCurrency(result.netIncome / 12)}
+        icon={<CalendarCheck className="h-5 w-5 text-emerald-600" />}
+        colorClass="text-emerald-600 dark:text-emerald-400"
+        highlight
+      />
+
+      <ResultCard
+        label={LABELS.results.monthlySavings}
+        value={formatCurrency((result.totalObligation + result.efkaAnnual) / 12)}
+        icon={<Landmark className="h-5 w-5 text-amber-600" />}
+        colorClass="text-amber-600 dark:text-amber-400"
+        tooltip={TOOLTIPS.monthlySavings}
       />
 
       {regime === "mplokaki" && (
