@@ -57,7 +57,10 @@ function setUrlParams(params: Record<string, string>) {
       url.searchParams.set(key, value);
     }
   });
-  window.history.replaceState({}, "", url.toString());
+  const newUrl = url.toString();
+  if (newUrl !== window.location.href) {
+    window.history.replaceState({}, "", newUrl);
+  }
 }
 
 function initRegime(urlParams: Partial<Record<string, string>>): Regime {

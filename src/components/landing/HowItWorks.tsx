@@ -26,7 +26,7 @@ const STEPS = [
 ];
 
 export function HowItWorks() {
-  const { ref, isVisible } = useScrollReveal(0.1, "how-it-works");
+  const { ref, isVisible } = useScrollReveal(0.1);
 
   return (
     <section id="how-it-works" aria-label="Πώς λειτουργεί" className="bg-white py-20 dark:bg-[var(--lp-warm-white)] lg:py-28" ref={ref}>
