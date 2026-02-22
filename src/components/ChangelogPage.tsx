@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "@dr.pogodin/react-helmet";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Moon, Sun } from "lucide-react";
 import { SITE_URL } from "@/lib/constants";
 import { CHANGELOG, LATEST_VERSION } from "@/data/changelog";
 import { markChangelogSeen } from "@/lib/changelog-utils";
@@ -10,8 +10,7 @@ import { ChangelogEntry } from "./ChangelogEntry";
 import { useDarkMode } from "@/hooks/useDarkMode";
 
 export function ChangelogPage() {
-  const [dark] = useDarkMode();
-
+  const [dark, toggleDark] = useDarkMode();
   useEffect(() => {
     markChangelogSeen();
     trackChangelogView();
@@ -38,13 +37,22 @@ export function ChangelogPage() {
 
       <div className="mx-auto max-w-2xl px-5 py-16 lg:px-8">
         {/* Header */}
-        <div className="reveal-up mb-10">
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--lp-text)]">
-            Ιστορικό Αλλαγών
-          </h1>
-          <p className="mt-2 text-[var(--lp-text-muted)]">
-            Τι νέο υπάρχει στο Forologisi
-          </p>
+        <div className="reveal-up mb-10 flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-[var(--lp-text)]">
+              Ιστορικό Αλλαγών
+            </h1>
+            <p className="mt-2 text-[var(--lp-text-muted)]">
+              Τι νέο υπάρχει στο Forologisi
+            </p>
+          </div>
+          <button
+            onClick={toggleDark}
+            className="rounded-lg p-2 text-[var(--lp-text-muted)] transition-colors hover:bg-[var(--lp-navy)]/5 hover:text-[var(--lp-navy)] dark:hover:bg-white/10 dark:hover:text-white"
+            aria-label={dark ? "Φωτεινό θέμα" : "Σκοτεινό θέμα"}
+          >
+            {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </button>
         </div>
 
         {/* Timeline */}
