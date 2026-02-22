@@ -12,10 +12,13 @@ import {
 import { EfkaSelector } from "./EfkaSelector";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
+import { useState } from "react";
 import { LABELS, TOOLTIPS } from "@/lib/constants";
 import { formatCurrency, sanitizeNumericInput } from "@/lib/utils";
 import { trackForeignClient } from "@/lib/analytics";
 import type { AgeGroup, ClientLocation, FiscalYear, ProfessionType, Regime } from "@/lib/types";
+
+type IncomeFrequency = "yearly" | "monthly";
 
 interface IncomeFormProps {
   year: FiscalYear;
@@ -80,12 +83,42 @@ export function IncomeForm({
   onDomesticIncomeShareChange,
   taxableIncome,
 }: IncomeFormProps) {
+  const [frequency, setFrequency] = useState<IncomeFrequency>("yearly");
+
+  const displayValue = frequency === "monthly" ? Math.round(grossIncome / 12) : grossIncome;
+
+  const handleIncomeChange = (value: number) => {
+    onGrossIncomeChange(frequency === "monthly" ? value * 12 : value);
+  };
+
   return (
     <Card>
       <CardHeader className="pb-4">
         <CardTitle className="text-lg">Στοιχεία Εισοδήματος</CardTitle>
       </CardHeader>
       <CardContent className="space-y-5">
+        {/* Income Frequency */}
+        <div>
+          <Label className="mb-1.5 block text-sm font-medium">
+            {LABELS.income.frequency.label}
+          </Label>
+          <div className="flex gap-2">
+            {(["yearly", "monthly"] as const).map((freq) => (
+              <button
+                key={freq}
+                onClick={() => setFrequency(freq)}
+                className={`flex-1 rounded-md border px-2 py-2.5 text-sm transition-colors ${
+                  frequency === freq
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-background hover:bg-accent"
+                }`}
+              >
+                {LABELS.income.frequency[freq]}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Gross Income */}
         <div>
           <Label htmlFor="gross-income" className="mb-1.5 block text-sm font-medium">
@@ -99,13 +132,18 @@ export function IncomeForm({
               id="gross-income"
               type="number"
               min={0}
-              step={100}
-              value={grossIncome || ""}
-              onChange={(e) => onGrossIncomeChange(sanitizeNumericInput(e.target.value, { min: 0 }))}
+              step={frequency === "monthly" ? 50 : 100}
+              value={displayValue || ""}
+              onChange={(e) => handleIncomeChange(sanitizeNumericInput(e.target.value, { min: 0 }))}
               className="pl-7 tabular-nums"
               placeholder="0,00"
             />
           </div>
+          {frequency === "monthly" && grossIncome > 0 && (
+            <p className="mt-1 text-xs text-muted-foreground">
+              = {formatCurrency(grossIncome)}/έτος
+            </p>
+          )}
         </div>
 
         {/* EFKA */}
