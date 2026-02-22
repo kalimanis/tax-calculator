@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, X, Moon, Sun } from "lucide-react";
 import { useDarkMode } from "@/hooks/useDarkMode";
+import { Logo } from "@/components/Logo";
 
 const NAV_LINKS = [
   { label: "Μισθωτός", href: "#misthotos" },
@@ -31,13 +32,8 @@ export function Navbar() {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--lp-navy)] text-sm font-bold text-white dark:bg-white dark:text-[var(--lp-navy)]">
-            Φ
-          </div>
-          <span className="text-lg font-bold tracking-tight text-[var(--lp-navy)] dark:text-white">
-            ΦοροΥπολογιστής
-          </span>
+        <a href="#" className="flex items-center">
+          <Logo />
         </a>
 
         {/* Desktop nav */}
