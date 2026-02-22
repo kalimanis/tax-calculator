@@ -21,6 +21,7 @@ import { Info } from "lucide-react";
 import { LABELS } from "@/lib/constants";
 import { SALARY_LABELS, SALARY_TOOLTIPS, getMinimumWage } from "@/lib/salary-constants";
 import { formatCurrency, sanitizeNumericInput } from "@/lib/utils";
+import { trackDirection, trackArticle5G } from "@/lib/analytics";
 import type { AgeGroup, FiscalYear, PayFrequency, SalaryDirection, Seniority } from "@/lib/types";
 
 interface SalaryFormProps {
@@ -85,7 +86,10 @@ export function SalaryForm({
             {(["gross-to-net", "net-to-gross"] as const).map((dir) => (
               <button
                 key={dir}
-                onClick={() => onDirectionChange(dir)}
+                onClick={() => {
+                  trackDirection(dir);
+                  onDirectionChange(dir);
+                }}
                 className={`flex-1 rounded-md border px-2 py-2.5 text-sm transition-colors ${
                   direction === dir
                     ? "border-primary bg-primary text-primary-foreground"
@@ -299,7 +303,10 @@ export function SalaryForm({
                   type="checkbox"
                   id="article-5g"
                   checked={hasArticle5G}
-                  onChange={(e) => onArticle5GChange(e.target.checked)}
+                  onChange={(e) => {
+                    trackArticle5G(e.target.checked);
+                    onArticle5GChange(e.target.checked);
+                  }}
                   className="h-4 w-4 rounded border-gray-300"
                 />
                 <div className="flex items-center gap-1.5">

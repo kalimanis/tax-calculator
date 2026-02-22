@@ -19,7 +19,7 @@ const TRUST_ITEMS = [
   {
     icon: Lock,
     title: "Ιδιωτικότητα",
-    description: "Κανένα δεδομένο δεν αποθηκεύεται. Όλοι οι υπολογισμοί γίνονται στη συσκευή σου.",
+    description: "Οι υπολογισμοί γίνονται στη συσκευή σου, χωρίς αποθήκευση προσωπικών δεδομένων. Ανώνυμα στατιστικά χωρίς cookies.",
     color: "var(--lp-navy)",
     bg: "bg-[var(--lp-navy)]/8",
   },
@@ -47,7 +47,7 @@ const TRUST_ITEMS = [
 ];
 
 export function TrustSection() {
-  const { ref, isVisible } = useScrollReveal(0.1);
+  const { ref, isVisible } = useScrollReveal(0.1, "trust");
 
   return (
     <section id="trust" aria-label="Γιατί να μας εμπιστευτείς" className="bg-white py-20 dark:bg-[var(--lp-warm-white)] lg:py-28" ref={ref}>

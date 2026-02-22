@@ -14,6 +14,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Info } from "lucide-react";
 import { LABELS, TOOLTIPS } from "@/lib/constants";
 import { formatCurrency, sanitizeNumericInput } from "@/lib/utils";
+import { trackForeignClient } from "@/lib/analytics";
 import type { AgeGroup, ClientLocation, FiscalYear, ProfessionType, Regime } from "@/lib/types";
 
 interface IncomeFormProps {
@@ -166,7 +167,10 @@ export function IncomeForm({
                 {(["domestic", "foreign", "mixed"] as const).map((loc) => (
                   <button
                     key={loc}
-                    onClick={() => onClientLocationChange(loc)}
+                    onClick={() => {
+                      if (loc !== "domestic") trackForeignClient(loc);
+                      onClientLocationChange(loc);
+                    }}
                     className={`flex-1 rounded-md border px-2 py-2.5 text-sm transition-colors ${
                       clientLocation === loc
                         ? "border-primary bg-primary text-primary-foreground"
