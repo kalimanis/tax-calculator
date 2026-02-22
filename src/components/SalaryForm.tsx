@@ -18,11 +18,14 @@ import {
 } from "@/components/ui/accordion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
+import { useState } from "react";
 import { LABELS } from "@/lib/constants";
 import { SALARY_LABELS, SALARY_TOOLTIPS, getMinimumWage } from "@/lib/salary-constants";
 import { formatCurrency, sanitizeNumericInput } from "@/lib/utils";
 import { trackDirection, trackArticle5G } from "@/lib/analytics";
 import type { AgeGroup, FiscalYear, PayFrequency, SalaryDirection, Seniority } from "@/lib/types";
+
+type SalaryPeriod = "monthly" | "yearly";
 
 interface SalaryFormProps {
   year: FiscalYear;
@@ -70,6 +73,15 @@ export function SalaryForm({
   taxableIncome,
 }: SalaryFormProps) {
   const minimumWage = getMinimumWage(year);
+  const [period, setPeriod] = useState<SalaryPeriod>("monthly");
+
+  const displayValue = period === "yearly"
+    ? Math.round(monthlySalary * payFrequency)
+    : monthlySalary;
+
+  const handleSalaryChange = (value: number) => {
+    onMonthlySalaryChange(period === "yearly" ? Math.round(value / payFrequency) : value);
+  };
 
   return (
     <Card>
@@ -104,7 +116,29 @@ export function SalaryForm({
           </div>
         </div>
 
-        {/* Monthly Salary */}
+        {/* Salary Period */}
+        <div>
+          <Label className="mb-1.5 block text-sm font-medium">
+            {SALARY_LABELS.period.label}
+          </Label>
+          <div className="flex gap-2">
+            {(["monthly", "yearly"] as const).map((p) => (
+              <button
+                key={p}
+                onClick={() => setPeriod(p)}
+                className={`flex-1 rounded-md border px-2 py-2.5 text-sm transition-colors ${
+                  period === p
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-background hover:bg-accent"
+                }`}
+              >
+                {SALARY_LABELS.period[p]}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Salary */}
         <div>
           <div className="mb-1.5 flex items-center gap-2">
             <Label htmlFor="monthly-salary" className="text-sm font-medium">
@@ -135,13 +169,18 @@ export function SalaryForm({
               id="monthly-salary"
               type="number"
               min={0}
-              step={50}
-              value={monthlySalary || ""}
-              onChange={(e) => onMonthlySalaryChange(sanitizeNumericInput(e.target.value, { min: 0 }))}
+              step={period === "yearly" ? 100 : 50}
+              value={displayValue || ""}
+              onChange={(e) => handleSalaryChange(sanitizeNumericInput(e.target.value, { min: 0 }))}
               className="pl-7 tabular-nums"
               placeholder="0,00"
             />
           </div>
+          {period === "yearly" && monthlySalary > 0 && (
+            <p className="mt-1 text-xs text-muted-foreground">
+              = {formatCurrency(monthlySalary)}/μήνα
+            </p>
+          )}
         </div>
 
         {/* Pay Frequency */}
