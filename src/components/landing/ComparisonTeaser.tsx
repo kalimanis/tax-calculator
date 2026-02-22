@@ -12,7 +12,7 @@ interface CompRow {
 }
 
 export function ComparisonTeaser() {
-  const { ref, isVisible } = useScrollReveal(0.1, "comparison");
+  const { ref, isVisible } = useScrollReveal(0.1);
 
   const rows = useMemo<CompRow[]>(() => {
     // Salary comparison: €2000 gross monthly

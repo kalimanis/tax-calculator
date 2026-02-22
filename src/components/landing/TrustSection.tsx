@@ -47,7 +47,7 @@ const TRUST_ITEMS = [
 ];
 
 export function TrustSection() {
-  const { ref, isVisible } = useScrollReveal(0.1, "trust");
+  const { ref, isVisible } = useScrollReveal(0.1);
 
   return (
     <section id="trust" aria-label="Γιατί να μας εμπιστευτείς" className="bg-white py-20 dark:bg-[var(--lp-warm-white)] lg:py-28" ref={ref}>
