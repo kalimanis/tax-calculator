@@ -17,9 +17,30 @@ function TooltipProvider({
 }
 
 function Tooltip({
+  children,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Root>) {
-  return <TooltipPrimitive.Root data-slot="tooltip" {...props} />
+  const [open, setOpen] = React.useState(false)
+  return (
+    <TooltipPrimitive.Root
+      data-slot="tooltip"
+      open={open}
+      onOpenChange={setOpen}
+      {...props}
+    >
+      {React.Children.map(children, (child) => {
+        if (React.isValidElement(child) && child.type === TooltipTrigger) {
+          return React.cloneElement(child as React.ReactElement<Record<string, unknown>>, {
+            onClick: (e: React.MouseEvent) => {
+              e.preventDefault()
+              setOpen((prev) => !prev)
+            },
+          })
+        }
+        return child
+      })}
+    </TooltipPrimitive.Root>
+  )
 }
 
 function TooltipTrigger({
