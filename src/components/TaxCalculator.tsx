@@ -3,6 +3,7 @@ import { Helmet } from "@dr.pogodin/react-helmet";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Moon, Sun } from "lucide-react";
 import { useDarkMode } from "@/hooks/useDarkMode";
+import { Logo } from "@/components/Logo";
 import { YearSelector } from "./YearSelector";
 import { RegimeSelector } from "./RegimeSelector";
 import { IncomeForm } from "./IncomeForm";
@@ -365,9 +366,7 @@ export function TaxCalculator() {
       <header className="bg-gradient-to-r from-slate-900 to-slate-800 text-white print:bg-slate-900">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:py-6">
           <a href="/" className="flex items-center gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-sm font-bold text-slate-900">
-              Φ
-            </div>
+            <Logo />
             <div>
               <h1 className="text-lg font-bold tracking-tight sm:text-2xl">
                 Υπολογιστής Φόρου Εισοδήματος

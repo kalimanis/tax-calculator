@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Mail, History } from "lucide-react";
 import { ChangelogBadge } from "@/components/ChangelogBadge";
+import { Logo } from "@/components/Logo";
 
 // Obfuscated to prevent scraping — assembled at runtime
 const EMAIL_PARTS = ["ilias.kalemanis", "gmail.com"];
@@ -16,14 +17,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="flex flex-col items-center gap-4 text-center">
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[var(--lp-navy)] text-xs font-bold text-white dark:bg-white dark:text-[var(--lp-navy)]">
-              Φ
-            </div>
-            <span className="font-outfit text-sm font-bold text-[var(--lp-navy)] dark:text-white">
-              ΦοροΥπολογιστής
-            </span>
-          </div>
+          <Logo size="sm" />
 
           {/* Disclaimer */}
           <p className="max-w-lg text-xs leading-relaxed text-[var(--lp-text-light)]">
