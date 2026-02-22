@@ -363,22 +363,17 @@ export function TaxCalculator() {
       </Helmet>
 
       {/* Header */}
-      <header className="bg-gradient-to-r from-slate-900 to-slate-800 text-white print:bg-slate-900">
+      <header className="bg-[var(--lp-warm-white)] shadow-sm print:bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:py-6">
           <a href="/" className="flex items-center gap-3">
             <Logo />
-            <div>
-              <h1 className="text-lg font-bold tracking-tight sm:text-2xl">
-                Υπολογιστής Φόρου Εισοδήματος
-              </h1>
-              <p className="mt-1 text-sm text-slate-300">
-                Φορολογικά Έτη 2025 &amp; 2026
-              </p>
-            </div>
+            <p className="text-sm text-[var(--lp-text-muted)]">
+              Φορολογικά Έτη 2025 &amp; 2026
+            </p>
           </a>
           <button
             onClick={toggleDark}
-            className="rounded-lg p-2 text-slate-300 transition-colors hover:bg-white/10 hover:text-white print:hidden"
+            className="rounded-lg p-2 text-[var(--lp-text-muted)] transition-colors hover:bg-[var(--lp-navy)]/5 hover:text-[var(--lp-navy)] dark:hover:bg-white/10 dark:hover:text-white print:hidden"
             aria-label={dark ? "Φωτεινό θέμα" : "Σκοτεινό θέμα"}
           >
             {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
