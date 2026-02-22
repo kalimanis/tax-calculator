@@ -16,37 +16,46 @@ function TooltipProvider({
   )
 }
 
+const TooltipToggleContext = React.createContext<() => void>(() => {})
+
 function Tooltip({
   children,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Root>) {
   const [open, setOpen] = React.useState(false)
+  const toggle = React.useCallback(() => setOpen((prev) => !prev), [])
   return (
-    <TooltipPrimitive.Root
-      data-slot="tooltip"
-      open={open}
-      onOpenChange={setOpen}
-      {...props}
-    >
-      {React.Children.map(children, (child) => {
-        if (React.isValidElement(child) && child.type === TooltipTrigger) {
-          return React.cloneElement(child as React.ReactElement<Record<string, unknown>>, {
-            onClick: (e: React.MouseEvent) => {
-              e.preventDefault()
-              setOpen((prev) => !prev)
-            },
-          })
-        }
-        return child
-      })}
-    </TooltipPrimitive.Root>
+    <TooltipToggleContext.Provider value={toggle}>
+      <TooltipPrimitive.Root
+        data-slot="tooltip"
+        open={open}
+        onOpenChange={setOpen}
+        {...props}
+      >
+        {children}
+      </TooltipPrimitive.Root>
+    </TooltipToggleContext.Provider>
   )
 }
 
 function TooltipTrigger({
+  style,
+  onClick,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {
-  return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />
+  const toggle = React.useContext(TooltipToggleContext)
+  return (
+    <TooltipPrimitive.Trigger
+      data-slot="tooltip-trigger"
+      style={{ pointerEvents: "auto", ...style }}
+      onClick={(e) => {
+        e.stopPropagation()
+        toggle()
+        onClick?.(e)
+      }}
+      {...props}
+    />
+  )
 }
 
 function TooltipContent({
