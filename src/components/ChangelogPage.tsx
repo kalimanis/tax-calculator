@@ -30,7 +30,7 @@ export function ChangelogPage() {
         <title>Ιστορικό Αλλαγών — Forologisi.app</title>
         <meta
           name="description"
-          content="Δείτε τις τελευταίες ενημερώσεις και βελτιώσεις στον φορολογικό υπολογιστή Forologisi."
+          content="Δείτε τις τελευταίες ενημερώσεις και βελτιώσεις στον φορολογικό υπολογισμό Forologisi."
         />
         <link rel="canonical" href={`${SITE_URL}/changelog`} />
       </Helmet>
