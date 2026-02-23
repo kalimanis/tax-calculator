@@ -45,7 +45,7 @@ const WEB_APP_SCHEMA = {
   name: "ΦοροΥπολογιστής",
   url: SITE_URL,
   description:
-    "Δωρεάν υπολογιστής φόρου εισοδήματος και καθαρού μισθού για Ελλάδα. Μισθωτός, μπλοκάκι, ατομική — ενημερωμένος για 2025 & 2026.",
+    "Δωρεάν υπολογισμός φόρου εισοδήματος και καθαρού μισθού για Ελλάδα. Μισθωτός, μπλοκάκι, ατομική — ενημερωμένος για 2025 & 2026.",
   applicationCategory: "FinanceApplication",
   operatingSystem: "All",
   offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
@@ -62,14 +62,14 @@ export function LandingPage() {
   return (
     <div className="font-outfit min-h-screen bg-[var(--lp-warm-white)]">
       <Helmet>
-        <title>ΦοροΥπολογιστής — Υπολογιστής Φόρου & Μισθού 2025/2026</title>
+        <title>ΦοροΥπολογιστής — Υπολογισμός Φόρου & Μισθού 2025/2026</title>
         <meta
           name="description"
-          content="Δωρεάν υπολογιστής φόρου εισοδήματος και καθαρού μισθού για Ελλάδα. Μισθωτός, μπλοκάκι, ατομική — ενημερωμένος για 2025 & 2026."
+          content="Δωρεάν υπολογισμός φόρου εισοδήματος και καθαρού μισθού για Ελλάδα. Μισθωτός, μπλοκάκι, ατομική — ενημερωμένος για 2025 & 2026."
         />
         <meta
           name="keywords"
-          content="υπολογιστής φόρου, καθαρός μισθός, φόρος εισοδήματος, μπλοκάκι, ατομική επιχείρηση, ΕΦΚΑ, Ελλάδα, 2025, 2026"
+          content="υπολογισμός φόρου, καθαρός μισθός, φόρος εισοδήματος, μπλοκάκι, ατομική επιχείρηση, ΕΦΚΑ, Ελλάδα, 2025, 2026"
         />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={`${SITE_URL}/`} />
@@ -78,11 +78,11 @@ export function LandingPage() {
         <meta property="og:type" content="website" />
         <meta
           property="og:title"
-          content="ΦοροΥπολογιστής — Υπολογιστής Φόρου & Μισθού"
+          content="ΦοροΥπολογιστής — Υπολογισμός Φόρου & Μισθού"
         />
         <meta
           property="og:description"
-          content="Δωρεάν υπολογιστής φόρου εισοδήματος και καθαρού μισθού για Ελλάδα."
+          content="Δωρεάν υπολογισμός φόρου εισοδήματος και καθαρού μισθού για Ελλάδα."
         />
         <meta property="og:url" content={`${SITE_URL}/`} />
         <meta property="og:image" content={`${SITE_URL}/og-image.png`} />
@@ -92,11 +92,11 @@ export function LandingPage() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content="ΦοροΥπολογιστής — Υπολογιστής Φόρου & Μισθού"
+          content="ΦοροΥπολογιστής — Υπολογισμός Φόρου & Μισθού"
         />
         <meta
           name="twitter:description"
-          content="Δωρεάν υπολογιστής φόρου εισοδήματος και καθαρού μισθού για Ελλάδα."
+          content="Δωρεάν υπολογισμός φόρου εισοδήματος και καθαρού μισθού για Ελλάδα."
         />
         <meta name="twitter:image" content={`${SITE_URL}/og-image.png`} />
 
