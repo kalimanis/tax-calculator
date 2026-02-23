@@ -96,6 +96,16 @@ export function trackWhatsNewDismissed() {
   trackEvent("whats_new_dismissed");
 }
 
+// ─── E-Receipt Events ───
+
+export function trackEReceiptInfoView(mode: CalculatorMode) {
+  trackEvent("e_receipt_info_view", { mode });
+}
+
+export function trackEReceiptInfoToggle(expanded: boolean) {
+  trackEvent("e_receipt_info_toggle", { expanded });
+}
+
 // ─── Helpers ───
 
 /** Bucket gross amounts into ranges for privacy (don't track exact amounts) */

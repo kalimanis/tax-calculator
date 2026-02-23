@@ -14,6 +14,7 @@ import { BracketBreakdown } from "./BracketBreakdown";
 import { IncomeWaterfall } from "./IncomeWaterfall";
 import { ComparisonView } from "./ComparisonView";
 import { SalaryComparisonView } from "./SalaryComparisonView";
+import { EReceiptInfo } from "./EReceiptInfo";
 import { Disclaimer } from "./Disclaimer";
 import { LABELS, SITE_URL } from "@/lib/constants";
 import { calculateTax } from "@/lib/tax-engine";
@@ -473,6 +474,8 @@ export function TaxCalculator() {
                 <>
                   <SalaryResults result={salaryResult} payFrequency={payFrequency} />
 
+                  <EReceiptInfo realIncome={salaryResult.grossAnnual} mode="employee" />
+
                   <Card>
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base">Λεπτομερής Ανάλυση</CardTitle>
@@ -503,6 +506,8 @@ export function TaxCalculator() {
             ) : grossIncome > 0 ? (
               <>
                 <ResultsSummary result={taxResult} regime={regime} clientLocation={clientLocation} />
+
+                <EReceiptInfo realIncome={taxResult.taxableIncome} mode={regime === "atomiki" ? "atomiki" : "mplokaki"} />
 
                 <Card>
                   <CardHeader className="pb-3">
