@@ -10,6 +10,7 @@ import { IncomeForm } from "./IncomeForm";
 import { SalaryForm } from "./SalaryForm";
 import { ResultsSummary } from "./ResultsSummary";
 import { SalaryResults } from "./SalaryResults";
+import { SalaryBreakdown } from "./SalaryBreakdown";
 import { BracketBreakdown } from "./BracketBreakdown";
 import { IncomeWaterfall } from "./IncomeWaterfall";
 import { ComparisonView } from "./ComparisonView";
@@ -472,7 +473,7 @@ export function TaxCalculator() {
             {isSalary ? (
               salaryResult ? (
                 <>
-                  <SalaryResults result={salaryResult} payFrequency={payFrequency} />
+                  <SalaryResults result={salaryResult} />
 
                   <EReceiptInfo realIncome={salaryResult.grossAnnual} mode="employee" />
 
@@ -481,6 +482,7 @@ export function TaxCalculator() {
                       <CardTitle className="text-base">Λεπτομερής Ανάλυση</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-2">
+                      <SalaryBreakdown result={salaryResult} payFrequency={payFrequency} />
                       <BracketBreakdown
                         brackets={salaryResult.brackets}
                         grossTax={salaryResult.grossTax}
