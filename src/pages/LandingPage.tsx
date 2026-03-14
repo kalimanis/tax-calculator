@@ -62,7 +62,7 @@ export function LandingPage() {
   return (
     <div className="font-outfit min-h-screen bg-[var(--lp-warm-white)]">
       <Helmet>
-        <title>ΦοροΥπολογιστής — Υπολογισμός Φόρου & Μισθού 2025/2026</title>
+        <title>Υπολογιστής Φόρου Εισοδήματος & Καθαρού Μισθού - Ελλάδα 2025/2026</title>
         <meta
           name="description"
           content="Δωρεάν υπολογισμός φόρου εισοδήματος και καθαρού μισθού για Ελλάδα. Μισθωτός, μπλοκάκι, ατομική — ενημερωμένος για 2025 & 2026."
