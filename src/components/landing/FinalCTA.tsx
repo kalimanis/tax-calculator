@@ -1,16 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { useScrollReveal } from "@/hooks/useLanding";
+import { useTranslation } from "react-i18next";
 import { ArrowRight } from "lucide-react";
 import { trackLandingCTA } from "@/lib/analytics";
 
 export function FinalCTA() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { ref, isVisible } = useScrollReveal(0.1, "cta");
 
   return (
     <section
       id="cta"
-      aria-label="Τελική πρόσκληση"
+      aria-label={t("finalCta.title")}
       className="grain-overlay relative overflow-hidden bg-[var(--lp-navy)] py-20 lg:py-28"
       ref={ref}
     >
@@ -20,10 +22,10 @@ export function FinalCTA() {
       <div className="relative mx-auto max-w-3xl px-5 text-center lg:px-8">
         <div className={`reveal-up ${isVisible ? "revealed" : ""}`}>
           <h2 className="font-outfit text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
-            Πόσα πραγματικά κρατάς;
+            {t("finalCta.title")}
           </h2>
           <p className="mt-4 text-lg text-white/50">
-            Μάθε σε λιγότερο από 30 δευτερόλεπτα.
+            {t("finalCta.subtitle")}
           </p>
         </div>
 
@@ -38,7 +40,7 @@ export function FinalCTA() {
             data-event="cta-final"
             className="group inline-flex items-center gap-2.5 rounded-full bg-[var(--lp-amber)] px-8 py-4 text-base font-bold text-[var(--lp-navy)] shadow-2xl shadow-[var(--lp-amber)]/20 transition-all hover:bg-[var(--lp-amber-light)] hover:shadow-2xl hover:shadow-[var(--lp-amber)]/30"
           >
-            Υπολόγισε Τώρα — Δωρεάν
+            {t("finalCta.button")}
             <ArrowRight
               size={18}
               className="transition-transform group-hover:translate-x-0.5"

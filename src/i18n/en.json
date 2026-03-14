@@ -1,0 +1,348 @@
+{
+  "appTitle": "Freelancer Tax Calculator",
+  "subtitle": "Tax Years 2025 & 2026",
+  "regime": {
+    "misthotos": "Employee (Art. 12 §1)",
+    "misthotosShort": "Employee",
+    "mplokaki": "Freelance Invoice (Art. 12 §2f)",
+    "mplokakiShort": "Invoice",
+    "atomiki": "Sole Proprietorship (Art. 29)",
+    "atomikiShort": "Sole Prop."
+  },
+  "income": {
+    "gross": "Gross Revenue",
+    "efka": "EFKA Contributions",
+    "expenses": "Other Expenses",
+    "taxable": "Taxable Income",
+    "frequency": {
+      "label": "Period",
+      "yearly": "Annual",
+      "monthly": "Monthly"
+    }
+  },
+  "children": "Dependent Children",
+  "age": "Age",
+  "ageGroups": {
+    "young": "≤ 25 years",
+    "middle": "26-30 years",
+    "standard": "> 30 years"
+  },
+  "results": {
+    "grossTax": "Gross Tax",
+    "taxReduction": "Tax Reduction (Art. 16)",
+    "netTax": "Net Income Tax",
+    "prepayment": "Tax Prepayment",
+    "totalObligation": "Total Tax Obligation",
+    "effectiveRate": "Effective Rate",
+    "netIncome": "Net Income (after tax & EFKA)",
+    "netMonthly": "Monthly Net Income",
+    "monthlySavings": "Monthly Obligations",
+    "withholding": "Tax Withholding (20%)",
+    "balanceDue": "Balance Due / Refund"
+  },
+  "efka": {
+    "auto": "Automatic Calculation",
+    "manual": "Manual Entry",
+    "category": "Insurance Category",
+    "profession": "Profession",
+    "professions": {
+      "standard": "Freelancer",
+      "engineer": "Engineer / Lawyer",
+      "doctor": "Doctor"
+    },
+    "newProfessional": "New Professional (first 5 years)",
+    "monthly": "Monthly Contribution",
+    "annual": "Annual Contribution"
+  },
+  "clientLocation": {
+    "title": "Clients",
+    "domestic": "Greece",
+    "foreign": "Foreign",
+    "mixed": "Mixed",
+    "domesticShare": "Domestic Revenue Share (%)",
+    "noWithholding": "No withholding — foreign clients do not withhold tax.",
+    "partialWithholding": "Withholding only on domestic revenue."
+  },
+  "balanceDue": {
+    "owed": "Settlement Amount Owed",
+    "refund": "Tax Refund",
+    "zero": "Zero Balance"
+  },
+  "comparison": {
+    "title": "Comparison",
+    "yearVsYear": "2025 vs 2026",
+    "regimeVsRegime": "Invoice vs Sole Prop.",
+    "difference": "Difference",
+    "savings": "Savings"
+  },
+  "brackets": {
+    "title": "Bracket Analysis",
+    "bracket": "Bracket",
+    "rate": "Rate",
+    "tax": "Tax",
+    "total": "Total",
+    "baseRate": "Base: {{rate}}",
+    "reducedRate": "Reduced: {{rate}}"
+  },
+  "waterfall": {
+    "title": "Income Flow",
+    "labels": {
+      "gross": "Gross",
+      "efka": "EFKA",
+      "expenses": "Expenses",
+      "tax": "Tax",
+      "prepayment": "Prepayment",
+      "net": "Net",
+      "grossSalary": "Gross",
+      "netSalary": "Net"
+    }
+  },
+  "newBusiness": {
+    "label": "New Business (first 3 years)",
+    "firstYear": "First Filing Year",
+    "yearsActive": "Years in Business"
+  },
+  "disclaimer": "This calculation is indicative and does not constitute tax advice. Consult your accountant for an accurate calculation. Based on L.4172/2013 (ITC) & L.5246/2025.",
+  "fiscalYear": "Fiscal Year",
+  "taxRegime": "Tax Regime",
+  "calculate": "Calculate",
+  "reset": "Reset",
+  "notApplicable": "Not applicable",
+  "tooltips": {
+    "misthotos": "Employee (Art. 12 §1 ITC). Income tax on employment income with tax-free allowance.",
+    "mplokaki": "Taxed as employee (Art. 12 §2f ITC). Max 3 employers or 75%+ from one. Tax-free allowance applies.",
+    "atomiki": "Business profit tax (Art. 29 ITC). No tax-free allowance. 55% tax prepayment.",
+    "taxReduction": "Tax reduction Art. 16 ITC. Applies only to freelance invoice. Base: €777 (no children), decreases €20/€1,000 over €12,000 income.",
+    "prepayment": "55% of tax (27.5% in first year). Applies only to sole proprietorship.",
+    "withholding": "Employer withholds 20% of gross fees (Art. 60 ITC). Offset against final tax.",
+    "efka": "EFKA contributions are deducted from gross revenue before tax calculation.",
+    "foreignClient": "According to POL.1029/2018, foreign employers/clients without permanent establishment in Greece are not obligated to withhold tax. A contract documenting the relationship is required.",
+    "monthlySavings": "The amount to set aside each month to cover your tax obligation (tax + EFKA).",
+    "changes2026": "L.5246/2025: New scale with reduced rates, 6th bracket €40-60K (39%), reductions for children and youth ≤30."
+  },
+  "salary": {
+    "formTitle": "Salary Details",
+    "direction": {
+      "label": "Calculation Direction",
+      "grossToNet": "Gross → Net",
+      "netToGross": "Net → Gross"
+    },
+    "monthlySalary": "Monthly Salary",
+    "grossSalary": "Gross Salary",
+    "targetNet": "Target Net",
+    "payFrequency": {
+      "label": "Pay Schedule",
+      "14": "14 salaries",
+      "12": "12 salaries"
+    },
+    "seniority": {
+      "label": "Seniority",
+      "0": "0-3 years",
+      "1": "3-6 years (+10%)",
+      "2": "6-9 years (+20%)",
+      "3": "9+ years (+30%)"
+    },
+    "efka": {
+      "employee": "Employee EFKA",
+      "employer": "Employer EFKA"
+    },
+    "article5G": "Article 5G (50% tax reduction)",
+    "period": {
+      "label": "Period",
+      "monthly": "Monthly",
+      "yearly": "Annual"
+    },
+    "minimumWage": "Minimum Wage",
+    "results": {
+      "grossMonthly": "Gross Monthly",
+      "grossAnnual": "Gross Annual",
+      "efkaEmployee": "Employee EFKA",
+      "efkaEmployer": "Employer EFKA",
+      "taxable": "Taxable Income",
+      "grossTax": "Gross Tax",
+      "taxReduction": "Tax Reduction (Art. 16)",
+      "netTax": "Net Tax",
+      "netMonthly": "Net Monthly",
+      "netAnnual": "Net Annual",
+      "effectiveRate": "Effective Rate",
+      "employerCost": "Employer Cost"
+    },
+    "breakdown": "Payroll Breakdown",
+    "monthly": "Monthly",
+    "annual": "Annual",
+    "tooltips": {
+      "efkaCeiling": "Maximum monthly EFKA contributions. Contributions are calculated up to this ceiling.",
+      "article5G": "Special regime Art. 5G ITC: 50% reduction in income tax for tax residents who transferred their tax residence to Greece.",
+      "seniority": "Seniority increments based on years of service (10% per 3 years, up to 30%).",
+      "minimumWage": "Minimum legal wage for full-time employment.",
+      "netToGross": "Calculates the gross salary corresponding to the desired net."
+    }
+  },
+  "ui": {
+    "lightTheme": "Light theme",
+    "darkTheme": "Dark theme",
+    "print": "Print",
+    "taxYears": "Tax Years 2025 & 2026",
+    "detailedAnalysis": "Detailed Analysis",
+    "enterSalary": "Enter your monthly salary to see results",
+    "enterIncome": "Enter your gross revenue to see results",
+    "autoCalculate": "Results are calculated automatically",
+    "perYear": "/year",
+    "perMonth": "/month",
+    "settings": "Settings",
+    "incomeFormTitle": "Income Details"
+  },
+  "resultLabels": {
+    "taxReduction": "Tax Reduction",
+    "netTax": "Net Tax",
+    "prepayment": "Prepayment",
+    "totalObligation": "Total Obligation",
+    "netIncome": "Net Income",
+    "withholding": "Withholding (20%)"
+  },
+  "regimeLabels": {
+    "mplokaki": "Invoice",
+    "atomiki": "Sole Prop."
+  },
+  "salaryBreakdown": {
+    "settlementTooltip": "In payroll, tax is rounded monthly. The small difference (usually < €1) is settled in the annual tax return.",
+    "settlementDiff": "Settlement difference due to rounding:",
+    "refund": "refund",
+    "payment": "payment"
+  },
+  "eReceipt": {
+    "title": "Electronic Receipts (Art. 15 §6)",
+    "required": "required receipt amount (30% of income)",
+    "cappedNote": "(30% = {{amount}} → maximum limit €20,000)",
+    "perMonth": "/ month",
+    "maxPenalty": "maximum penalty (22% on shortfall)",
+    "footnote": "L. 4172/2013, Art. 15 §6 — Obligation to collect receipts via electronic transactions (card/e-banking)."
+  },
+  "changelog": {
+    "title": "Changelog",
+    "subtitle": "What's new in Forologisi",
+    "back": "Back to Calculator"
+  },
+  "whatsNew": {
+    "title": "What's New in Forologisi",
+    "viewAll": "View all changes →"
+  },
+  "hero": {
+    "netMonthlySalary": "Net Monthly Salary",
+    "gross": "Gross",
+    "efka": "EFKA",
+    "tax": "Tax",
+    "net": "Net",
+    "effectiveTax": "Effective Tax",
+    "titleMain": "Find out what you really",
+    "titleHighlight": "keep",
+    "description": "Calculate income tax and net salary — employee, freelance invoice or sole proprietorship — based on the <1>2025 & 2026</1> scale.",
+    "ctaPrimary": "Calculate Your Salary",
+    "ctaSecondary": "See how it works",
+    "trustBadges": ["L.5246/2025", "EFKA 2025", "2026 Scale", "100% Free"]
+  },
+  "navbar": {
+    "employee": "Employee",
+    "freelancer": "Freelancer",
+    "comparison": "Comparison",
+    "cta": "Calculate Now"
+  },
+  "howItWorks": {
+    "label": "How it works",
+    "title": "3 simple steps",
+    "steps": [
+      {
+        "title": "Enter your details",
+        "description": "Gross salary or annual revenue, regime, children"
+      },
+      {
+        "title": "We calculate precisely",
+        "description": "EFKA, tax, prepayment, Art. 16 reduction — all automatic"
+      },
+      {
+        "title": "See the results",
+        "description": "Net salary, detailed breakdown, year comparison"
+      }
+    ]
+  },
+  "features": {
+    "label": "What it covers",
+    "title": "One calculator, three worlds",
+    "items": [
+      {
+        "id": "misthotos",
+        "title": "Employee",
+        "subtitle": "From gross to net in seconds",
+        "bullets": ["Employee EFKA contributions", "14 salaries", "Article 5G", "Employer cost", "Reverse calculation"]
+      },
+      {
+        "id": "mplokaki",
+        "title": "Freelance Invoice",
+        "subtitle": "20% withholding, Art. 16, foreign clients",
+        "bullets": ["6 EFKA categories", "2025 & 2026 scale", "Art. 16 tax reduction", "Foreign clients"]
+      },
+      {
+        "id": "atomiki",
+        "title": "Sole Proprietorship",
+        "subtitle": "Prepayment, business tax, comparison",
+        "bullets": ["Tax prepayment (55% or 27.5% 1st year)", "Income flow chart", "Comparison with invoice"]
+      }
+    ]
+  },
+  "liveDemo": {
+    "label": "Try it",
+    "title": "Try it now",
+    "inputEmployee": "Gross Monthly Salary",
+    "inputMplokaki": "Monthly Revenue",
+    "resultEmployee": "Net Monthly",
+    "resultMplokaki": "Net Monthly (est.)",
+    "fiscalYear": "Fiscal year",
+    "efkaNote": "· EFKA 2nd category",
+    "cta": "See full details"
+  },
+  "comparisonTeaser": {
+    "label": "Comparison",
+    "title": "2025 vs 2026 — What changes?",
+    "difference": "Difference",
+    "perMonth": "month",
+    "perYear": "year",
+    "row1Label": "Employee €2,000 gross",
+    "row2Label": "Invoice €30,000 (EFKA 2nd)"
+  },
+  "trust": {
+    "label": "Trust",
+    "title": "Why trust us",
+    "items": [
+      { "title": "Based on legislation", "description": "L.4172/2013, L.5246/2025, e-EFKA circulars" },
+      { "title": "Up to date", "description": "2026 scale, EFKA 2025, minimum wage €880" },
+      { "title": "Privacy", "description": "Calculations happen on your device, no personal data stored. Anonymous statistics without cookies." },
+      { "title": "100% Free", "description": "No hidden charges, no registration" },
+      { "title": "Reliable", "description": "Calculations based on current laws and official EFKA rates" },
+      { "title": "Mobile-friendly", "description": "Works on mobile, tablet, desktop" }
+    ]
+  },
+  "faq": {
+    "label": "FAQ",
+    "title": "Frequently Asked Questions",
+    "items": [
+      { "question": "How is net salary calculated?", "answer": "Gross − EFKA (13.37%) = Taxable → Scale Art.15 − Reduction Art.16 = Tax → Net. Calculation is done automatically based on the ITC." },
+      { "question": "What changes in 2026?", "answer": "New scale (L.5246/2025) with reduced rates, especially for families and youth. New 6th bracket €40-60K at 39%, reductions in first brackets for parents." },
+      { "question": "Does it cover foreign clients?", "answer": "Yes. Freelance invoice with foreign clients: no 20% withholding, but same tax (POL.1029/2018). Domestic, foreign and mixed are supported." },
+      { "question": "Is the calculation accurate?", "answer": "Based on the ITC and EFKA circulars. Small deviations (±€1-2) due to payroll rounding." },
+      { "question": "What is Article 5G?", "answer": "50% tax exemption for employees who transfer their tax residence to Greece. Applies to employees and freelancers." },
+      { "question": "Is my data stored?", "answer": "Calculations happen exclusively on your device — no amount or personal data is sent to a server. We use anonymous visitor statistics without cookies." }
+    ]
+  },
+  "finalCta": {
+    "title": "How much do you really keep?",
+    "subtitle": "Find out in less than 30 seconds.",
+    "button": "Calculate Now — Free"
+  },
+  "footer": {
+    "disclaimer": "Indicative calculations. Does not constitute tax advice. Consult your accountant. Based on L.4172/2013 & L.5246/2025.",
+    "privacy": "We use Umami Analytics, no cookies, no personal data. Statistics are anonymous and aggregated.",
+    "madeWith": "Made with ❤️ in Greece",
+    "changelog": "Changelog",
+    "contact": "Contact"
+  }
+}

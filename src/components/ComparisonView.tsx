@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
-import { LABELS } from "@/lib/constants";
+import { useTranslation } from "react-i18next";
 import { trackComparison } from "@/lib/analytics";
 import { calculateTax } from "@/lib/tax-engine";
 import { formatCurrency, formatPercent } from "@/lib/utils";
@@ -47,19 +47,20 @@ function ComparisonRow({ label, valueA, valueB, isCurrency = true, inverse = fal
 }
 
 export function ComparisonView({ input, currentResult }: ComparisonViewProps) {
+  const { t } = useTranslation();
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-base">{LABELS.comparison.title}</CardTitle>
+        <CardTitle className="text-base">{t("comparison.title")}</CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="years" onValueChange={(v) => trackComparison(v === "years" ? "year" : "mode")}>
           <TabsList className="w-full">
             <TabsTrigger value="years" className="flex-1">
-              {LABELS.comparison.yearVsYear}
+              {t("comparison.yearVsYear")}
             </TabsTrigger>
             <TabsTrigger value="regimes" className="flex-1">
-              {LABELS.comparison.regimeVsRegime}
+              {t("comparison.regimeVsRegime")}
             </TabsTrigger>
           </TabsList>
 
@@ -76,13 +77,8 @@ export function ComparisonView({ input, currentResult }: ComparisonViewProps) {
   );
 }
 
-function YearComparison({
-  input,
-  currentResult,
-}: {
-  input: TaxInput;
-  currentResult: TaxResult;
-}) {
+function YearComparison({ input, currentResult }: { input: TaxInput; currentResult: TaxResult }) {
+  const { t } = useTranslation();
   const otherYear = input.fiscalYear === 2025 ? 2026 : 2025;
   const otherResult = calculateTax({ ...input, fiscalYear: otherYear });
 
@@ -99,23 +95,18 @@ function YearComparison({
         <span>2026</span>
       </div>
       <div className="divide-y">
-        <ComparisonRow label={LABELS.results.grossTax} valueA={resultA.grossTax} valueB={resultB.grossTax} />
-        <ComparisonRow label={LABELS.results.netTax} valueA={resultA.netTax} valueB={resultB.netTax} />
-        <ComparisonRow label={LABELS.results.totalObligation} valueA={resultA.totalObligation} valueB={resultB.totalObligation} />
-        <ComparisonRow label={LABELS.results.effectiveRate} valueA={resultA.effectiveRate} valueB={resultB.effectiveRate} isCurrency={false} />
-        <ComparisonRow label={LABELS.results.netIncome} valueA={resultA.netIncome} valueB={resultB.netIncome} inverse />
+        <ComparisonRow label={t("results.grossTax")} valueA={resultA.grossTax} valueB={resultB.grossTax} />
+        <ComparisonRow label={t("results.netTax")} valueA={resultA.netTax} valueB={resultB.netTax} />
+        <ComparisonRow label={t("results.totalObligation")} valueA={resultA.totalObligation} valueB={resultB.totalObligation} />
+        <ComparisonRow label={t("results.effectiveRate")} valueA={resultA.effectiveRate} valueB={resultB.effectiveRate} isCurrency={false} />
+        <ComparisonRow label={t("results.netIncome")} valueA={resultA.netIncome} valueB={resultB.netIncome} inverse />
       </div>
     </div>
   );
 }
 
-function RegimeComparison({
-  input,
-  currentResult,
-}: {
-  input: TaxInput;
-  currentResult: TaxResult;
-}) {
+function RegimeComparison({ input, currentResult }: { input: TaxInput; currentResult: TaxResult }) {
+  const { t } = useTranslation();
   const otherRegime = input.regime === "mplokaki" ? "atomiki" as const : "mplokaki" as const;
   const otherResult = calculateTax({ ...input, regime: otherRegime });
 
@@ -127,16 +118,16 @@ function RegimeComparison({
   return (
     <div>
       <div className="mb-3 flex items-center justify-center gap-4 text-sm font-semibold">
-        <span>Μπλοκάκι</span>
+        <span>{t("regimeLabels.mplokaki")}</span>
         <span className="text-muted-foreground">vs</span>
-        <span>Ατομική</span>
+        <span>{t("regimeLabels.atomiki")}</span>
       </div>
       <div className="divide-y">
-        <ComparisonRow label={LABELS.results.grossTax} valueA={resultA.grossTax} valueB={resultB.grossTax} />
-        <ComparisonRow label={LABELS.results.netTax} valueA={resultA.netTax} valueB={resultB.netTax} />
-        <ComparisonRow label={LABELS.results.totalObligation} valueA={resultA.totalObligation} valueB={resultB.totalObligation} />
-        <ComparisonRow label={LABELS.results.effectiveRate} valueA={resultA.effectiveRate} valueB={resultB.effectiveRate} isCurrency={false} />
-        <ComparisonRow label={LABELS.results.netIncome} valueA={resultA.netIncome} valueB={resultB.netIncome} inverse />
+        <ComparisonRow label={t("results.grossTax")} valueA={resultA.grossTax} valueB={resultB.grossTax} />
+        <ComparisonRow label={t("results.netTax")} valueA={resultA.netTax} valueB={resultB.netTax} />
+        <ComparisonRow label={t("results.totalObligation")} valueA={resultA.totalObligation} valueB={resultB.totalObligation} />
+        <ComparisonRow label={t("results.effectiveRate")} valueA={resultA.effectiveRate} valueB={resultB.effectiveRate} isCurrency={false} />
+        <ComparisonRow label={t("results.netIncome")} valueA={resultA.netIncome} valueB={resultB.netIncome} inverse />
       </div>
     </div>
   );

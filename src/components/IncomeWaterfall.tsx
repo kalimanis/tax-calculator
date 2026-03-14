@@ -14,7 +14,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { LABELS } from "@/lib/constants";
+import { useTranslation } from "react-i18next";
 import { formatCurrency } from "@/lib/utils";
 import type { Regime, TaxResult } from "@/lib/types";
 
@@ -32,7 +32,9 @@ interface IncomeWaterfallProps {
 }
 
 export function IncomeWaterfall({ result, grossIncome, regime, chartData: externalData }: IncomeWaterfallProps) {
-  const chartData = externalData ?? buildFreelancerData(result!, grossIncome!, regime!);
+  const { t } = useTranslation();
+
+  const chartData = externalData ?? buildFreelancerData(result!, grossIncome!, regime!, t);
 
   if (chartData.length === 0) return null;
 
@@ -40,7 +42,7 @@ export function IncomeWaterfall({ result, grossIncome, regime, chartData: extern
     <Accordion type="single" collapsible>
       <AccordionItem value="waterfall">
         <AccordionTrigger className="text-base font-semibold">
-          {LABELS.waterfall.title}
+          {t("waterfall.title")}
         </AccordionTrigger>
         <AccordionContent>
           <div className="h-48 w-full sm:h-64">
@@ -70,17 +72,22 @@ export function IncomeWaterfall({ result, grossIncome, regime, chartData: extern
   );
 }
 
-function buildFreelancerData(result: TaxResult, grossIncome: number, regime: Regime): WaterfallBar[] {
+function buildFreelancerData(
+  result: TaxResult,
+  grossIncome: number,
+  regime: Regime,
+  t: (key: string) => string
+): WaterfallBar[] {
   if (grossIncome <= 0) return [];
   const expenses = grossIncome - result.efkaAnnual - result.taxableIncome;
   return [
-    { name: "Ακαθάριστα", value: grossIncome, color: "#059669" },
-    ...(result.efkaAnnual > 0 ? [{ name: "ΕΦΚΑ", value: result.efkaAnnual, color: "#dc2626" }] : []),
-    ...(expenses > 0 ? [{ name: "Έξοδα", value: expenses, color: "#dc2626" }] : []),
-    { name: "Φόρος", value: result.netTax, color: "#dc2626" },
+    { name: t("waterfall.labels.gross"), value: grossIncome, color: "#059669" },
+    ...(result.efkaAnnual > 0 ? [{ name: t("waterfall.labels.efka"), value: result.efkaAnnual, color: "#dc2626" }] : []),
+    ...(expenses > 0 ? [{ name: t("waterfall.labels.expenses"), value: expenses, color: "#dc2626" }] : []),
+    { name: t("waterfall.labels.tax"), value: result.netTax, color: "#dc2626" },
     ...(regime === "atomiki" && result.prepayment > 0
-      ? [{ name: "Προκαταβολή", value: result.prepayment, color: "#f59e0b" }]
+      ? [{ name: t("waterfall.labels.prepayment"), value: result.prepayment, color: "#f59e0b" }]
       : []),
-    { name: "Καθαρό", value: Math.max(0, result.netIncome), color: "#059669" },
+    { name: t("waterfall.labels.net"), value: Math.max(0, result.netIncome), color: "#059669" },
   ];
 }

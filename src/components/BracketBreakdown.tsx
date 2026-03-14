@@ -5,7 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { LABELS } from "@/lib/constants";
+import { useTranslation } from "react-i18next";
 import { formatCurrency, formatPercent } from "@/lib/utils";
 import type { BracketResult } from "@/lib/types";
 
@@ -24,6 +24,7 @@ const BRACKET_COLORS = [
 ];
 
 export function BracketBreakdown({ brackets, grossTax }: BracketBreakdownProps) {
+  const { t } = useTranslation();
   if (brackets.length === 0) return null;
 
   const maxTax = Math.max(...brackets.map((b) => b.tax), 1);
@@ -32,7 +33,7 @@ export function BracketBreakdown({ brackets, grossTax }: BracketBreakdownProps) 
     <Accordion type="single" collapsible defaultValue="brackets">
       <AccordionItem value="brackets">
         <AccordionTrigger className="text-base font-semibold">
-          {LABELS.brackets.title}
+          {t("brackets.title")}
         </AccordionTrigger>
         <AccordionContent>
           <div className="space-y-3">
@@ -49,7 +50,7 @@ export function BracketBreakdown({ brackets, grossTax }: BracketBreakdownProps) 
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-2">
                       <span className="font-medium">
-                        {LABELS.brackets.bracket} {i + 1}:
+                        {t("brackets.bracket")} {i + 1}:
                       </span>
                       <span className="text-muted-foreground">
                         €{bracket.min.toLocaleString("el-GR")} {maxLabel}
@@ -65,8 +66,9 @@ export function BracketBreakdown({ brackets, grossTax }: BracketBreakdownProps) 
                             </TooltipTrigger>
                             <TooltipContent>
                               <p>
-                                Βασικός: {formatPercent(bracket.baseRate * 100)}
-                                {" → "}Μειωμένος: {formatPercent(bracket.rate * 100)}
+                                {t("brackets.baseRate", { rate: formatPercent(bracket.baseRate * 100) })}
+                                {" → "}
+                                {t("brackets.reducedRate", { rate: formatPercent(bracket.rate * 100) })}
                               </p>
                             </TooltipContent>
                           </Tooltip>
@@ -90,7 +92,7 @@ export function BracketBreakdown({ brackets, grossTax }: BracketBreakdownProps) 
             })}
 
             <div className="mt-4 flex items-center justify-between border-t pt-3">
-              <span className="font-semibold">{LABELS.brackets.total} {LABELS.brackets.tax}:</span>
+              <span className="font-semibold">{t("brackets.total")} {t("brackets.tax")}:</span>
               <span className="text-lg font-bold tabular-nums text-rose-600 dark:text-rose-400">
                 {formatCurrency(grossTax)}
               </span>

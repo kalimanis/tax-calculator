@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
-import { LABELS, TOOLTIPS } from "@/lib/constants";
+import { useTranslation } from "react-i18next";
 import { formatCurrency, formatPercent } from "@/lib/utils";
 import type { ClientLocation, Regime, TaxResult } from "@/lib/types";
 
@@ -46,20 +46,21 @@ function MetricRow({ label, value, colorClass, tooltip, subtitle, muted }: Metri
   );
 }
 
-function getBalanceDueLabel(balanceDue: number): string {
-  if (balanceDue > 0) return LABELS.balanceDue.owed;
-  if (balanceDue < 0) return LABELS.balanceDue.refund;
-  return LABELS.balanceDue.zero;
-}
-
-function getWithholdingSubtitle(clientLocation: ClientLocation): string | undefined {
-  if (clientLocation === "foreign") return LABELS.clientLocation.noWithholding;
-  if (clientLocation === "mixed") return LABELS.clientLocation.partialWithholding;
-  return undefined;
-}
-
 export function ResultsSummary({ result, regime, clientLocation }: ResultsSummaryProps) {
+  const { t } = useTranslation();
   const isRefund = regime === "mplokaki" && result.balanceDue < 0;
+
+  const getBalanceDueLabel = (balanceDue: number): string => {
+    if (balanceDue > 0) return t("balanceDue.owed");
+    if (balanceDue < 0) return t("balanceDue.refund");
+    return t("balanceDue.zero");
+  };
+
+  const getWithholdingSubtitle = (loc: ClientLocation): string | undefined => {
+    if (loc === "foreign") return t("clientLocation.noWithholding");
+    if (loc === "mixed") return t("clientLocation.partialWithholding");
+    return undefined;
+  };
 
   return (
     <Card>
@@ -67,7 +68,7 @@ export function ResultsSummary({ result, regime, clientLocation }: ResultsSummar
         {/* Hero: Net Monthly */}
         <div className="mb-4 flex items-center justify-between rounded-lg bg-emerald-50 px-4 py-3 dark:bg-emerald-950/30">
           <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
-            {LABELS.results.netMonthly}
+            {t("results.netMonthly")}
           </span>
           <span className="text-2xl font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
             {formatCurrency(result.netIncome / 12)}
@@ -78,31 +79,31 @@ export function ResultsSummary({ result, regime, clientLocation }: ResultsSummar
         <div className="grid gap-x-6 sm:grid-cols-2">
           <div className="divide-y">
             <MetricRow
-              label={LABELS.results.grossTax}
+              label={t("results.grossTax")}
               value={formatCurrency(result.grossTax)}
               colorClass="text-blue-600 dark:text-blue-400"
             />
             <MetricRow
-              label="Μείωση Φόρου"
-              value={regime === "mplokaki" ? formatCurrency(result.taxReduction) : LABELS.notApplicable}
+              label={t("resultLabels.taxReduction")}
+              value={regime === "mplokaki" ? formatCurrency(result.taxReduction) : t("notApplicable")}
               colorClass="text-emerald-600 dark:text-emerald-400"
-              tooltip={TOOLTIPS.taxReduction}
+              tooltip={t("tooltips.taxReduction")}
               muted={regime !== "mplokaki"}
             />
             <MetricRow
-              label="Καθαρός Φόρος"
+              label={t("resultLabels.netTax")}
               value={formatCurrency(result.netTax)}
               colorClass="text-rose-600 dark:text-rose-400"
             />
             <MetricRow
-              label="Προκαταβολή"
-              value={regime === "atomiki" ? formatCurrency(result.prepayment) : LABELS.notApplicable}
+              label={t("resultLabels.prepayment")}
+              value={regime === "atomiki" ? formatCurrency(result.prepayment) : t("notApplicable")}
               colorClass="text-amber-600 dark:text-amber-400"
-              tooltip={TOOLTIPS.prepayment}
+              tooltip={t("tooltips.prepayment")}
               muted={regime !== "atomiki"}
             />
             <MetricRow
-              label="Συνολική Υποχρέωση"
+              label={t("resultLabels.totalObligation")}
               value={formatCurrency(result.totalObligation)}
               colorClass="text-red-700 dark:text-red-400"
             />
@@ -110,28 +111,28 @@ export function ResultsSummary({ result, regime, clientLocation }: ResultsSummar
 
           <div className="divide-y">
             <MetricRow
-              label={LABELS.results.effectiveRate}
+              label={t("results.effectiveRate")}
               value={formatPercent(result.effectiveRate)}
               colorClass="text-purple-600 dark:text-purple-400"
             />
             <MetricRow
-              label="Καθαρό Εισόδημα"
+              label={t("resultLabels.netIncome")}
               value={formatCurrency(result.netIncome)}
               colorClass="text-emerald-600 dark:text-emerald-400"
             />
             <MetricRow
-              label={LABELS.results.monthlySavings}
+              label={t("results.monthlySavings")}
               value={formatCurrency((result.totalObligation + result.efkaAnnual) / 12)}
               colorClass="text-amber-600 dark:text-amber-400"
-              tooltip={TOOLTIPS.monthlySavings}
+              tooltip={t("tooltips.monthlySavings")}
             />
             {regime === "mplokaki" && (
               <>
                 <MetricRow
-                  label="Παρακράτηση (20%)"
+                  label={t("resultLabels.withholding")}
                   value={formatCurrency(result.withholding20)}
                   colorClass="text-sky-600 dark:text-sky-400"
-                  tooltip={TOOLTIPS.withholding}
+                  tooltip={t("tooltips.withholding")}
                   subtitle={getWithholdingSubtitle(clientLocation)}
                 />
                 <MetricRow

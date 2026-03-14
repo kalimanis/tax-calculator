@@ -3,6 +3,7 @@ import { Helmet } from "@dr.pogodin/react-helmet";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Moon, Sun } from "lucide-react";
 import { useDarkMode } from "@/hooks/useDarkMode";
+import { useTranslation } from "react-i18next";
 import { Logo } from "@/components/Logo";
 import { YearSelector } from "./YearSelector";
 import { RegimeSelector } from "./RegimeSelector";
@@ -17,7 +18,8 @@ import { ComparisonView } from "./ComparisonView";
 import { SalaryComparisonView } from "./SalaryComparisonView";
 import { EReceiptInfo } from "./EReceiptInfo";
 import { Disclaimer } from "./Disclaimer";
-import { LABELS, SITE_URL } from "@/lib/constants";
+import { LanguageToggle } from "./LanguageToggle";
+import { SITE_URL } from "@/lib/constants";
 import { calculateTax } from "@/lib/tax-engine";
 import { calculateSalary } from "@/lib/salary-engine";
 import { getEfkaRates } from "@/lib/salary-constants";
@@ -51,10 +53,8 @@ function getUrlParams(): Partial<Record<string, string>> {
 
 function setUrlParams(params: Record<string, string>) {
   const url = new URL(window.location.href);
-  // Clear all existing params first
   const existingKeys = Array.from(url.searchParams.keys());
   existingKeys.forEach((key) => url.searchParams.delete(key));
-  // Set new params
   Object.entries(params).forEach(([key, value]) => {
     if (value && value !== "0" && value !== "standard" && value !== "false") {
       url.searchParams.set(key, value);
@@ -75,55 +75,38 @@ function initRegime(urlParams: Partial<Record<string, string>>): Regime {
 export function TaxCalculator() {
   const urlParams = getUrlParams();
   const [dark, toggleDark] = useDarkMode();
+  const { t } = useTranslation();
 
   const [year, setYear] = useState<FiscalYear>(
     urlParams.y === "2026" ? 2026 : 2025
   );
   const [regime, setRegime] = useState<Regime>(initRegime(urlParams));
-  const [grossIncome, setGrossIncome] = useState(
-    Number(urlParams.gi) || 0
-  );
-  const [otherExpenses, setOtherExpenses] = useState(
-    Number(urlParams.ex) || 0
-  );
+  const [grossIncome, setGrossIncome] = useState(Number(urlParams.gi) || 0);
+  const [otherExpenses, setOtherExpenses] = useState(Number(urlParams.ex) || 0);
   const [children, setChildren] = useState(Number(urlParams.ch) || 0);
   const [ageGroup, setAgeGroup] = useState<AgeGroup>(
     (urlParams.ag as AgeGroup) || "standard"
   );
-  const [isFirstYearFiling, setIsFirstYearFiling] = useState(
-    urlParams.fy === "1"
-  );
-  const [yearsInBusiness, setYearsInBusiness] = useState(
-    Number(urlParams.yb) || 4
-  );
+  const [isFirstYearFiling, setIsFirstYearFiling] = useState(urlParams.fy === "1");
+  const [yearsInBusiness, setYearsInBusiness] = useState(Number(urlParams.yb) || 4);
   const [clientLocation, setClientLocation] = useState<ClientLocation>(
     (urlParams.cl as ClientLocation) || "domestic"
   );
-  const [domesticIncomeShare, setDomesticIncomeShare] = useState(
-    Number(urlParams.ds) || 50
-  );
+  const [domesticIncomeShare, setDomesticIncomeShare] = useState(Number(urlParams.ds) || 50);
 
-  // EFKA state (freelancer)
   const [efkaAutoMode, setEfkaAutoMode] = useState(true);
   const [profession, setProfession] = useState<ProfessionType>(
     (urlParams.pr as ProfessionType) || "standard"
   );
-  const [efkaCategory, setEfkaCategory] = useState(
-    Number(urlParams.ec) || 1
-  );
-  const [isNewProfessional, setIsNewProfessional] = useState(
-    urlParams.np === "1"
-  );
+  const [efkaCategory, setEfkaCategory] = useState(Number(urlParams.ec) || 1);
+  const [isNewProfessional, setIsNewProfessional] = useState(urlParams.np === "1");
   const [manualEfka, setManualEfka] = useState(Number(urlParams.me) || 0);
 
-  // Salary state
   const defaultEfkaRates = getEfkaRates(2025);
   const [salaryDirection, setSalaryDirection] = useState<SalaryDirection>(
     urlParams.sd === "net-to-gross" ? "net-to-gross" : "gross-to-net"
   );
-  const [monthlySalary, setMonthlySalary] = useState(
-    Number(urlParams.ms) || 0
-  );
+  const [monthlySalary, setMonthlySalary] = useState(Number(urlParams.ms) || 0);
   const [payFrequency, setPayFrequency] = useState<PayFrequency>(
     urlParams.pf === "12" ? 12 : 14
   );
@@ -138,7 +121,6 @@ export function TaxCalculator() {
     (Number(urlParams.sn) as Seniority) || 0
   );
 
-  // Compute EFKA annual based on mode (freelancer)
   const efkaAnnual = useMemo(() => {
     if (!efkaAutoMode) return manualEfka;
     if (isNewProfessional) return getEfkaNewProfessional(year).annual;
@@ -148,7 +130,6 @@ export function TaxCalculator() {
     return table[cat]?.annual ?? 0;
   }, [efkaAutoMode, manualEfka, isNewProfessional, year, profession, efkaCategory]);
 
-  // Ensure category stays valid when profession changes
   const handleProfessionChange = useCallback(
     (p: ProfessionType) => {
       setProfession(p);
@@ -174,7 +155,6 @@ export function TaxCalculator() {
     setEfkaCategory(1);
     setIsNewProfessional(false);
     setManualEfka(0);
-    // Salary reset
     setSalaryDirection("gross-to-net");
     setMonthlySalary(0);
     setPayFrequency(14);
@@ -187,7 +167,6 @@ export function TaxCalculator() {
 
   const isSalary = regime === "misthotos";
 
-  // Analytics: map regime to analytics mode
   const regimeToMode = (r: Regime) =>
     r === "misthotos" ? "employee" as const : r;
 
@@ -203,7 +182,6 @@ export function TaxCalculator() {
     setYear(y);
   }, []);
 
-  // Tax input (freelancer)
   const taxInput: TaxInput = useMemo(
     () => ({
       fiscalYear: year,
@@ -223,7 +201,6 @@ export function TaxCalculator() {
 
   const taxResult = useMemo(() => calculateTax(taxInput), [taxInput]);
 
-  // Salary input & result
   const salaryInput: SalaryInput = useMemo(
     () => ({
       fiscalYear: year,
@@ -245,63 +222,40 @@ export function TaxCalculator() {
     [isSalary, monthlySalary, salaryInput]
   );
 
-  // Salary waterfall chart data
   const salaryWaterfallData = useMemo(() => {
     if (!salaryResult) return undefined;
     return [
-      { name: "Μικτός", value: salaryResult.grossAnnual, color: "#059669" },
-      { name: "ΕΦΚΑ", value: salaryResult.efkaEmployee, color: "#dc2626" },
-      { name: "Φόρος", value: salaryResult.netTax, color: "#dc2626" },
-      { name: "Καθαρός", value: salaryResult.netAnnual, color: "#059669" },
+      { name: t("waterfall.labels.grossSalary"), value: salaryResult.grossAnnual, color: "#059669" },
+      { name: t("waterfall.labels.efka"), value: salaryResult.efkaEmployee, color: "#dc2626" },
+      { name: t("waterfall.labels.tax"), value: salaryResult.netTax, color: "#dc2626" },
+      { name: t("waterfall.labels.netSalary"), value: salaryResult.netAnnual, color: "#059669" },
     ];
-  }, [salaryResult]);
+  }, [salaryResult, t]);
 
-  // Sync to URL
   useEffect(() => {
     if (isSalary) {
       setUrlParams({
-        y: String(year),
-        r: regime,
-        ch: String(children),
-        ag: ageGroup,
-        sd: salaryDirection,
-        ms: String(monthlySalary),
-        pf: String(payFrequency),
-        eer: String(efkaEmployeeRate),
-        err: String(efkaEmployerRate),
-        a5g: hasArticle5G ? "1" : "0",
-        sn: String(seniority),
+        y: String(year), r: regime, ch: String(children), ag: ageGroup,
+        sd: salaryDirection, ms: String(monthlySalary), pf: String(payFrequency),
+        eer: String(efkaEmployeeRate), err: String(efkaEmployerRate),
+        a5g: hasArticle5G ? "1" : "0", sn: String(seniority),
       });
     } else {
       setUrlParams({
-        y: String(year),
-        r: regime,
-        gi: String(grossIncome),
-        ex: String(otherExpenses),
-        ch: String(children),
-        ag: ageGroup,
-        fy: isFirstYearFiling ? "1" : "0",
-        yb: String(yearsInBusiness),
-        pr: profession,
-        ec: String(efkaCategory),
-        np: isNewProfessional ? "1" : "0",
-        me: String(manualEfka),
-        cl: clientLocation,
-        ds: String(domesticIncomeShare),
+        y: String(year), r: regime, gi: String(grossIncome), ex: String(otherExpenses),
+        ch: String(children), ag: ageGroup, fy: isFirstYearFiling ? "1" : "0",
+        yb: String(yearsInBusiness), pr: profession, ec: String(efkaCategory),
+        np: isNewProfessional ? "1" : "0", me: String(manualEfka),
+        cl: clientLocation, ds: String(domesticIncomeShare),
       });
     }
   }, [isSalary, year, regime, grossIncome, otherExpenses, children, ageGroup, isFirstYearFiling, yearsInBusiness, profession, efkaCategory, isNewProfessional, manualEfka, clientLocation, domesticIncomeShare, salaryDirection, monthlySalary, payFrequency, efkaEmployeeRate, efkaEmployerRate, hasArticle5G, seniority]);
 
-  // Analytics: debounced calculation tracking
   useEffect(() => {
     const amount = isSalary ? monthlySalary * 12 : grossIncome;
     if (amount <= 0) return;
     const timeout = setTimeout(() => {
-      trackCalculation(regimeToMode(regime), {
-        fiscalYear: year,
-        grossAmount: amount,
-        children,
-      });
+      trackCalculation(regimeToMode(regime), { fiscalYear: year, grossAmount: amount, children });
     }, 2000);
     return () => clearTimeout(timeout);
   }, [isSalary, grossIncome, monthlySalary, regime, year, children]);
@@ -310,18 +264,8 @@ export function TaxCalculator() {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Αρχική",
-        item: `${SITE_URL}/`,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Υπολογιστής Φόρου",
-        item: `${SITE_URL}/calculator`,
-      },
+      { "@type": "ListItem", position: 1, name: "Αρχική", item: `${SITE_URL}/` },
+      { "@type": "ListItem", position: 2, name: "Υπολογιστής Φόρου", item: `${SITE_URL}/calculator` },
     ],
   };
 
@@ -329,61 +273,42 @@ export function TaxCalculator() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <Helmet>
         <title>Υπολογιστής Φόρου Εισοδήματος — ΦοροΥπολογιστής</title>
-        <meta
-          name="description"
-          content="Υπολογίστε τον φόρο εισοδήματος και τον καθαρό μισθό σας. Μισθωτός, μπλοκάκι, ατομική επιχείρηση — 2025 & 2026."
-        />
+        <meta name="description" content="Υπολογίστε τον φόρο εισοδήματος και τον καθαρό μισθό σας. Μισθωτός, μπλοκάκι, ατομική επιχείρηση — 2025 & 2026." />
         <link rel="canonical" href={`${SITE_URL}/calculator`} />
-
         <meta property="og:type" content="website" />
-        <meta
-          property="og:title"
-          content="Υπολογιστής Φόρου Εισοδήματος — ΦοροΥπολογιστής"
-        />
-        <meta
-          property="og:description"
-          content="Υπολογίστε τον φόρο εισοδήματος και τον καθαρό μισθό σας."
-        />
+        <meta property="og:title" content="Υπολογιστής Φόρου Εισοδήματος — ΦοροΥπολογιστής" />
+        <meta property="og:description" content="Υπολογίστε τον φόρο εισοδήματος και τον καθαρό μισθό σας." />
         <meta property="og:url" content={`${SITE_URL}/calculator`} />
         <meta property="og:image" content={`${SITE_URL}/og-image.png`} />
         <meta property="og:locale" content="el_GR" />
-
         <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:title"
-          content="Υπολογιστής Φόρου Εισοδήματος — ΦοροΥπολογιστής"
-        />
-        <meta
-          name="twitter:description"
-          content="Υπολογίστε τον φόρο εισοδήματος και τον καθαρό μισθό σας."
-        />
+        <meta name="twitter:title" content="Υπολογιστής Φόρου Εισοδήματος — ΦοροΥπολογιστής" />
+        <meta name="twitter:description" content="Υπολογίστε τον φόρο εισοδήματος και τον καθαρό μισθό σας." />
         <meta name="twitter:image" content={`${SITE_URL}/og-image.png`} />
-
-        <script type="application/ld+json">
-          {JSON.stringify(breadcrumbSchema)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
       </Helmet>
 
-      {/* Header */}
       <header className="bg-[var(--lp-warm-white)] shadow-sm print:bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:py-6">
           <a href="/" className="flex items-center gap-3">
             <Logo />
             <p className="text-sm text-[var(--lp-text-muted)]">
-              Φορολογικά Έτη 2025 &amp; 2026
+              {t("ui.taxYears")}
             </p>
           </a>
-          <button
-            onClick={toggleDark}
-            className="rounded-lg p-2 text-[var(--lp-text-muted)] transition-colors hover:bg-[var(--lp-navy)]/5 hover:text-[var(--lp-navy)] dark:hover:bg-white/10 dark:hover:text-white print:hidden"
-            aria-label={dark ? "Φωτεινό θέμα" : "Σκοτεινό θέμα"}
-          >
-            {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </button>
+          <div className="flex items-center gap-1">
+            <LanguageToggle className="text-[var(--lp-text-muted)] hover:text-[var(--lp-navy)] dark:hover:text-white" />
+            <button
+              onClick={toggleDark}
+              className="rounded-lg p-2 text-[var(--lp-text-muted)] transition-colors hover:bg-[var(--lp-navy)]/5 hover:text-[var(--lp-navy)] dark:hover:bg-white/10 dark:hover:text-white print:hidden"
+              aria-label={dark ? t("ui.lightTheme") : t("ui.darkTheme")}
+            >
+              {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
       </header>
 
-      {/* Controls */}
       <div className="border-b bg-white dark:bg-slate-900">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3 sm:gap-4">
           <YearSelector value={year} onChange={handleYearChange} />
@@ -393,22 +318,20 @@ export function TaxCalculator() {
               onClick={handleReset}
               className="rounded-md border px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent"
             >
-              {LABELS.reset}
+              {t("reset")}
             </button>
             <button
               onClick={() => window.print()}
               className="hidden rounded-md border px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent sm:block"
             >
-              Εκτύπωση
+              {t("ui.print")}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
       <main className="mx-auto max-w-5xl px-4 py-6">
         <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
-          {/* Left: Form */}
           <div>
             {isSalary ? (
               <SalaryForm
@@ -468,77 +391,52 @@ export function TaxCalculator() {
             )}
           </div>
 
-          {/* Right: Results */}
           <div className="space-y-6">
             {isSalary ? (
               salaryResult ? (
                 <>
                   <SalaryResults result={salaryResult} />
-
                   <EReceiptInfo realIncome={salaryResult.grossAnnual} mode="employee" />
-
                   <Card>
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-base">Λεπτομερής Ανάλυση</CardTitle>
+                      <CardTitle className="text-base">{t("ui.detailedAnalysis")}</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-2">
                       <SalaryBreakdown result={salaryResult} payFrequency={payFrequency} />
-                      <BracketBreakdown
-                        brackets={salaryResult.brackets}
-                        grossTax={salaryResult.grossTax}
-                      />
+                      <BracketBreakdown brackets={salaryResult.brackets} grossTax={salaryResult.grossTax} />
                       <IncomeWaterfall chartData={salaryWaterfallData} />
                     </CardContent>
                   </Card>
-
                   <SalaryComparisonView input={salaryInput} currentResult={salaryResult} />
                 </>
               ) : (
                 <Card>
                   <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-                    <p className="text-lg font-medium text-muted-foreground">
-                      Εισάγετε τον μηνιαίο μισθό σας για να δείτε τα αποτελέσματα
-                    </p>
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      Τα αποτελέσματα υπολογίζονται αυτόματα
-                    </p>
+                    <p className="text-lg font-medium text-muted-foreground">{t("ui.enterSalary")}</p>
+                    <p className="mt-2 text-sm text-muted-foreground">{t("ui.autoCalculate")}</p>
                   </CardContent>
                 </Card>
               )
             ) : grossIncome > 0 ? (
               <>
                 <ResultsSummary result={taxResult} regime={regime} clientLocation={clientLocation} />
-
                 <EReceiptInfo realIncome={taxResult.taxableIncome} mode={regime === "atomiki" ? "atomiki" : "mplokaki"} />
-
                 <Card>
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base">Λεπτομερής Ανάλυση</CardTitle>
+                    <CardTitle className="text-base">{t("ui.detailedAnalysis")}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                    <BracketBreakdown
-                      brackets={taxResult.brackets}
-                      grossTax={taxResult.grossTax}
-                    />
-                    <IncomeWaterfall
-                      result={taxResult}
-                      grossIncome={grossIncome}
-                      regime={regime}
-                    />
+                    <BracketBreakdown brackets={taxResult.brackets} grossTax={taxResult.grossTax} />
+                    <IncomeWaterfall result={taxResult} grossIncome={grossIncome} regime={regime} />
                   </CardContent>
                 </Card>
-
                 <ComparisonView input={taxInput} currentResult={taxResult} />
               </>
             ) : (
               <Card>
                 <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-                  <p className="text-lg font-medium text-muted-foreground">
-                    Εισάγετε τα ακαθάριστα έσοδά σας για να δείτε τα αποτελέσματα
-                  </p>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    Τα αποτελέσματα υπολογίζονται αυτόματα
-                  </p>
+                  <p className="text-lg font-medium text-muted-foreground">{t("ui.enterIncome")}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{t("ui.autoCalculate")}</p>
                 </CardContent>
               </Card>
             )}

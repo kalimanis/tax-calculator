@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
 import { Info } from "lucide-react";
-import { LABELS, TOOLTIPS } from "@/lib/constants";
+import { useTranslation } from "react-i18next";
 import { getEfkaTable, getEfkaNewProfessional, getMaxCategory } from "@/lib/efka-tables";
 import { formatCurrency, sanitizeNumericInput } from "@/lib/utils";
 import type { FiscalYear, ProfessionType } from "@/lib/types";
@@ -43,6 +43,7 @@ export function EfkaSelector({
   isNewProfessional,
   onNewProfessionalChange,
 }: EfkaSelectorProps) {
+  const { t } = useTranslation();
   const table = getEfkaTable(year, profession);
   const maxCat = getMaxCategory(profession);
   const newProf = getEfkaNewProfessional(year);
@@ -52,20 +53,20 @@ export function EfkaSelector({
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <Label className="text-sm font-medium shrink-0">
-            {LABELS.income.efka}
+            {t("income.efka")}
           </Label>
           <Tooltip>
             <TooltipTrigger asChild>
               <Info className="h-3.5 w-3.5 text-muted-foreground" />
             </TooltipTrigger>
             <TooltipContent className="max-w-[min(20rem,calc(100vw-2rem))]">
-              <p>{TOOLTIPS.efka}</p>
+              <p>{t("tooltips.efka")}</p>
             </TooltipContent>
           </Tooltip>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <Label htmlFor="efka-mode" className="text-xs text-muted-foreground">
-            {autoMode ? LABELS.efka.auto : LABELS.efka.manual}
+            {autoMode ? t("efka.auto") : t("efka.manual")}
           </Label>
           <Switch
             id="efka-mode"
@@ -86,7 +87,7 @@ export function EfkaSelector({
               className="h-4 w-4 rounded border-gray-300"
             />
             <Label htmlFor="new-professional" className="text-sm">
-              {LABELS.efka.newProfessional}
+              {t("efka.newProfessional")}
             </Label>
           </div>
 
@@ -94,7 +95,7 @@ export function EfkaSelector({
             <>
               <div>
                 <Label className="mb-1.5 block text-xs text-muted-foreground">
-                  {LABELS.efka.profession}
+                  {t("efka.profession")}
                 </Label>
                 <Select
                   value={profession}
@@ -104,22 +105,16 @@ export function EfkaSelector({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="standard">
-                      {LABELS.efka.professions.standard}
-                    </SelectItem>
-                    <SelectItem value="engineer">
-                      {LABELS.efka.professions.engineer}
-                    </SelectItem>
-                    <SelectItem value="doctor">
-                      {LABELS.efka.professions.doctor}
-                    </SelectItem>
+                    <SelectItem value="standard">{t("efka.professions.standard")}</SelectItem>
+                    <SelectItem value="engineer">{t("efka.professions.engineer")}</SelectItem>
+                    <SelectItem value="doctor">{t("efka.professions.doctor")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div>
                 <Label className="mb-1.5 block text-xs text-muted-foreground">
-                  {LABELS.efka.category}
+                  {t("efka.category")}
                 </Label>
                 <Select
                   value={String(category)}
@@ -131,7 +126,7 @@ export function EfkaSelector({
                   <SelectContent>
                     {Array.from({ length: maxCat }, (_, i) => i + 1).map((cat) => (
                       <SelectItem key={cat} value={String(cat)}>
-                        {table[cat].label} — {formatCurrency(table[cat].monthly)}/μήνα
+                        {table[cat].label} — {formatCurrency(table[cat].monthly)}/{t("salary.monthly").toLowerCase()}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -141,14 +136,14 @@ export function EfkaSelector({
           )}
 
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">{LABELS.efka.annual}:</span>
+            <span className="text-muted-foreground">{t("efka.annual")}:</span>
             <Badge variant="secondary" className="text-sm font-semibold tabular-nums">
               {formatCurrency(efkaAnnual)}
             </Badge>
           </div>
           {!isNewProfessional && (
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">{LABELS.efka.monthly}:</span>
+              <span className="text-muted-foreground">{t("efka.monthly")}:</span>
               <span className="tabular-nums text-muted-foreground">
                 {formatCurrency(table[category]?.monthly ?? 0)}
               </span>
@@ -156,7 +151,7 @@ export function EfkaSelector({
           )}
           {isNewProfessional && (
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">{LABELS.efka.monthly}:</span>
+              <span className="text-muted-foreground">{t("efka.monthly")}:</span>
               <span className="tabular-nums text-muted-foreground">
                 {formatCurrency(newProf.monthly)}
               </span>

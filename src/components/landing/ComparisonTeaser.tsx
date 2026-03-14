@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useScrollReveal } from "@/hooks/useLanding";
+import { useTranslation } from "react-i18next";
 import { calculateSalary } from "@/lib/salary-engine";
 import { calculateTax } from "@/lib/tax-engine";
 import { TrendingUp } from "lucide-react";
@@ -12,6 +13,7 @@ interface CompRow {
 }
 
 export function ComparisonTeaser() {
+  const { t } = useTranslation();
   const { ref, isVisible } = useScrollReveal(0.1);
 
   const rows = useMemo<CompRow[]>(() => {
@@ -73,19 +75,19 @@ export function ComparisonTeaser() {
 
     return [
       {
-        label: "Μισθωτός €2.000 μικτά",
+        label: t("comparisonTeaser.row1Label"),
         val2025: sal2025.netMonthly,
         val2026: sal2026.netMonthly,
         isMonthly: true,
       },
       {
-        label: "Μπλοκάκι €30.000 (ΕΦΚΑ 2η)",
+        label: t("comparisonTeaser.row2Label"),
         val2025: tax2025.netIncome,
         val2026: tax2026.netIncome,
         isMonthly: false,
       },
     ];
-  }, []);
+  }, [t]);
 
   const fmt = (n: number) =>
     n.toLocaleString("el-GR", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
@@ -93,17 +95,17 @@ export function ComparisonTeaser() {
   return (
     <section
       id="comparison"
-      aria-label="Σύγκριση 2025 vs 2026"
+      aria-label={t("comparisonTeaser.title")}
       className="relative bg-gradient-to-b from-[var(--lp-warm-white-dim)] to-white py-20 dark:to-[var(--lp-warm-white)] lg:py-28"
       ref={ref}
     >
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className={`reveal-up ${isVisible ? "revealed" : ""}`}>
           <p className="text-center text-sm font-semibold tracking-widest text-[var(--lp-teal)] uppercase">
-            Σύγκριση
+            {t("comparisonTeaser.label")}
           </p>
           <h2 className="font-outfit mt-3 text-center text-3xl font-bold text-[var(--lp-navy)] dark:text-white sm:text-4xl">
-            2025 vs 2026 — Τι αλλάζει;
+            {t("comparisonTeaser.title")}
           </h2>
         </div>
 
@@ -121,14 +123,14 @@ export function ComparisonTeaser() {
                 2026
               </div>
               <div className="text-center text-sm font-semibold text-[var(--lp-teal)]">
-                Διαφορά
+                {t("comparisonTeaser.difference")}
               </div>
             </div>
 
             {/* Data rows */}
             {rows.map((row) => {
               const diff = row.val2026 - row.val2025;
-              const suffix = row.isMonthly ? "/μήνα" : "/έτος";
+              const suffix = row.isMonthly ? `/${t("comparisonTeaser.perMonth")}` : `/${t("comparisonTeaser.perYear")}`;
 
               return (
                 <div
@@ -178,7 +180,7 @@ export function ComparisonTeaser() {
                     <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
                       +€{fmt(Math.round(diff))}{" "}
                       <span className="font-normal text-emerald-500/70 dark:text-emerald-400/70">
-                        ({row.isMonthly ? "μήνα" : "έτος"})
+                        ({row.isMonthly ? t("comparisonTeaser.perMonth") : t("comparisonTeaser.perYear")})
                       </span>
                     </p>
                   </div>

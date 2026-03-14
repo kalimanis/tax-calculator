@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useScrollReveal, useCountUp } from "@/hooks/useLanding";
+import { useTranslation } from "react-i18next";
 import { calculateSalary } from "@/lib/salary-engine";
 import { calculateTax } from "@/lib/tax-engine";
 import { sanitizeNumericInput } from "@/lib/utils";
@@ -11,6 +12,7 @@ import type { FiscalYear } from "@/lib/types";
 type DemoMode = "misthotos" | "mplokaki";
 
 export function LiveDemo() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { ref, isVisible } = useScrollReveal(0.1, "demo");
   const [mode, setMode] = useState<DemoMode>("misthotos");
@@ -33,12 +35,12 @@ export function LiveDemo() {
       });
       return {
         net: salaryResult.netMonthly,
-        label: "Καθαρός Μηνιαίος",
+        label: t("liveDemo.resultEmployee"),
       };
     }
 
     const annualIncome = amount * 12;
-    const efkaAnnual = 3731.16; // 2nd EFKA category 2026
+    const efkaAnnual = 3731.16;
     const taxResult = calculateTax({
       fiscalYear: year,
       regime: "mplokaki",
@@ -54,39 +56,35 @@ export function LiveDemo() {
     });
     return {
       net: Math.round((taxResult.netIncome / 12) * 100) / 100,
-      label: "Καθαρός Μηνιαίος (εκτ.)",
+      label: t("liveDemo.resultMplokaki"),
     };
-  }, [mode, amount, year]);
+  }, [mode, amount, year, t]);
 
   const { count } = useCountUp(Math.round(result.net), 600);
 
   return (
     <section
       id="demo"
-      aria-label="Ζωντανή δοκιμή"
+      aria-label={t("liveDemo.label")}
       data-section="live-demo"
       className="relative overflow-hidden bg-[var(--lp-navy)] py-20 lg:py-28"
       ref={ref}
     >
-      {/* Mesh decorations */}
       <div className="pointer-events-none absolute -top-40 right-0 h-[400px] w-[400px] rounded-full bg-[var(--lp-teal)]/10 blur-[120px]" />
       <div className="pointer-events-none absolute -bottom-32 -left-20 h-[300px] w-[300px] rounded-full bg-[var(--lp-amber)]/8 blur-[100px]" />
 
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <div className={`reveal-up ${isVisible ? "revealed" : ""}`}>
           <p className="text-center text-sm font-semibold tracking-widest text-[var(--lp-teal-light)] uppercase">
-            Δοκίμασέ το
+            {t("liveDemo.label")}
           </p>
           <h2 className="font-outfit mt-3 text-center text-3xl font-bold text-white sm:text-4xl">
-            Δοκίμασέ το τώρα
+            {t("liveDemo.title")}
           </h2>
         </div>
 
-        <div
-          className={`reveal-up stagger-2 mx-auto mt-12 max-w-lg ${isVisible ? "revealed" : ""}`}
-        >
+        <div className={`reveal-up stagger-2 mx-auto mt-12 max-w-lg ${isVisible ? "revealed" : ""}`}>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm">
-            {/* Mode toggle */}
             <div className="mb-6 flex rounded-xl bg-white/5 p-1">
               {(["misthotos", "mplokaki"] as const).map((m) => (
                 <button
@@ -98,14 +96,13 @@ export function LiveDemo() {
                       : "text-white/50 hover:text-white/80"
                   }`}
                 >
-                  {m === "misthotos" ? "Μισθωτός" : "Μπλοκάκι"}
+                  {m === "misthotos" ? t("regime.misthotosShort") : t("regime.mplokakiShort")}
                 </button>
               ))}
             </div>
 
-            {/* Input */}
             <label className="block text-sm font-medium text-white/60">
-              {mode === "misthotos" ? "Μικτός Μηνιαίος Μισθός" : "Μηνιαίος Τζίρος"}
+              {mode === "misthotos" ? t("liveDemo.inputEmployee") : t("liveDemo.inputMplokaki")}
             </label>
             <div className="relative mt-2">
               <span className="absolute top-1/2 left-4 -translate-y-1/2 text-lg font-semibold text-white/40">
@@ -119,7 +116,6 @@ export function LiveDemo() {
               />
             </div>
 
-            {/* Result */}
             <div className="mt-8 rounded-xl bg-white/5 p-6 text-center">
               <p className="text-sm font-medium text-white/50">
                 {result.label}
@@ -128,12 +124,11 @@ export function LiveDemo() {
                 €{count.toLocaleString("el-GR")}
               </p>
               <p className="mt-1 text-xs text-white/30">
-                Φορολογικό έτος {year}
-                {mode === "mplokaki" && " · ΕΦΚΑ 2η κατηγορία"}
+                {t("liveDemo.fiscalYear")} {year}
+                {mode === "mplokaki" && ` ${t("liveDemo.efkaNote")}`}
               </p>
             </div>
 
-            {/* CTA */}
             <button
               onClick={() => {
                 trackLandingCTA("demo");
@@ -149,11 +144,8 @@ export function LiveDemo() {
               }}
               className="group mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--lp-amber)] py-3.5 text-sm font-bold text-[var(--lp-navy)] transition-all hover:bg-[var(--lp-amber-light)] hover:shadow-xl hover:shadow-[var(--lp-amber)]/20"
             >
-              Δες αναλυτικά
-              <ArrowRight
-                size={16}
-                className="transition-transform group-hover:translate-x-0.5"
-              />
+              {t("liveDemo.cta")}
+              <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
             </button>
           </div>
         </div>

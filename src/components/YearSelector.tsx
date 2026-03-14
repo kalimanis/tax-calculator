@@ -1,7 +1,7 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
-import { LABELS, TOOLTIPS } from "@/lib/constants";
+import { useTranslation } from "react-i18next";
 import type { FiscalYear } from "@/lib/types";
 
 interface YearSelectorProps {
@@ -10,10 +10,11 @@ interface YearSelectorProps {
 }
 
 export function YearSelector({ value, onChange }: YearSelectorProps) {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center gap-2">
       <span className="hidden text-sm font-medium text-slate-700 dark:text-slate-300 sm:inline">
-        {LABELS.fiscalYear}
+        {t("fiscalYear")}
       </span>
       <Tabs
         value={String(value)}
@@ -28,7 +29,7 @@ export function YearSelector({ value, onChange }: YearSelectorProps) {
                 <Info className="h-3.5 w-3.5 text-muted-foreground" />
               </TooltipTrigger>
               <TooltipContent className="max-w-[min(20rem,calc(100vw-2rem))]">
-                <p>{TOOLTIPS.changes2026}</p>
+                <p>{t("tooltips.changes2026")}</p>
               </TooltipContent>
             </Tooltip>
           </TabsTrigger>

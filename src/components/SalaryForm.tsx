@@ -19,8 +19,8 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
 import { useState } from "react";
-import { LABELS } from "@/lib/constants";
-import { SALARY_LABELS, SALARY_TOOLTIPS, getMinimumWage } from "@/lib/salary-constants";
+import { useTranslation } from "react-i18next";
+import { getMinimumWage } from "@/lib/salary-constants";
 import { formatCurrency, sanitizeNumericInput } from "@/lib/utils";
 import { trackDirection, trackArticle5G } from "@/lib/analytics";
 import type { AgeGroup, FiscalYear, PayFrequency, SalaryDirection, Seniority } from "@/lib/types";
@@ -72,6 +72,7 @@ export function SalaryForm({
   onArticle5GChange,
   taxableIncome,
 }: SalaryFormProps) {
+  const { t } = useTranslation();
   const minimumWage = getMinimumWage(year);
   const [period, setPeriod] = useState<SalaryPeriod>("monthly");
 
@@ -86,13 +87,13 @@ export function SalaryForm({
   return (
     <Card>
       <CardHeader className="pb-4">
-        <CardTitle className="text-lg">{SALARY_LABELS.formTitle}</CardTitle>
+        <CardTitle className="text-lg">{t("salary.formTitle")}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-5">
         {/* Direction Toggle */}
         <div>
           <Label className="mb-1.5 block text-sm font-medium">
-            {SALARY_LABELS.direction.label}
+            {t("salary.direction.label")}
           </Label>
           <div className="flex gap-2">
             {(["gross-to-net", "net-to-gross"] as const).map((dir) => (
@@ -109,8 +110,8 @@ export function SalaryForm({
                 }`}
               >
                 {dir === "gross-to-net"
-                  ? SALARY_LABELS.direction.grossToNet
-                  : SALARY_LABELS.direction.netToGross}
+                  ? t("salary.direction.grossToNet")
+                  : t("salary.direction.netToGross")}
               </button>
             ))}
           </div>
@@ -119,7 +120,7 @@ export function SalaryForm({
         {/* Salary Period */}
         <div>
           <Label className="mb-1.5 block text-sm font-medium">
-            {SALARY_LABELS.period.label}
+            {t("salary.period.label")}
           </Label>
           <div className="flex gap-2">
             {(["monthly", "yearly"] as const).map((p) => (
@@ -132,7 +133,7 @@ export function SalaryForm({
                     : "border-border bg-background hover:bg-accent"
                 }`}
               >
-                {SALARY_LABELS.period[p]}
+                {t(`salary.period.${p}`)}
               </button>
             ))}
           </div>
@@ -143,8 +144,8 @@ export function SalaryForm({
           <div className="mb-1.5 flex items-center gap-2">
             <Label htmlFor="monthly-salary" className="text-sm font-medium">
               {direction === "gross-to-net"
-                ? SALARY_LABELS.grossSalary
-                : SALARY_LABELS.targetNet}
+                ? t("salary.grossSalary")
+                : t("salary.targetNet")}
             </Label>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -153,11 +154,11 @@ export function SalaryForm({
                   className="cursor-pointer text-xs hover:bg-accent"
                   onClick={() => onMonthlySalaryChange(minimumWage)}
                 >
-                  {SALARY_LABELS.minimumWage}: {formatCurrency(minimumWage)}
+                  {t("salary.minimumWage")}: {formatCurrency(minimumWage)}
                 </Badge>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{SALARY_TOOLTIPS.minimumWage}</p>
+                <p>{t("salary.tooltips.minimumWage")}</p>
               </TooltipContent>
             </Tooltip>
           </div>
@@ -178,7 +179,7 @@ export function SalaryForm({
           </div>
           {period === "yearly" && monthlySalary > 0 && (
             <p className="mt-1 text-xs text-muted-foreground">
-              = {formatCurrency(monthlySalary)}/μήνα
+              = {formatCurrency(monthlySalary)}{t("ui.perMonth")}
             </p>
           )}
         </div>
@@ -186,7 +187,7 @@ export function SalaryForm({
         {/* Pay Frequency */}
         <div>
           <Label className="mb-1.5 block text-sm font-medium">
-            {SALARY_LABELS.payFrequency.label}
+            {t("salary.payFrequency.label")}
           </Label>
           <div className="flex gap-2">
             {([14, 12] as const).map((freq) => (
@@ -199,7 +200,7 @@ export function SalaryForm({
                     : "border-border bg-background hover:bg-accent"
                 }`}
               >
-                {SALARY_LABELS.payFrequency[String(freq) as "14" | "12"]}
+                {t(`salary.payFrequency.${freq}`)}
               </button>
             ))}
           </div>
@@ -210,7 +211,7 @@ export function SalaryForm({
         {/* Children */}
         <div>
           <Label className="mb-1.5 block text-sm font-medium">
-            {LABELS.children}
+            {t("children")}
           </Label>
           <Select
             value={String(children)}
@@ -233,7 +234,7 @@ export function SalaryForm({
         {year === 2026 && (
           <div>
             <Label className="mb-1.5 block text-sm font-medium">
-              {LABELS.age}
+              {t("age")}
             </Label>
             <div className="flex gap-2">
               {(["young", "middle", "standard"] as const).map((ag) => (
@@ -246,7 +247,7 @@ export function SalaryForm({
                       : "border-border bg-background hover:bg-accent"
                   }`}
                 >
-                  {LABELS.ageGroups[ag]}
+                  {t(`ageGroups.${ag}`)}
                 </button>
               ))}
             </div>
@@ -257,21 +258,21 @@ export function SalaryForm({
         <Accordion type="single" collapsible>
           <AccordionItem value="advanced">
             <AccordionTrigger className="text-sm font-medium">
-              Ρυθμίσεις
+              {t("ui.settings")}
             </AccordionTrigger>
             <AccordionContent className="space-y-4 pt-2">
               {/* Seniority */}
               <div>
                 <div className="mb-1.5 flex items-center gap-1.5">
                   <Label className="text-sm font-medium">
-                    {SALARY_LABELS.seniority.label}
+                    {t("salary.seniority.label")}
                   </Label>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Info className="h-3 w-3 text-muted-foreground" />
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{SALARY_TOOLTIPS.seniority}</p>
+                      <p>{t("salary.tooltips.seniority")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -285,7 +286,7 @@ export function SalaryForm({
                   <SelectContent>
                     {([0, 1, 2, 3] as const).map((s) => (
                       <SelectItem key={s} value={String(s)}>
-                        {SALARY_LABELS.seniority[String(s) as "0" | "1" | "2" | "3"]}
+                        {t(`salary.seniority.${s}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -296,7 +297,7 @@ export function SalaryForm({
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label htmlFor="efka-employee" className="mb-1.5 block text-xs font-medium">
-                    {SALARY_LABELS.efka.employee}
+                    {t("salary.efka.employee")}
                   </Label>
                   <div className="relative">
                     <Input
@@ -316,7 +317,7 @@ export function SalaryForm({
                 </div>
                 <div>
                   <Label htmlFor="efka-employer" className="mb-1.5 block text-xs font-medium">
-                    {SALARY_LABELS.efka.employer}
+                    {t("salary.efka.employer")}
                   </Label>
                   <div className="relative">
                     <Input
@@ -350,14 +351,14 @@ export function SalaryForm({
                 />
                 <div className="flex items-center gap-1.5">
                   <Label htmlFor="article-5g" className="text-sm">
-                    {SALARY_LABELS.article5G}
+                    {t("salary.article5G")}
                   </Label>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Info className="h-3 w-3 text-muted-foreground" />
                     </TooltipTrigger>
                     <TooltipContent className="max-w-[min(20rem,calc(100vw-2rem))]">
-                      <p>{SALARY_TOOLTIPS.article5G}</p>
+                      <p>{t("salary.tooltips.article5G")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -371,7 +372,7 @@ export function SalaryForm({
         {/* Taxable Income Display */}
         <div className="rounded-lg bg-gradient-to-r from-indigo-50 to-blue-50 p-4 dark:from-indigo-950/30 dark:to-blue-950/30">
           <div className="text-sm text-muted-foreground">
-            {SALARY_LABELS.results.taxable}
+            {t("salary.results.taxable")}
           </div>
           <div className="mt-1 text-2xl font-bold tabular-nums text-indigo-700 dark:text-indigo-300">
             {formatCurrency(taxableIncome)}

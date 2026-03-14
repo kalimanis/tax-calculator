@@ -13,7 +13,7 @@ import { EfkaSelector } from "./EfkaSelector";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
 import { useState } from "react";
-import { LABELS, TOOLTIPS } from "@/lib/constants";
+import { useTranslation } from "react-i18next";
 import { formatCurrency, sanitizeNumericInput } from "@/lib/utils";
 import { trackForeignClient } from "@/lib/analytics";
 import type { AgeGroup, ClientLocation, FiscalYear, ProfessionType, Regime } from "@/lib/types";
@@ -83,6 +83,7 @@ export function IncomeForm({
   onDomesticIncomeShareChange,
   taxableIncome,
 }: IncomeFormProps) {
+  const { t } = useTranslation();
   const [frequency, setFrequency] = useState<IncomeFrequency>("yearly");
 
   const displayValue = frequency === "monthly" ? Math.round(grossIncome / 12) : grossIncome;
@@ -94,13 +95,13 @@ export function IncomeForm({
   return (
     <Card>
       <CardHeader className="pb-4">
-        <CardTitle className="text-lg">Στοιχεία Εισοδήματος</CardTitle>
+        <CardTitle className="text-lg">{t("ui.incomeFormTitle")}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-5">
         {/* Income Frequency */}
         <div>
           <Label className="mb-1.5 block text-sm font-medium">
-            {LABELS.income.frequency.label}
+            {t("income.frequency.label")}
           </Label>
           <div className="flex gap-2">
             {(["yearly", "monthly"] as const).map((freq) => (
@@ -113,7 +114,7 @@ export function IncomeForm({
                     : "border-border bg-background hover:bg-accent"
                 }`}
               >
-                {LABELS.income.frequency[freq]}
+                {t(`income.frequency.${freq}`)}
               </button>
             ))}
           </div>
@@ -122,7 +123,7 @@ export function IncomeForm({
         {/* Gross Income */}
         <div>
           <Label htmlFor="gross-income" className="mb-1.5 block text-sm font-medium">
-            {LABELS.income.gross}
+            {t("income.gross")}
           </Label>
           <div className="relative">
             <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
@@ -141,7 +142,7 @@ export function IncomeForm({
           </div>
           {frequency === "monthly" && grossIncome > 0 && (
             <p className="mt-1 text-xs text-muted-foreground">
-              = {formatCurrency(grossIncome)}/έτος
+              = {formatCurrency(grossIncome)}{t("ui.perYear")}
             </p>
           )}
         </div>
@@ -164,7 +165,7 @@ export function IncomeForm({
         {/* Other Expenses */}
         <div>
           <Label htmlFor="expenses" className="mb-1.5 block text-sm font-medium">
-            {LABELS.income.expenses}
+            {t("income.expenses")}
           </Label>
           <div className="relative">
             <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
@@ -190,14 +191,14 @@ export function IncomeForm({
             <div>
               <div className="mb-1.5 flex items-center gap-1.5">
                 <Label className="block text-sm font-medium">
-                  {LABELS.clientLocation.title}
+                  {t("clientLocation.title")}
                 </Label>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Info className="h-3 w-3 text-muted-foreground" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-[min(20rem,calc(100vw-2rem))]">
-                    <p>{TOOLTIPS.foreignClient}</p>
+                    <p>{t("tooltips.foreignClient")}</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -215,14 +216,14 @@ export function IncomeForm({
                         : "border-border bg-background hover:bg-accent"
                     }`}
                   >
-                    {LABELS.clientLocation[loc]}
+                    {t(`clientLocation.${loc}`)}
                   </button>
                 ))}
               </div>
               {clientLocation === "mixed" && (
                 <div className="mt-3">
                   <Label htmlFor="domestic-share" className="mb-1.5 block text-sm font-medium">
-                    {LABELS.clientLocation.domesticShare}
+                    {t("clientLocation.domesticShare")}
                   </Label>
                   <Input
                     id="domestic-share"
@@ -249,7 +250,7 @@ export function IncomeForm({
         {/* Children */}
         <div>
           <Label className="mb-1.5 block text-sm font-medium">
-            {LABELS.children}
+            {t("children")}
           </Label>
           <Select
             value={String(children)}
@@ -272,7 +273,7 @@ export function IncomeForm({
         {year === 2026 && (
           <div>
             <Label className="mb-1.5 block text-sm font-medium">
-              {LABELS.age}
+              {t("age")}
             </Label>
             <div className="flex gap-2">
               {(["young", "middle", "standard"] as const).map((ag) => (
@@ -285,7 +286,7 @@ export function IncomeForm({
                       : "border-border bg-background hover:bg-accent"
                   }`}
                 >
-                  {LABELS.ageGroups[ag]}
+                  {t(`ageGroups.${ag}`)}
                 </button>
               ))}
             </div>
@@ -305,13 +306,13 @@ export function IncomeForm({
                 className="h-4 w-4 rounded border-gray-300"
               />
               <Label htmlFor="first-year" className="text-sm">
-                {LABELS.newBusiness.firstYear}
+                {t("newBusiness.firstYear")}
               </Label>
             </div>
 
             <div>
               <Label className="mb-1.5 block text-sm font-medium">
-                {LABELS.newBusiness.yearsActive}
+                {t("newBusiness.yearsActive")}
               </Label>
               <Select
                 value={String(yearsInBusiness)}
@@ -337,7 +338,7 @@ export function IncomeForm({
         {/* Taxable Income Display */}
         <div className="rounded-lg bg-gradient-to-r from-indigo-50 to-blue-50 p-4 dark:from-indigo-950/30 dark:to-blue-950/30">
           <div className="text-sm text-muted-foreground">
-            {LABELS.income.taxable}
+            {t("income.taxable")}
           </div>
           <div className="mt-1 text-2xl font-bold tabular-nums text-indigo-700 dark:text-indigo-300">
             {formatCurrency(taxableIncome)}

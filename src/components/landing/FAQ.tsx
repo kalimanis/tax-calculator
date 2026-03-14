@@ -1,47 +1,17 @@
 import { useState } from "react";
 import { useScrollReveal } from "@/hooks/useLanding";
+import { useTranslation } from "react-i18next";
 import { ChevronDown } from "lucide-react";
 import { trackFAQOpen } from "@/lib/analytics";
 
-const FAQ_ITEMS = [
-  {
-    question: "Πώς υπολογίζεται ο καθαρός μισθός;",
-    answer:
-      "Μικτός − ΕΦΚΑ (13,37%) = Φορολογητέο → Κλίμακα Άρθ.15 − Μείωση Άρθ.16 = Φόρος → Καθαρός. Ο υπολογισμός γίνεται αυτόματα με βάση τον ΚΦΕ.",
-  },
-  {
-    question: "Τι αλλάζει το 2026;",
-    answer:
-      "Νέα κλίμακα (Ν.5246/2025) με μειωμένους συντελεστές, ειδικά για οικογένειες και νέους. Νέο 6ο κλιμάκιο €40-60K στο 39%, μειώσεις στα πρώτα κλιμάκια για γονείς.",
-  },
-  {
-    question: "Καλύπτει πελάτες εξωτερικού;",
-    answer:
-      "Ναι. Μπλοκάκι με ξένους πελάτες: χωρίς παρακράτηση 20%, αλλά ίδιος φόρος (ΠΟΛ.1029/2018). Υποστηρίζεται εγχώριο, εξωτερικό και μικτό.",
-  },
-  {
-    question: "Είναι ακριβής ο υπολογισμός;",
-    answer:
-      "Βασίζεται στον ΚΦΕ και τις εγκυκλίους ΕΦΚΑ. Μικρές αποκλίσεις (±€1-2) λόγω στρογγυλοποίησης μισθοδοσίας.",
-  },
-  {
-    question: "Τι είναι το Άρθρο 5Γ;",
-    answer:
-      "50% απαλλαγή φόρου για εργαζομένους που μεταφέρουν φορολογική κατοικία στην Ελλάδα. Ισχύει για μισθωτούς και ελεύθερους επαγγελματίες.",
-  },
-  {
-    question: "Αποθηκεύονται τα δεδομένα μου;",
-    answer:
-      "Οι υπολογισμοί γίνονται αποκλειστικά στη συσκευή σου — κανένα ποσό ή προσωπικό δεδομένο δεν αποστέλλεται σε server. Χρησιμοποιούμε ανώνυμα στατιστικά επισκεψιμότητας χωρίς cookies.",
-  },
-];
+type FAQItemType = { question: string; answer: string };
 
 function FAQItem({
   item,
   isOpen,
   onToggle,
 }: {
-  item: (typeof FAQ_ITEMS)[number];
+  item: FAQItemType;
   isOpen: boolean;
   onToggle: () => void;
 }) {
@@ -77,30 +47,33 @@ function FAQItem({
 }
 
 export function FAQ() {
+  const { t } = useTranslation();
   const { ref, isVisible } = useScrollReveal(0.1, "faq");
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const items = t("faq.items", { returnObjects: true }) as FAQItemType[];
 
   return (
     <section
       id="faq"
-      aria-label="Συχνές ερωτήσεις"
+      aria-label={t("faq.title")}
       className="bg-gradient-to-b from-white to-[var(--lp-warm-white-dim)] py-20 dark:from-[var(--lp-warm-white)] dark:to-[var(--lp-warm-white-dim)] lg:py-28"
       ref={ref}
     >
       <div className="mx-auto max-w-3xl px-5 lg:px-8">
         <div className={`reveal-up ${isVisible ? "revealed" : ""}`}>
           <p className="text-center text-sm font-semibold tracking-widest text-[var(--lp-teal)] uppercase">
-            FAQ
+            {t("faq.label")}
           </p>
           <h2 className="font-outfit mt-3 text-center text-3xl font-bold text-[var(--lp-navy)] dark:text-white sm:text-4xl">
-            Συχνές Ερωτήσεις
+            {t("faq.title")}
           </h2>
         </div>
 
         <div
           className={`reveal-up stagger-2 mt-12 rounded-2xl border border-[var(--lp-navy)]/5 bg-white px-6 dark:border-white/5 dark:bg-white/5 ${isVisible ? "revealed" : ""}`}
         >
-          {FAQ_ITEMS.map((item, i) => (
+          {items.map((item, i) => (
             <FAQItem
               key={item.question}
               item={item}

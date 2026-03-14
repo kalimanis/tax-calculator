@@ -1,8 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
-import { LABELS } from "@/lib/constants";
-import { SALARY_LABELS } from "@/lib/salary-constants";
+import { useTranslation } from "react-i18next";
 import { calculateSalary } from "@/lib/salary-engine";
 import { formatCurrency, formatPercent } from "@/lib/utils";
 import type { SalaryInput, SalaryResult } from "@/lib/types";
@@ -50,6 +49,7 @@ function ComparisonRow({
 }
 
 export function SalaryComparisonView({ input, currentResult }: SalaryComparisonViewProps) {
+  const { t } = useTranslation();
   const otherYear = input.fiscalYear === 2025 ? 2026 : 2025;
   const otherResult = calculateSalary({ ...input, fiscalYear: otherYear });
 
@@ -61,7 +61,7 @@ export function SalaryComparisonView({ input, currentResult }: SalaryComparisonV
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-base">{LABELS.comparison.title}</CardTitle>
+        <CardTitle className="text-base">{t("comparison.title")}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="mb-3 flex items-center justify-center gap-4 text-sm font-semibold">
@@ -70,12 +70,12 @@ export function SalaryComparisonView({ input, currentResult }: SalaryComparisonV
           <span>2026</span>
         </div>
         <div className="divide-y">
-          <ComparisonRow label={SALARY_LABELS.results.grossTax} valueA={resultA.grossTax} valueB={resultB.grossTax} />
-          <ComparisonRow label={SALARY_LABELS.results.netTax} valueA={resultA.netTax} valueB={resultB.netTax} />
-          <ComparisonRow label={SALARY_LABELS.results.efkaEmployee} valueA={resultA.efkaEmployee} valueB={resultB.efkaEmployee} />
-          <ComparisonRow label={SALARY_LABELS.results.effectiveRate} valueA={resultA.effectiveRate} valueB={resultB.effectiveRate} isCurrency={false} />
-          <ComparisonRow label={SALARY_LABELS.results.netMonthly} valueA={resultA.netMonthly} valueB={resultB.netMonthly} inverse />
-          <ComparisonRow label={SALARY_LABELS.results.employerCost} valueA={resultA.employerCost} valueB={resultB.employerCost} />
+          <ComparisonRow label={t("salary.results.grossTax")} valueA={resultA.grossTax} valueB={resultB.grossTax} />
+          <ComparisonRow label={t("salary.results.netTax")} valueA={resultA.netTax} valueB={resultB.netTax} />
+          <ComparisonRow label={t("salary.results.efkaEmployee")} valueA={resultA.efkaEmployee} valueB={resultB.efkaEmployee} />
+          <ComparisonRow label={t("salary.results.effectiveRate")} valueA={resultA.effectiveRate} valueB={resultB.effectiveRate} isCurrency={false} />
+          <ComparisonRow label={t("salary.results.netMonthly")} valueA={resultA.netMonthly} valueB={resultB.netMonthly} inverse />
+          <ComparisonRow label={t("salary.results.employerCost")} valueA={resultA.employerCost} valueB={resultB.employerCost} />
         </div>
       </CardContent>
     </Card>
