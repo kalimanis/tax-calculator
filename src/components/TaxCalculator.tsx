@@ -139,7 +139,7 @@ export function TaxCalculator() {
     [efkaCategory]
   );
 
-  const handleReset = useCallback(() => {
+  const handleReset = () => {
     setYear(2025);
     setRegime("mplokaki");
     setGrossIncome(0);
@@ -163,7 +163,7 @@ export function TaxCalculator() {
     setEfkaEmployerRate(rates.employer);
     setHasArticle5G(false);
     setSeniority(0);
-  }, []);
+  };
 
   const isSalary = regime === "misthotos";
 
@@ -177,10 +177,10 @@ export function TaxCalculator() {
     setRegime(r);
   }, []);
 
-  const handleYearChange = useCallback((y: FiscalYear) => {
+  const handleYearChange = (y: FiscalYear) => {
     trackYearSwitch(y);
     setYear(y);
-  }, []);
+  };
 
   const taxInput: TaxInput = useMemo(
     () => ({
