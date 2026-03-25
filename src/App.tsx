@@ -1,7 +1,6 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/react";
 import { LandingPage } from "@/pages/LandingPage";
 
 const TaxCalculator = lazy(() =>
@@ -51,7 +50,6 @@ function App() {
         />
       </Routes>
       <Analytics />
-      <SpeedInsights />
     </BrowserRouter>
   );
 }
