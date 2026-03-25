@@ -6,7 +6,6 @@ import { calculateSalary } from "@/lib/salary-engine";
 import { calculateTax } from "@/lib/tax-engine";
 import { sanitizeNumericInput } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
-import { trackLandingCTA } from "@/lib/analytics";
 import type { FiscalYear } from "@/lib/types";
 
 type DemoMode = "misthotos" | "mplokaki";
@@ -14,7 +13,7 @@ type DemoMode = "misthotos" | "mplokaki";
 export function LiveDemo() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { ref, isVisible } = useScrollReveal(0.1, "demo");
+  const { ref, isVisible } = useScrollReveal(0.1);
   const [mode, setMode] = useState<DemoMode>("misthotos");
   const [amount, setAmount] = useState(1500);
   const [year] = useState<FiscalYear>(2026);
@@ -131,7 +130,6 @@ export function LiveDemo() {
 
             <button
               onClick={() => {
-                trackLandingCTA("demo");
                 const params = new URLSearchParams();
                 params.set("y", String(year));
                 params.set("r", mode);

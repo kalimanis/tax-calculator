@@ -5,7 +5,6 @@ import { useCountUp } from "@/hooks/useLanding";
 import { calculateSalary } from "@/lib/salary-engine";
 import { formatCurrency, formatPercent } from "@/lib/utils";
 import { ArrowRight, ChevronDown, CheckCircle2 } from "lucide-react";
-import { trackLandingCTA } from "@/lib/analytics";
 
 const HERO_GROSS = 2000;
 
@@ -64,10 +63,7 @@ export function Hero() {
 
             <div className="mt-8 flex flex-wrap gap-4">
               <button
-                onClick={() => {
-                  trackLandingCTA("hero");
-                  navigate("/calculator");
-                }}
+                onClick={() => navigate("/calculator")}
                 data-event="cta-hero-primary"
                 className="group inline-flex items-center gap-2 rounded-full bg-[var(--lp-teal)] px-7 py-3.5 text-[15px] font-semibold text-white shadow-xl shadow-[var(--lp-teal)]/20 transition-all hover:bg-[var(--lp-teal-dark)] hover:shadow-2xl hover:shadow-[var(--lp-teal)]/30"
               >

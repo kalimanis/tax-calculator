@@ -3,7 +3,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { trackComparison } from "@/lib/analytics";
 import { calculateTax } from "@/lib/tax-engine";
 import { formatCurrency, formatPercent } from "@/lib/utils";
 import type { TaxInput, TaxResult } from "@/lib/types";
@@ -54,7 +53,7 @@ export function ComparisonView({ input, currentResult }: ComparisonViewProps) {
         <CardTitle className="text-base">{t("comparison.title")}</CardTitle>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="years" onValueChange={(v) => trackComparison(v === "years" ? "year" : "mode")}>
+        <Tabs defaultValue="years">
           <TabsList className="w-full">
             <TabsTrigger value="years" className="flex-1">
               {t("comparison.yearVsYear")}

@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { trackLandingSection } from "@/lib/analytics";
 
-export function useScrollReveal(threshold = 0.1, sectionName?: string) {
+export function useScrollReveal(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const tracked = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -14,17 +12,13 @@ export function useScrollReveal(threshold = 0.1, sectionName?: string) {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          if (sectionName && !tracked.current) {
-            trackLandingSection(sectionName);
-            tracked.current = true;
-          }
         }
       },
       { threshold }
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [threshold, sectionName]);
+  }, [threshold]);
 
   return { ref, isVisible };
 }

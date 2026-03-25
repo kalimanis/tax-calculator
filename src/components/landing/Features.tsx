@@ -28,7 +28,7 @@ const FEATURE_STYLES = [
 
 export function Features() {
   const { t } = useTranslation();
-  const { ref, isVisible } = useScrollReveal(0.1, "features");
+  const { ref, isVisible } = useScrollReveal(0.1);
 
   const items = t("features.items", { returnObjects: true }) as {
     id: string;

@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { Receipt } from "lucide-react";
 import {
   Accordion,
@@ -9,23 +8,13 @@ import {
 import { useTranslation } from "react-i18next";
 import { calculateEReceipt } from "@/lib/e-receipt-calc";
 import { formatCurrency } from "@/lib/utils";
-import { trackEReceiptInfoView, trackEReceiptInfoToggle } from "@/lib/analytics";
 
 interface EReceiptInfoProps {
   realIncome: number;
-  mode: "employee" | "mplokaki" | "atomiki";
 }
 
-export function EReceiptInfo({ realIncome, mode }: EReceiptInfoProps) {
+export function EReceiptInfo({ realIncome }: EReceiptInfoProps) {
   const { t } = useTranslation();
-  const trackedMode = useRef(mode);
-
-  useEffect(() => {
-    trackedMode.current = mode;
-    if (realIncome > 0) {
-      trackEReceiptInfoView(mode);
-    }
-  }, [mode, realIncome]);
 
   if (realIncome <= 0) return null;
 
@@ -38,7 +27,6 @@ export function EReceiptInfo({ realIncome, mode }: EReceiptInfoProps) {
         type="single"
         collapsible
         defaultValue="e-receipt"
-        onValueChange={(val) => trackEReceiptInfoToggle(val === "e-receipt")}
       >
         <AccordionItem value="e-receipt" className="border-none">
           <AccordionTrigger className="px-4 py-3 text-base font-semibold hover:no-underline">

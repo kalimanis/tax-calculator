@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { Helmet } from "@dr.pogodin/react-helmet";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Moon, Sun } from "lucide-react";
@@ -24,11 +24,6 @@ import { calculateTax } from "@/lib/tax-engine";
 import { calculateSalary } from "@/lib/salary-engine";
 import { getEfkaRates } from "@/lib/salary-constants";
 import { getEfkaTable, getEfkaNewProfessional, getMaxCategory } from "@/lib/efka-tables";
-import {
-  trackCalculation,
-  trackModeSwitch,
-  trackYearSwitch,
-} from "@/lib/analytics";
 import type {
   AgeGroup,
   ClientLocation,
@@ -167,18 +162,11 @@ export function TaxCalculator() {
 
   const isSalary = regime === "misthotos";
 
-  const regimeToMode = (r: Regime) =>
-    r === "misthotos" ? "employee" as const : r;
-
-  const prevRegime = useRef(regime);
   const handleRegimeChange = useCallback((r: Regime) => {
-    trackModeSwitch(regimeToMode(prevRegime.current), regimeToMode(r));
-    prevRegime.current = r;
     setRegime(r);
   }, []);
 
   const handleYearChange = (y: FiscalYear) => {
-    trackYearSwitch(y);
     setYear(y);
   };
 
@@ -250,15 +238,6 @@ export function TaxCalculator() {
       });
     }
   }, [isSalary, year, regime, grossIncome, otherExpenses, children, ageGroup, isFirstYearFiling, yearsInBusiness, profession, efkaCategory, isNewProfessional, manualEfka, clientLocation, domesticIncomeShare, salaryDirection, monthlySalary, payFrequency, efkaEmployeeRate, efkaEmployerRate, hasArticle5G, seniority]);
-
-  useEffect(() => {
-    const amount = isSalary ? monthlySalary * 12 : grossIncome;
-    if (amount <= 0) return;
-    const timeout = setTimeout(() => {
-      trackCalculation(regimeToMode(regime), { fiscalYear: year, grossAmount: amount, children });
-    }, 2000);
-    return () => clearTimeout(timeout);
-  }, [isSalary, grossIncome, monthlySalary, regime, year, children]);
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -396,7 +375,7 @@ export function TaxCalculator() {
               salaryResult ? (
                 <>
                   <SalaryResults result={salaryResult} />
-                  <EReceiptInfo realIncome={salaryResult.grossAnnual} mode="employee" />
+                  <EReceiptInfo realIncome={salaryResult.grossAnnual} />
                   <Card>
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base">{t("ui.detailedAnalysis")}</CardTitle>
@@ -420,7 +399,7 @@ export function TaxCalculator() {
             ) : grossIncome > 0 ? (
               <>
                 <ResultsSummary result={taxResult} regime={regime} clientLocation={clientLocation} />
-                <EReceiptInfo realIncome={taxResult.taxableIncome} mode={regime === "atomiki" ? "atomiki" : "mplokaki"} />
+                <EReceiptInfo realIncome={taxResult.taxableIncome} />
                 <Card>
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base">{t("ui.detailedAnalysis")}</CardTitle>

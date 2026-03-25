@@ -26,11 +26,6 @@ export function Footer() {
             {t("footer.disclaimer")}
           </p>
 
-          {/* Privacy note */}
-          <p className="max-w-lg text-xs leading-relaxed text-[var(--lp-text-light)]">
-            {t("footer.privacy")}
-          </p>
-
           {/* Copyright & contact */}
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-[var(--lp-text-light)]">
             <span>© {new Date().getFullYear()}</span>

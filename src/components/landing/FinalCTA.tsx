@@ -2,12 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { useScrollReveal } from "@/hooks/useLanding";
 import { useTranslation } from "react-i18next";
 import { ArrowRight } from "lucide-react";
-import { trackLandingCTA } from "@/lib/analytics";
 
 export function FinalCTA() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { ref, isVisible } = useScrollReveal(0.1, "cta");
+  const { ref, isVisible } = useScrollReveal(0.1);
 
   return (
     <section
@@ -33,10 +32,7 @@ export function FinalCTA() {
           className={`reveal-up stagger-2 mt-10 ${isVisible ? "revealed" : ""}`}
         >
           <button
-            onClick={() => {
-              trackLandingCTA("final");
-              navigate("/calculator");
-            }}
+            onClick={() => navigate("/calculator")}
             data-event="cta-final"
             className="group inline-flex items-center gap-2.5 rounded-full bg-[var(--lp-amber)] px-8 py-4 text-base font-bold text-[var(--lp-navy)] shadow-2xl shadow-[var(--lp-amber)]/20 transition-all hover:bg-[var(--lp-amber-light)] hover:shadow-2xl hover:shadow-[var(--lp-amber)]/30"
           >

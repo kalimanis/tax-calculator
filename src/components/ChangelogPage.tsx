@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import { SITE_URL } from "@/lib/constants";
 import { CHANGELOG, LATEST_VERSION } from "@/data/changelog";
 import { markChangelogSeen } from "@/lib/changelog-utils";
-import { trackChangelogView } from "@/lib/analytics";
 import { ChangelogEntry } from "./ChangelogEntry";
 import { useDarkMode } from "@/hooks/useDarkMode";
 
@@ -16,7 +15,6 @@ export function ChangelogPage() {
 
   useEffect(() => {
     markChangelogSeen();
-    trackChangelogView();
   }, []);
 
   useEffect(() => {

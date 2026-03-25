@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useScrollReveal } from "@/hooks/useLanding";
 import { useTranslation } from "react-i18next";
 import { ChevronDown } from "lucide-react";
-import { trackFAQOpen } from "@/lib/analytics";
 
 type FAQItemType = { question: string; answer: string };
 
@@ -48,7 +47,7 @@ function FAQItem({
 
 export function FAQ() {
   const { t } = useTranslation();
-  const { ref, isVisible } = useScrollReveal(0.1, "faq");
+  const { ref, isVisible } = useScrollReveal(0.1);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const items = t("faq.items", { returnObjects: true }) as FAQItemType[];
@@ -81,7 +80,6 @@ export function FAQ() {
               onToggle={() => {
                 const isOpening = openIndex !== i;
                 setOpenIndex(isOpening ? i : null);
-                if (isOpening) trackFAQOpen(item.question);
               }}
             />
           ))}

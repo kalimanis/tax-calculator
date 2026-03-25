@@ -4,7 +4,6 @@ import { X, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { CHANGELOG, LATEST_VERSION } from "@/data/changelog";
 import { shouldShowWhatsNew, dismissWhatsNew, formatGreekDate } from "@/lib/changelog-utils";
-import { trackWhatsNewShown, trackWhatsNewDismissed } from "@/lib/analytics";
 
 export function WhatsNewModal() {
   const { t } = useTranslation();
@@ -16,7 +15,6 @@ export function WhatsNewModal() {
     if (shouldShowWhatsNew()) {
       const timer = setTimeout(() => {
         setOpen(true);
-        trackWhatsNewShown();
       }, 1500);
       return () => clearTimeout(timer);
     }
@@ -25,7 +23,6 @@ export function WhatsNewModal() {
   const handleDismiss = useCallback(() => {
     setOpen(false);
     dismissWhatsNew();
-    trackWhatsNewDismissed();
   }, []);
 
   const handleViewAll = useCallback(() => {
